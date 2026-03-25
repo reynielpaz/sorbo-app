@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+/* Colores y fuentes del design system de Sorbo en Tailwind v4 */
+@theme {
+  /* Colores */
+  --color-sorbo-black: #0a0908;
+  --color-sorbo-dark: #1a1612;
+  --color-sorbo-warm: #2a2420;
+  --color-sorbo-gold: #d4a853;
+  --color-sorbo-cream: #f5e6c8;
+  --color-sorbo-amber: #e8943a;
+  --color-sorbo-neon: #00b4ff;
+  --color-sorbo-green: #4caf50;
+  --color-sorbo-red: #e53935;
+
+  /* Familias tipográficas */
+  --font-playfair: 'Playfair Display', Georgia, serif;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', 'Courier New', monospace;
+}
+
+/* CSS custom properties para el design system */
+:root {
+  /* Colores primarios */
+  --sorbo-black: #0a0908;
+  --sorbo-dark: #1a1612;
+  --sorbo-dark-warm: #2a2420;
+
+  /* Acentos */
+  --sorbo-gold: #d4a853;
+  --sorbo-cream: #f5e6c8;
+  --sorbo-amber: #e8943a;
+
+  /* Funcionales */
+  --sorbo-neon: #00b4ff;
+  --sorbo-green: #4caf50;
+  --sorbo-red: #e53935;
+
+  /* Texto */
+  --sorbo-text-primary: #f5e6c8;
+  --sorbo-text-secondary: rgba(245, 230, 200, 0.7);
+  --sorbo-text-muted: rgba(245, 230, 200, 0.4);
+
+  /* Glassmorphism */
+  --sorbo-glass: rgba(26, 22, 18, 0.65);
+  --sorbo-glass-light: rgba(245, 230, 200, 0.08);
+  --sorbo-glass-border: rgba(212, 168, 83, 0.15);
+
+  /* Gradientes */
+  --sorbo-gradient-hero: linear-gradient(135deg, #0a0908 0%, #1a1612 50%, #2a1a0a 100%);
+  --sorbo-gradient-gold: linear-gradient(135deg, #d4a853 0%, #e8943a 100%);
+  --sorbo-gradient-glass: linear-gradient(135deg, rgba(212, 168, 83, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+
+  /* Sombras */
+  --sorbo-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --sorbo-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --sorbo-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --sorbo-shadow-gold: 0 4px 16px rgba(212, 168, 83, 0.2);
+
+  /* Timing de animaciones */
+  --ease-out-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset y estilos base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  background-color: var(--sorbo-black);
+  color: var(--sorbo-text-primary);
+  font-family: 'DM Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--sorbo-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 168, 83, 0.3);
+  border-radius: 2px;
+}
