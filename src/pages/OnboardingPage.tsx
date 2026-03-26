@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/utils/constants';
 
 interface SlideData {
@@ -39,6 +40,7 @@ const slideVariants = {
 
 export function OnboardingPage() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [direction, setDirection] = useState(1);
 
@@ -56,13 +58,13 @@ export function OnboardingPage() {
 
   const handleFinish = useCallback(() => {
     localStorage.setItem('sorbo_onboarding_done', 'true');
-    navigate(ROUTES.HOME, { replace: true });
-  }, [navigate]);
+    navigate(isAuthenticated ? ROUTES.HOME : ROUTES.AUTH, { replace: true });
+  }, [isAuthenticated, navigate]);
 
   const handleSkip = useCallback(() => {
     localStorage.setItem('sorbo_onboarding_done', 'true');
-    navigate(ROUTES.HOME, { replace: true });
-  }, [navigate]);
+    navigate(isAuthenticated ? ROUTES.HOME : ROUTES.AUTH, { replace: true });
+  }, [isAuthenticated, navigate]);
 
   const slide = SLIDES[currentSlide];
   const isLastSlide = currentSlide === SLIDES.length - 1;

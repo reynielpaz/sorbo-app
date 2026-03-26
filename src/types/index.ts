@@ -7,4 +7,4 @@ export type {
   PaymentMethod,
   CartItem,
 } from './order';
-export type { User, UserRole } from './user';
+export type { Profile, User, UserRole } from './user';

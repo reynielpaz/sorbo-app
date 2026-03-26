@@ -3,6 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import { ROUTES } from '@/utils/constants';
 import { SplashPage } from '@/pages/SplashPage';
 import { OnboardingPage } from '@/pages/OnboardingPage';
+import { AuthPage } from '@/pages/AuthPage';
 import { HomePage } from '@/pages/HomePage';
 import { MenuPage } from '@/pages/MenuPage';
 import { CartPage } from '@/pages/CartPage';
@@ -14,6 +15,7 @@ export function Router() {
       <Routes>
         <Route path={ROUTES.SPLASH} element={<SplashPage />} />
         <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
+        <Route path={ROUTES.AUTH} element={<AuthPage />} />
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.MENU} element={<MenuPage />} />
         <Route path={ROUTES.CART} element={<CartPage />} />
