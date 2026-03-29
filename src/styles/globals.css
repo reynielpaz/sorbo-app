@@ -3,15 +3,15 @@
 /* Colores y fuentes del design system de Sorbo en Tailwind v4 */
 @theme {
   /* Colores */
-  --color-sorbo-black: #0a0908;
-  --color-sorbo-dark: #1a1612;
-  --color-sorbo-warm: #2a2420;
-  --color-sorbo-gold: #d4a853;
-  --color-sorbo-cream: #f5e6c8;
-  --color-sorbo-amber: #e8943a;
-  --color-sorbo-neon: #00b4ff;
-  --color-sorbo-green: #4caf50;
-  --color-sorbo-red: #e53935;
+  --color-sorbo-black: #0b0f1a;
+  --color-sorbo-dark: #0e1225;
+  --color-sorbo-warm: #131830;
+  --color-sorbo-gold: #a78bfa;
+  --color-sorbo-cream: #ffffff;
+  --color-sorbo-amber: #f59e0b;
+  --color-sorbo-neon: #8b5cf6;
+  --color-sorbo-green: #00dc82;
+  --color-sorbo-red: #ef4444;
 
   /* Familias tipográficas */
   --font-playfair: 'Playfair Display', Georgia, serif;
@@ -22,40 +22,41 @@
 /* CSS custom properties para el design system */
 :root {
   /* Colores primarios */
-  --sorbo-black: #0a0908;
-  --sorbo-dark: #1a1612;
-  --sorbo-dark-warm: #2a2420;
+  --sorbo-black: #0b0f1a;
+  --sorbo-dark: #0e1225;
+  --sorbo-dark-warm: #131830;
 
   /* Acentos */
-  --sorbo-gold: #d4a853;
-  --sorbo-cream: #f5e6c8;
-  --sorbo-amber: #e8943a;
+  --sorbo-gold: #a78bfa;
+  --sorbo-cream: #ffffff;
+  --sorbo-amber: #f59e0b;
 
   /* Funcionales */
-  --sorbo-neon: #00b4ff;
-  --sorbo-green: #4caf50;
-  --sorbo-red: #e53935;
+  --sorbo-neon: #8b5cf6;
+  --sorbo-green: #00dc82;
+  --sorbo-red: #ef4444;
 
   /* Texto */
-  --sorbo-text-primary: #f5e6c8;
-  --sorbo-text-secondary: rgba(245, 230, 200, 0.7);
-  --sorbo-text-muted: rgba(245, 230, 200, 0.4);
+  --sorbo-text-primary: #ffffff;
+  --sorbo-text-secondary: rgba(255, 255, 255, 0.5);
+  --sorbo-text-muted: rgba(255, 255, 255, 0.25);
 
   /* Glassmorphism */
-  --sorbo-glass: rgba(26, 22, 18, 0.65);
-  --sorbo-glass-light: rgba(245, 230, 200, 0.08);
-  --sorbo-glass-border: rgba(212, 168, 83, 0.15);
+  --sorbo-glass: rgba(255, 255, 255, 0.06);
+  --sorbo-glass-light: rgba(255, 255, 255, 0.04);
+  --sorbo-glass-border: rgba(255, 255, 255, 0.1);
+  --sorbo-glass-border-light: rgba(255, 255, 255, 0.07);
 
   /* Gradientes */
-  --sorbo-gradient-hero: linear-gradient(135deg, #0a0908 0%, #1a1612 50%, #2a1a0a 100%);
-  --sorbo-gradient-gold: linear-gradient(135deg, #d4a853 0%, #e8943a 100%);
-  --sorbo-gradient-glass: linear-gradient(135deg, rgba(212, 168, 83, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+  --sorbo-gradient-hero: linear-gradient(135deg, #0b0f1a 0%, #0e1225 45%, #131830 100%);
+  --sorbo-gradient-gold: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  --sorbo-gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
 
   /* Sombras */
   --sorbo-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --sorbo-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
   --sorbo-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
-  --sorbo-shadow-gold: 0 4px 16px rgba(212, 168, 83, 0.2);
+  --sorbo-shadow-gold: 0 4px 16px rgba(99, 102, 241, 0.28);
 
   /* Timing de animaciones */
   --ease-out-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -73,6 +74,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
 }
 
 body {
@@ -83,6 +85,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overscroll-behavior: none;
 }
 
 /* Scrollbar personalizado */
@@ -90,9 +93,18 @@ body {
   width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--sorbo-dark);
+  background: rgba(255, 255, 255, 0.03);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(212, 168, 83, 0.3);
+  background: rgba(255, 255, 255, 0.14);
   border-radius: 2px;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -30,7 +30,7 @@ export function AppShell({
       <main
         className={cn(
           'flex-1 overflow-y-auto',
-          showBottomNav && 'pb-20',
+          showBottomNav && 'pb-24',
           className
         )}
       >

@@ -10,7 +10,7 @@ export function Skeleton({ className, rounded = false }: SkeletonProps) {
   return (
     <div
       className={cn(
-        'skeleton',
+        'shimmer',
         rounded ? 'rounded-full' : 'rounded-xl',
         className
       )}
@@ -21,13 +21,14 @@ export function Skeleton({ className, rounded = false }: SkeletonProps) {
 /** Skeleton preconfigurado para tarjeta de producto */
 export function ProductCardSkeleton() {
   return (
-    <div className="bg-sorbo-dark rounded-2xl overflow-hidden border border-sorbo-gold/10">
-      <Skeleton className="w-full aspect-[4/3]" rounded={false} />
-      <div className="p-3 space-y-2">
-        <Skeleton className="h-4 w-3/4" />
-        <Skeleton className="h-3 w-full" />
-        <Skeleton className="h-3 w-1/2" />
-        <Skeleton className="h-5 w-1/3 mt-2" />
+    <div className="overflow-hidden rounded-[18px] border border-white/8 bg-white/5">
+      <Skeleton className="h-[110px] w-full" rounded={false} />
+      <div className="relative space-y-2 px-[11px] pb-[13px] pt-[10px] pr-12">
+        <Skeleton className="h-3.5 w-3/4" />
+        <Skeleton className="h-2.5 w-full" />
+        <Skeleton className="mb-2 h-2.5 w-1/2" />
+        <Skeleton className="h-4 w-1/3" />
+        <Skeleton className="absolute bottom-[13px] right-[11px] h-[28px] w-[28px] rounded-[9px]" />
       </div>
     </div>
   );

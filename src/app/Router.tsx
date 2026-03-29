@@ -6,6 +6,7 @@ import { OnboardingPage } from '@/pages/OnboardingPage';
 import { AuthPage } from '@/pages/AuthPage';
 import { HomePage } from '@/pages/HomePage';
 import { MenuPage } from '@/pages/MenuPage';
+import { ProductPage } from '@/pages/ProductPage';
 import { CartPage } from '@/pages/CartPage';
 import { ProfilePage } from '@/pages/ProfilePage';
 
@@ -18,6 +19,7 @@ export function Router() {
         <Route path={ROUTES.AUTH} element={<AuthPage />} />
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.MENU} element={<MenuPage />} />
+        <Route path={ROUTES.PRODUCT} element={<ProductPage />} />
         <Route path={ROUTES.CART} element={<CartPage />} />
         <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
         {/* Redirige cualquier ruta desconocida al splash */}

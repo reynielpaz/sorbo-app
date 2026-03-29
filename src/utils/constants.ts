@@ -4,6 +4,25 @@ export const APP_NAME = 'Sorbo Café • Bistró';
 /** Slogan del restaurante */
 export const APP_SLOGAN = 'Sienta, saborea, Sorbo';
 
+/** Iconos visuales para categorías del menú */
+export const CATEGORY_ICON_MAP: Record<string, string> = {
+  hamburguesas: '🍔',
+  'perros-calientes': '🌭',
+  patacones: '🫓',
+  ensaladas: '🥗',
+  'menu-kids': '👶',
+  salchipapas: '🍟',
+  especiales: '⭐',
+  bebidas: '🥤',
+  cocteles: '🍹',
+  postres: '🍰',
+};
+
+export function getCategoryIcon(slug?: string | null): string {
+  if (!slug) return '🍽️';
+  return CATEGORY_ICON_MAP[slug] ?? '🍽️';
+}
+
 /** Número de WhatsApp Business (sin +) */
 export const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER ?? '584221000292';
 
@@ -29,16 +48,21 @@ export const ROUTES = {
 
 /** Categorías del menú */
 export const MENU_CATEGORIES = [
-  { id: 'hamburguesas', name: 'Hamburguesas', slug: 'hamburguesas', icon: '🍔' },
-  { id: 'perros-calientes', name: 'Perros Calientes', slug: 'perros-calientes', icon: '🌭' },
-  { id: 'patacones', name: 'Patacones', slug: 'patacones', icon: '🫓' },
-  { id: 'ensaladas', name: 'Ensaladas', slug: 'ensaladas', icon: '🥗' },
-  { id: 'menu-kids', name: 'Menú Kids', slug: 'menu-kids', icon: '🧒' },
-  { id: 'salchipapas', name: 'Salchipapas', slug: 'salchipapas', icon: '🍟' },
-  { id: 'bebidas', name: 'Bebidas', slug: 'bebidas', icon: '🥤' },
-  { id: 'cocteles', name: 'Cócteles', slug: 'cocteles', icon: '🍹' },
-  { id: 'postres', name: 'Postres', slug: 'postres', icon: '🍮' },
-  { id: 'especiales', name: 'Especiales', slug: 'especiales', icon: '⭐' },
+  { id: 'hamburguesas', name: 'Hamburguesas', slug: 'hamburguesas', icon: CATEGORY_ICON_MAP.hamburguesas },
+  {
+    id: 'perros-calientes',
+    name: 'Perros Calientes',
+    slug: 'perros-calientes',
+    icon: CATEGORY_ICON_MAP['perros-calientes'],
+  },
+  { id: 'patacones', name: 'Patacones', slug: 'patacones', icon: CATEGORY_ICON_MAP.patacones },
+  { id: 'ensaladas', name: 'Ensaladas', slug: 'ensaladas', icon: CATEGORY_ICON_MAP.ensaladas },
+  { id: 'menu-kids', name: 'Menú Kids', slug: 'menu-kids', icon: CATEGORY_ICON_MAP['menu-kids'] },
+  { id: 'salchipapas', name: 'Salchipapas', slug: 'salchipapas', icon: CATEGORY_ICON_MAP.salchipapas },
+  { id: 'bebidas', name: 'Bebidas', slug: 'bebidas', icon: CATEGORY_ICON_MAP.bebidas },
+  { id: 'cocteles', name: 'Cócteles', slug: 'cocteles', icon: CATEGORY_ICON_MAP.cocteles },
+  { id: 'postres', name: 'Postres', slug: 'postres', icon: CATEGORY_ICON_MAP.postres },
+  { id: 'especiales', name: 'Especiales', slug: 'especiales', icon: CATEGORY_ICON_MAP.especiales },
 ] as const;
 
 /** Métodos de pago disponibles */

@@ -76,12 +76,13 @@
   animation: scaleIn 0.3s var(--ease-out-back) forwards;
 }
 
-.skeleton {
+.skeleton,
+.shimmer {
   background: linear-gradient(
     90deg,
-    rgba(42, 36, 32, 0.8) 25%,
-    rgba(212, 168, 83, 0.08) 50%,
-    rgba(42, 36, 32, 0.8) 75%
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(167, 139, 250, 0.16) 50%,
+    rgba(255, 255, 255, 0.05) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
