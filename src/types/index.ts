@@ -1,4 +1,5 @@
 export type { Category, Product, ProductCustomization, CustomizationOption, ProductTag } from './product';
+export type { Promotion, PromotionBannerItem } from './promotion';
 export type {
   Order,
   OrderItem,

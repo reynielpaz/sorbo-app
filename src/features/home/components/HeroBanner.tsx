@@ -1,29 +1,39 @@
 import { useEffect, useRef, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import type { PromotionBannerItem } from '@/types';
 import { cn } from '@/utils/cn';
+import { usePromotions } from '../hooks/usePromotions';
+import { PromoHeroCard } from './PromoHeroCard';
 
-interface PromoBanner {
-  title: string;
-  subtitle: string;
-}
+const HERO_FALLBACK_IMAGE = '/images/hero/hero-burger-splash.png';
 
-const PROMO_BANNERS: PromoBanner[] = [
-  {
-    title: '2x1 en cócteles',
-    subtitle: 'Todos los viernes de 7pm a 9pm',
-  },
-  {
-    title: 'Nuevo: Pizza Burguer',
-    subtitle: 'Prueba nuestra creación exclusiva',
-  },
-  {
-    title: 'Happy Hour',
-    subtitle: 'Bebidas al 2x1 de lunes a jueves',
-  },
-];
+const EMPTY_PROMOTIONS_FALLBACK: PromotionBannerItem = {
+  id: 'promotions-empty',
+  title: 'Nuevas promociones muy pronto',
+  description: 'Sabores que merecen repetirse.',
+  imageUrl: HERO_FALLBACK_IMAGE,
+  badgeLabel: 'PROMO',
+};
+
+const ERROR_PROMOTIONS_FALLBACK: PromotionBannerItem = {
+  id: 'promotions-error',
+  title: 'Promociones en actualización',
+  description: 'Sabores que merecen repetirse.',
+  imageUrl: HERO_FALLBACK_IMAGE,
+  badgeLabel: 'PROMO',
+};
 
 export function HeroBanner() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const { promotions, loading, error } = usePromotions();
+  const shouldReduceMotion = useReducedMotion();
+  const items = promotions.length > 0
+    ? promotions
+    : [error ? ERROR_PROMOTIONS_FALLBACK : EMPTY_PROMOTIONS_FALLBACK];
+  const hasMultiplePromotions = promotions.length > 1;
+  const showDots = !loading && hasMultiplePromotions;
+  const enableAutoplay = hasMultiplePromotions && !shouldReduceMotion;
 
   function scrollToIndex(index: number) {
     const container = containerRef.current;
@@ -32,7 +42,7 @@ export function HeroBanner() {
     if (!targetCard) return;
 
     targetCard.scrollIntoView({
-      behavior: 'smooth',
+      behavior: shouldReduceMotion ? 'auto' : 'smooth',
       inline: 'center',
       block: 'nearest',
     });
@@ -64,72 +74,96 @@ export function HeroBanner() {
   }
 
   useEffect(() => {
+    setActiveIndex(0);
+
+    const container = containerRef.current;
+    const firstCard = container?.children.item(0) as HTMLElement | null;
+
+    if (!firstCard) return;
+
+    firstCard.scrollIntoView({
+      behavior: 'auto',
+      inline: 'center',
+      block: 'nearest',
+    });
+  }, [items.length]);
+
+  useEffect(() => {
+    if (!enableAutoplay) return;
+
     const intervalId = window.setInterval(() => {
-      const nextIndex = activeIndex === PROMO_BANNERS.length - 1 ? 0 : activeIndex + 1;
-      scrollToIndex(nextIndex);
+      const nextIndex = activeIndex === promotions.length - 1 ? 0 : activeIndex + 1;
+      const container = containerRef.current;
+      const targetCard = container?.children.item(nextIndex) as HTMLElement | null;
+
+      if (!targetCard) return;
+
+      targetCard.scrollIntoView({
+        behavior: shouldReduceMotion ? 'auto' : 'smooth',
+        inline: 'center',
+        block: 'nearest',
+      });
+      setActiveIndex(nextIndex);
     }, 5_000);
 
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [activeIndex]);
+  }, [activeIndex, enableAutoplay, promotions.length, shouldReduceMotion]);
+
+  if (loading) {
+    return (
+      <motion.section
+        className="mx-3 mb-4 mt-1"
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+        animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+        transition={shouldReduceMotion ? undefined : { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        <div className="h-[210px] w-full animate-pulse rounded-[24px] border border-white/10 bg-white/5 shadow-[0_18px_50px_rgba(0,0,0,0.35)] sm:h-[240px]" />
+      </motion.section>
+    );
+  }
 
   return (
-    <section className="mx-3 mb-4 mt-1 space-y-3">
+    <motion.section
+      className="mx-3 mb-4 mt-1 space-y-3"
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+      animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+      transition={shouldReduceMotion ? undefined : { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+    >
       <div
         ref={containerRef}
         onScroll={handleScroll}
         className="hide-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto"
       >
-        {PROMO_BANNERS.map((banner) => (
-          <article
-            key={banner.title}
-            className={cn(
-              'relative h-[185px] w-full shrink-0 snap-center overflow-hidden rounded-[22px] border border-[rgba(255,255,255,0.12)]',
-              'bg-[linear-gradient(135deg,#9333EA_0%,#EC4899_40%,#F97316_75%,#EAB308_100%)] px-[18px] py-[16px]'
-            )}
-          >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_35%,rgba(255,255,255,0.25)_0%,transparent_45%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(147,51,234,0.3)_0%,transparent_40%)]" />
-
-            <div className="relative flex h-full items-end justify-between gap-4">
-              <div className="flex h-full max-w-[200px] flex-col justify-between">
-                <span className="inline-flex w-fit rounded-full bg-[rgba(0,0,0,0.2)] px-2.5 py-1 text-[9px] font-bold tracking-[0.1em] text-white backdrop-blur-md">
-                  PROMO DEL DÍA
-                </span>
-
-                <div className="space-y-2">
-                  <h2 className="max-w-[200px] font-playfair text-[22px] font-bold leading-[1.05] text-white [text-shadow:0_6px_18px_rgba(0,0,0,0.25)]">
-                    {banner.title}
-                  </h2>
-                  <p className="max-w-[180px] text-[12px] text-white/85">{banner.subtitle}</p>
-                </div>
-              </div>
-
-              <div className="relative mb-1 mr-1 flex h-[96px] w-[96px] shrink-0 items-center justify-center">
-                <div className="absolute h-[90px] w-[90px] rounded-full border border-white/20 bg-white/10 backdrop-blur-xl" />
-                <div className="absolute h-[70px] w-[70px] rounded-full border border-white/20 bg-white/12 backdrop-blur-xl" />
-                <span className="relative text-[28px]">☕</span>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-
-      <div className="flex items-center justify-center gap-2">
-        {PROMO_BANNERS.map((banner, index) => (
-          <button
-            key={banner.title}
-            type="button"
-            aria-label={`Ir a la promoción ${index + 1}`}
-            onClick={() => scrollToIndex(index)}
-            className={cn(
-              'rounded-full transition-all duration-300',
-              activeIndex === index ? 'h-[7px] w-[22px] bg-white' : 'h-[7px] w-[7px] bg-white/30'
-            )}
+        {items.map((promotion, index) => (
+          <PromoHeroCard
+            key={promotion.id}
+            promotion={promotion}
+            isActive={activeIndex === index}
+            shouldReduceMotion={Boolean(shouldReduceMotion)}
           />
         ))}
       </div>
-    </section>
+
+      {showDots ? (
+        <div className="flex items-center justify-center gap-2">
+          {promotions.map((promotion, index) => (
+            <button
+              key={promotion.id}
+              type="button"
+              aria-label={`Ir a promoción ${index + 1}`}
+              onClick={() => scrollToIndex(index)}
+              className={cn(
+                'rounded-full transition-all duration-300',
+                activeIndex === index
+                  ? 'h-2 w-6 bg-[#D4A853]'
+                  : 'h-2 w-2 bg-white/30'
+              )}
+            />
+          ))}
+        </div>
+      ) : null}
+    </motion.section>
   );
 }
