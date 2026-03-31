@@ -162,10 +162,8 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       <div className="flex items-center justify-between px-3 py-2.5">
         <div className="min-w-0 flex-1">
           <h3 className="line-clamp-1 font-playfair text-[14px] font-bold text-white">{product.name}</h3>
-          <div className="mt-1 flex items-center gap-3">
-            <span className="text-[16px] font-extrabold text-[#E8943A]">{formatPrice(product.price)}</span>
-            <span className="text-[10px] font-semibold text-[#E8943A]/60">{getAppetitePhrase(index)}</span>
-          </div>
+          <p className="mt-0.5 text-[10px] italic text-white/35">{getAppetitePhrase(index)}</p>
+          <span className="mt-1 block text-[16px] font-extrabold text-[#E8943A]">{formatPrice(product.price)}</span>
         </div>
 
         <button

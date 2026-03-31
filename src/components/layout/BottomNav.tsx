@@ -30,7 +30,7 @@ export function BottomNav({ cartCount = 0 }: BottomNavProps) {
       className={cn(
         'fixed left-[14px] right-[14px] z-30',
         'bottom-[calc(env(safe-area-inset-bottom)+14px)] h-[65px]',
-        'rounded-[22px] border border-white/10 bg-[rgba(255,255,255,0.07)] backdrop-blur-[24px]',
+        'rounded-[22px] border border-white/[0.06] bg-[rgba(10,10,10,0.75)] backdrop-blur-[20px]',
         'shadow-[0_-2px_24px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.05)]'
       )}
     >
@@ -50,9 +50,9 @@ export function BottomNav({ cartCount = 0 }: BottomNavProps) {
                 <motion.div
                   layoutId="nav-indicator"
                   transition={{ duration: 0.2 }}
-                  className="relative flex h-[42px] w-[42px] items-center justify-center rounded-[14px] bg-gradient-to-br from-[#4F46E5] to-[#4338CA] shadow-[0_4px_16px_rgba(67,56,202,0.4)]"
+                  className="relative flex h-[42px] w-[42px] items-center justify-center rounded-[14px] bg-gradient-to-br from-[#D4A853] to-[#B8923A] shadow-[0_4px_16px_rgba(212,168,83,0.35)]"
                 >
-                  <Icon size={20} className="text-white" />
+                  <Icon size={20} className="text-[#0B0F1A]" />
                   {isCart && cartCount > 0 && (
                     <motion.span
                       initial={{ scale: 0 }}
@@ -66,7 +66,7 @@ export function BottomNav({ cartCount = 0 }: BottomNavProps) {
               ) : (
                 <>
                   <div className="relative">
-                    <Icon size={20} className="text-white/25 transition-colors duration-200" />
+                    <Icon size={20} className="text-white/35 transition-colors duration-200" />
                     {isCart && cartCount > 0 && (
                       <motion.span
                         initial={{ scale: 0 }}
@@ -77,7 +77,7 @@ export function BottomNav({ cartCount = 0 }: BottomNavProps) {
                       </motion.span>
                     )}
                   </div>
-                  <span className="mt-1 text-[9px] font-medium text-white/35">{item.label}</span>
+                  <span className="mt-1 text-[9px] font-medium text-white/40">{item.label}</span>
                 </>
               )}
             </button>
