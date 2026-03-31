@@ -15,6 +15,7 @@ interface AppShellProps {
  * Shell principal de la app.
  * Envuelve el contenido con Header y BottomNav,
  * añadiendo el padding necesario para el nav inferior.
+ * El fondo Dark Luxury viene del App.tsx global.
  */
 export function AppShell({
   children,
@@ -25,7 +26,7 @@ export function AppShell({
   className,
 }: AppShellProps) {
   return (
-    <div className="min-h-screen bg-sorbo-black flex flex-col">
+    <div className="flex min-h-screen flex-col">
       {showHeader && <Header title={title} />}
       <main
         className={cn(

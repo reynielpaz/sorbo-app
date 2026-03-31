@@ -8,8 +8,8 @@ export function FeaturedProducts() {
   const { products, loading, error } = useFeaturedProducts();
 
   return (
-    <section className="mx-3 mt-4 rounded-[24px] border border-white/[0.05] bg-[rgba(14,18,37,0.5)] p-4">
-      <div className="mb-3 flex items-center justify-between gap-3">
+    <section className="mt-6">
+      <div className="mb-3 flex items-center justify-between gap-3 px-5">
         <h2 className="font-playfair text-[14px] font-semibold text-white/90">Lo más pedido</h2>
         <Link to={ROUTES.MENU} className="text-[11px] font-medium text-[#D4A853]">
           Ver todo →
@@ -17,19 +17,21 @@ export function FeaturedProducts() {
       </div>
 
       {loading ? (
-        <div className="grid grid-cols-2 gap-2.5">
-          {Array.from({ length: 2 }).map((_, index) => (
-            <ProductCardSkeleton key={index} />
+        <div className="hide-scrollbar flex gap-3 overflow-x-auto px-5">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div key={index} className="w-[230px] shrink-0">
+              <ProductCardSkeleton />
+            </div>
           ))}
         </div>
       ) : error ? (
-        <p className="text-sm text-sorbo-red">{error}</p>
+        <p className="px-5 text-sm text-sorbo-red">{error}</p>
       ) : products.length === 0 ? (
-        <p className="text-sm text-white/50">No hay productos destacados disponibles.</p>
+        <p className="px-5 text-sm text-white/50">No hay productos destacados disponibles.</p>
       ) : (
-        <div className="grid grid-cols-2 gap-2.5">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+        <div className="hide-scrollbar flex gap-3 overflow-x-auto px-5">
+          {products.map((product, index) => (
+            <ProductCard key={product.id} product={product} index={index} />
           ))}
         </div>
       )}

@@ -20,11 +20,7 @@ function getSectionAnimation(delay: number) {
 
 export function HomePage() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0B0F1A]">
-      {/* Esferas decorativas — dorado cálido muy sutil, CERO violeta/magenta */}
-      <div className="pointer-events-none absolute left-1/2 top-[-40px] h-[300px] w-[300px] -translate-x-1/2 bg-[radial-gradient(circle,rgba(212,168,83,0.06)_0%,transparent_70%)]" />
-      <div className="pointer-events-none absolute right-[-60px] top-[350px] h-[250px] w-[250px] bg-[radial-gradient(circle,rgba(212,168,83,0.04)_0%,transparent_60%)]" />
-
+    <div className="relative min-h-screen overflow-hidden">
       <div className="relative z-[1] pb-24">
         <motion.section {...getSectionAnimation(0)}>
           <TopGlassPanel />
