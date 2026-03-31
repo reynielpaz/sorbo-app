@@ -8,10 +8,10 @@ export function FeaturedProducts() {
   const { products, loading, error } = useFeaturedProducts();
 
   return (
-    <section className="mx-3 mt-4 rounded-[24px] border border-[rgba(255,255,255,0.05)] bg-[rgba(255,255,255,0.02)] p-4 shadow-[0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-xl">
+    <section className="mx-3 mt-4 rounded-[24px] border border-white/[0.05] bg-[rgba(14,18,37,0.5)] p-4">
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2 className="font-playfair text-[14px] font-semibold text-white/90">Lo más pedido</h2>
-        <Link to={ROUTES.MENU} className="text-[11px] font-medium text-[#A78BFA]">
+        <Link to={ROUTES.MENU} className="text-[11px] font-medium text-[#D4A853]">
           Ver todo →
         </Link>
       </div>

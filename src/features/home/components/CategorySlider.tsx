@@ -8,7 +8,7 @@ export function CategorySlider() {
   const { categories, loading, error } = useCategories();
 
   return (
-    <section className="mx-3 mt-4 rounded-[24px] border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] p-4 shadow-[0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-xl">
+    <section className="mx-3 mt-4 rounded-[24px] border border-white/[0.05] bg-[rgba(14,18,37,0.5)] p-4">
       <p className="mb-3.5 font-playfair text-[14px] font-semibold text-white/90">Categorías</p>
 
       {loading ? (

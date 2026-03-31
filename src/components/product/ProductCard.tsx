@@ -13,14 +13,14 @@ function resolveBadge(tags: Product['tags']) {
   if (tags.includes('popular')) {
     return {
       label: 'POPULAR',
-      className: 'border border-[rgba(139,92,246,0.2)] bg-[rgba(139,92,246,0.3)] text-[#D8B4FE]',
+      className: 'border border-[rgba(212,168,83,0.25)] bg-[rgba(212,168,83,0.15)] text-[#E8C068]',
     };
   }
 
   if (tags.includes('nuevo')) {
     return {
       label: 'NUEVO',
-      className: 'border border-[rgba(236,72,153,0.2)] bg-[rgba(236,72,153,0.3)] text-[#FBCFE8]',
+      className: 'border border-[rgba(232,148,58,0.25)] bg-[rgba(232,148,58,0.15)] text-[#F0B060]',
     };
   }
 
@@ -29,14 +29,14 @@ function resolveBadge(tags: Product['tags']) {
 
 function getPlaceholderGradient(categorySlug?: string) {
   if (categorySlug === 'hamburguesas') {
-    return 'bg-[linear-gradient(145deg,rgba(147,51,234,0.15),rgba(99,102,241,0.08))]';
+    return 'bg-[linear-gradient(145deg,rgba(212,168,83,0.1),rgba(184,146,58,0.05))]';
   }
 
   if (categorySlug === 'cocteles') {
-    return 'bg-[linear-gradient(145deg,rgba(236,72,153,0.15),rgba(244,114,182,0.08))]';
+    return 'bg-[linear-gradient(145deg,rgba(232,148,58,0.1),rgba(212,168,83,0.05))]';
   }
 
-  return 'bg-[linear-gradient(145deg,rgba(139,92,246,0.1),rgba(99,102,241,0.05))]';
+  return 'bg-[linear-gradient(145deg,rgba(212,168,83,0.08),rgba(14,18,37,0.3))]';
 }
 
 export function ProductCard({ product }: ProductCardProps) {
@@ -108,7 +108,7 @@ export function ProductCard({ product }: ProductCardProps) {
           onClick={handleAddToCart}
           className={cn(
             'absolute bottom-[13px] right-[11px] flex h-[28px] w-[28px] items-center justify-center rounded-[9px]',
-            'bg-gradient-to-br from-[#6366F1] to-[#4F46E5] text-sm font-bold text-white shadow-[0_3px_10px_rgba(79,70,229,0.3)]'
+            'bg-gradient-to-br from-[#D4A853] to-[#B8923A] text-sm font-bold text-[#0B0F1A] shadow-[0_3px_10px_rgba(212,168,83,0.3)]'
           )}
         >
           +

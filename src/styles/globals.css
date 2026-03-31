@@ -6,10 +6,9 @@
   --color-sorbo-black: #0b0f1a;
   --color-sorbo-dark: #0e1225;
   --color-sorbo-warm: #131830;
-  --color-sorbo-gold: #a78bfa;
+  --color-sorbo-gold: #d4a853;
   --color-sorbo-cream: #ffffff;
-  --color-sorbo-amber: #f59e0b;
-  --color-sorbo-neon: #8b5cf6;
+  --color-sorbo-amber: #e8943a;
   --color-sorbo-green: #00dc82;
   --color-sorbo-red: #ef4444;
 
@@ -26,13 +25,14 @@
   --sorbo-dark: #0e1225;
   --sorbo-dark-warm: #131830;
 
-  /* Acentos */
-  --sorbo-gold: #a78bfa;
+  /* Acentos — Dorado cálido, CERO violeta */
+  --sorbo-gold: #d4a853;
+  --sorbo-gold-light: #e8c068;
+  --sorbo-gold-dark: #b8923a;
   --sorbo-cream: #ffffff;
-  --sorbo-amber: #f59e0b;
+  --sorbo-amber: #e8943a;
 
   /* Funcionales */
-  --sorbo-neon: #8b5cf6;
   --sorbo-green: #00dc82;
   --sorbo-red: #ef4444;
 
@@ -47,16 +47,16 @@
   --sorbo-glass-border: rgba(255, 255, 255, 0.1);
   --sorbo-glass-border-light: rgba(255, 255, 255, 0.07);
 
-  /* Gradientes */
+  /* Gradientes — Dorado y marino, CERO violeta */
   --sorbo-gradient-hero: linear-gradient(135deg, #0b0f1a 0%, #0e1225 45%, #131830 100%);
-  --sorbo-gradient-gold: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  --sorbo-gradient-gold: linear-gradient(135deg, #d4a853 0%, #b8923a 100%);
   --sorbo-gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
 
-  /* Sombras */
+  /* Sombras — Dorado cálido, CERO violeta */
   --sorbo-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --sorbo-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
   --sorbo-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
-  --sorbo-shadow-gold: 0 4px 16px rgba(99, 102, 241, 0.28);
+  --sorbo-shadow-gold: 0 4px 16px rgba(212, 168, 83, 0.25);
 
   /* Timing de animaciones */
   --ease-out-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);

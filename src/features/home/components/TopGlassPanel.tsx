@@ -3,7 +3,7 @@ import { HomeHeader } from './HomeHeader';
 
 export function TopGlassPanel() {
   return (
-    <div className="mx-3 mt-3 overflow-hidden rounded-[26px] border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.03)] shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl">
+    <div className="mx-3 mt-3 overflow-hidden rounded-[26px] border border-white/[0.07] bg-[rgba(14,18,37,0.6)]">
       <HomeHeader />
       <HeroBanner />
     </div>

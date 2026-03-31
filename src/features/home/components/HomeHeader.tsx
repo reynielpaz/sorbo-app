@@ -5,7 +5,6 @@ import { useBusinessStatus } from '../hooks/useBusinessStatus';
 
 const CARACAS_TIMEZONE = 'America/Caracas';
 
-/** Frases inspiradoras con sabor zuliano para cautivar al usuario */
 const INSPIRATIONAL_PHRASES = [
   'El sabor que te hace volver',
   'Aquí se come con el alma',
@@ -87,41 +86,41 @@ export function HomeHeader() {
   }, []);
 
   return (
-    <div className="px-[18px] pb-[10px] pt-[calc(env(safe-area-inset-top)+14px)]">
-      {/* Fila 1: Logo + Badge */}
-      <div className="flex items-start justify-between">
+    <div className="px-[18px] pb-2 pt-[calc(env(safe-area-inset-top)+12px)]">
+      {/* Fila 1: Logo + Badge — compacta */}
+      <div className="flex items-center justify-between">
         <img
           src="/images/brand/logo-sorbo.png"
           alt="Sorbo Café • Bistró"
-          className="h-30 w-auto object-contain brightness-0 invert"
+          className="h-16 w-auto object-contain brightness-0 invert"
         />
 
-        <div className="pt-1">
+        <div>
           {loading ? (
-            <Skeleton className="h-[30px] w-[88px]" rounded />
+            <Skeleton className="h-[28px] w-[80px]" rounded />
           ) : isOpen ? (
-            <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(0,220,130,0.25)] bg-[rgba(0,220,130,0.1)] px-3.5 py-1 text-[11px] font-semibold text-[#00DC82]">
-              <span className="h-2 w-2 rounded-full bg-[#00DC82] shadow-[0_0_10px_rgba(0,220,130,0.85)]" />
+            <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(0,220,130,0.25)] bg-[rgba(0,220,130,0.1)] px-3 py-1 text-[11px] font-semibold text-[#00DC82]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#00DC82] shadow-[0_0_8px_rgba(0,220,130,0.85)]" />
               Abierto
             </span>
           ) : (
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1 text-[11px] font-semibold text-white/50 backdrop-blur-sm">
-              <span className="h-2 w-2 rounded-full bg-[#EF4444]/40 shadow-[0_0_8px_rgba(239,68,68,0.35)]" />
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1 text-[11px] font-semibold text-white/50">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#EF4444]/40 shadow-[0_0_8px_rgba(239,68,68,0.35)]" />
               Cerrado
             </span>
           )}
         </div>
       </div>
 
-      {/* Fila 2: Greeting pegado al logo */}
-      <div className="-mt-3">
-        <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/40">
+      {/* Fila 2: Greeting + frase — compacto */}
+      <div className="mt-1">
+        <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/35">
           {getGreeting().toUpperCase()}
         </p>
-        <h1 className="mt-0.5 line-clamp-1 font-playfair text-[22px] font-bold text-white">
+        <h1 className="line-clamp-1 font-playfair text-xl font-bold text-white">
           {firstName ? `Hola, ${greetingName}` : greetingName}
         </h1>
-        <p className="mt-1 text-[13px] italic text-[#D4A853]/70">
+        <p className="mt-0.5 text-[12px] italic text-[#D4A853]/60">
           {phrase}
         </p>
       </div>
