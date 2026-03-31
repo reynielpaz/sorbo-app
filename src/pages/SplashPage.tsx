@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
+import { hideBootScreen } from '@/utils/bootScreen';
 import { ROUTES } from '@/utils/constants';
 
 const LOGO_LETTERS = ['S', 'O', 'R', 'B', 'O'] as const;
@@ -82,6 +83,7 @@ export function SplashPage() {
         gsap.set(letters, { autoAlpha: 0, y: 40 });
       }
 
+      hideBootScreen();
       introTimelineRef.current = gsap.timeline();
 
       introTimelineRef.current

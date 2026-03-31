@@ -1,6 +1,8 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { useLayoutEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { ROUTES } from '@/utils/constants';
+import { hideBootScreen } from '@/utils/bootScreen';
 import { SplashPage } from '@/pages/SplashPage';
 import { OnboardingPage } from '@/pages/OnboardingPage';
 import { AuthPage } from '@/pages/AuthPage';
@@ -11,6 +13,14 @@ import { CartPage } from '@/pages/CartPage';
 import { ProfilePage } from '@/pages/ProfilePage';
 
 export function Router() {
+  const location = useLocation();
+
+  useLayoutEffect(() => {
+    if (location.pathname !== ROUTES.SPLASH) {
+      hideBootScreen();
+    }
+  }, [location.pathname]);
+
   return (
     <AnimatePresence mode="wait">
       <Routes>
