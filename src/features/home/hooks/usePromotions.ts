@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { CACHE_KEYS, getCached } from '@/services/cache';
 import { getActivePromotions } from '@/services/promotions';
 import type { PromotionBannerItem } from '@/types';
 
@@ -18,6 +19,16 @@ export function usePromotions(): UsePromotionsState {
 
     async function loadPromotions() {
       try {
+        const cached = getCached<PromotionBannerItem[]>(CACHE_KEYS.PROMOTIONS);
+        if (cached && cached.length > 0) {
+          if (!cancelled) {
+            setPromotions(cached);
+            setError(null);
+            setLoading(false);
+          }
+          return;
+        }
+
         const data = await getActivePromotions();
 
         if (cancelled) return;

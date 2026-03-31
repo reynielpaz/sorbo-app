@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { CACHE_KEYS, getCached } from '@/services/cache';
 import { getCategories } from '@/services/products';
 import type { Category } from '@/types';
 
@@ -18,6 +19,16 @@ export function useCategories(): UseCategoriesState {
 
     async function loadCategories() {
       try {
+        const cached = getCached<Category[]>(CACHE_KEYS.CATEGORIES);
+        if (cached && cached.length > 0) {
+          if (active) {
+            setCategories(cached);
+            setError(null);
+            setLoading(false);
+          }
+          return;
+        }
+
         const data = await getCategories();
 
         if (!active) return;

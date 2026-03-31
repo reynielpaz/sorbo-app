@@ -1,3 +1,4 @@
+import { CACHE_KEYS, setCache } from '@/services/cache';
 import { getFeaturedProducts, getCategories } from '@/services/products';
 import { getActivePromotions } from '@/services/promotions';
 import { preloadImages } from '@/utils/preloadImages';
@@ -9,6 +10,10 @@ export async function preloadHomeData(): Promise<void> {
       getFeaturedProducts().catch(() => []),
       getCategories().catch(() => []),
     ]);
+
+    setCache(CACHE_KEYS.PROMOTIONS, promotions);
+    setCache(CACHE_KEYS.FEATURED_PRODUCTS, products);
+    setCache(CACHE_KEYS.CATEGORIES, categories);
 
     const imageUrls: string[] = [];
 

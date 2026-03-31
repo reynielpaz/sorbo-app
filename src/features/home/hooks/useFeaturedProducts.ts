@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { CACHE_KEYS, getCached } from '@/services/cache';
 import { getFeaturedProducts } from '@/services/products';
 import type { Product } from '@/types';
 
@@ -18,6 +19,16 @@ export function useFeaturedProducts(): UseFeaturedProductsState {
 
     async function loadFeaturedProducts() {
       try {
+        const cached = getCached<Product[]>(CACHE_KEYS.FEATURED_PRODUCTS);
+        if (cached && cached.length > 0) {
+          if (active) {
+            setProducts(cached);
+            setError(null);
+            setLoading(false);
+          }
+          return;
+        }
+
         const data = await getFeaturedProducts();
 
         if (!active) return;
