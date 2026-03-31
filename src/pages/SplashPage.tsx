@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
+import { preloadHomeData } from '@/services/preloader';
 import { hideBootScreen } from '@/utils/bootScreen';
 import { ROUTES } from '@/utils/constants';
 
@@ -84,6 +85,7 @@ export function SplashPage() {
       }
 
       hideBootScreen();
+      void preloadHomeData();
       introTimelineRef.current = gsap.timeline();
 
       introTimelineRef.current
@@ -124,7 +126,7 @@ export function SplashPage() {
               navigate(targetRoute, { replace: true });
             },
           },
-          6.0
+          3.6
         );
     }, containerRef);
 
