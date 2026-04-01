@@ -33,9 +33,9 @@ const SLIDES: SlideData[] = [
 ] as const;
 
 const slideVariants = {
-  enter: (dir: number) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
-  center: { x: 0, opacity: 1 },
-  exit: (dir: number) => ({ x: dir < 0 ? '100%' : '-100%', opacity: 0 }),
+  enter: { opacity: 0 },
+  center: { opacity: 1 },
+  exit: { opacity: 0 },
 };
 
 export function OnboardingPage() {
@@ -108,15 +108,18 @@ export function OnboardingPage() {
           initial="enter"
           animate="center"
           exit="exit"
-          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0"
           style={{ background: '#000000' }}
         >
           <div className="relative h-full w-full">
-            <img
+            <motion.img
               src={slide.imageSrc}
               alt=""
               aria-hidden="true"
+              initial={{ scale: 1.06, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black/50" />
@@ -126,18 +129,18 @@ export function OnboardingPage() {
               style={{ paddingBottom: '25vh' }}
             >
               <motion.h2
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.15 }}
+                transition={{ duration: 0.48, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
                 className="font-playfair text-3xl font-bold text-sorbo-cream"
               >
                 {slide.title}
               </motion.h2>
 
               <motion.p
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.22 }}
+                transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
                 className="mt-4 font-sans text-base leading-relaxed"
                 style={{ color: 'rgba(245,230,200,0.7)' }}
               >
@@ -146,9 +149,9 @@ export function OnboardingPage() {
 
               {isLastSlide && (
                 <motion.button
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
+                  transition={{ duration: 0.5, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
                   onClick={handleFinish}
                   className="pointer-events-auto mt-6 w-fit rounded-xl bg-gradient-to-r from-[#D4A853] to-[#E8943A] px-8 py-3 font-sans text-sm font-bold text-[#0A0908]"
                 >

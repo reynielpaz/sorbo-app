@@ -9,26 +9,18 @@ const LOGO_LETTERS = ['S', 'O', 'R', 'B', 'O'] as const;
 const ONBOARDING_STORAGE_KEY = 'sorbo_onboarding_done';
 
 const PARTICLES = [
-  { id: 1, left: '8%', top: '84%', size: '2px', duration: '18s', delay: '-11s', opacity: '0.06', drift: '8px' },
-  { id: 2, left: '16%', top: '92%', size: '3px', duration: '15s', delay: '-6s', opacity: '0.1', drift: '-6px' },
-  { id: 3, left: '23%', top: '76%', size: '2px', duration: '17s', delay: '-13s', opacity: '0.08', drift: '10px' },
-  { id: 4, left: '29%', top: '88%', size: '1px', duration: '14s', delay: '-8s', opacity: '0.05', drift: '-4px' },
-  { id: 5, left: '34%', top: '70%', size: '2px', duration: '19s', delay: '-3s', opacity: '0.07', drift: '6px' },
-  { id: 6, left: '41%', top: '96%', size: '3px', duration: '16s', delay: '-12s', opacity: '0.11', drift: '-8px' },
-  { id: 7, left: '47%', top: '82%', size: '2px', duration: '18s', delay: '-2s', opacity: '0.09', drift: '7px' },
-  { id: 8, left: '53%', top: '90%', size: '2px', duration: '15s', delay: '-9s', opacity: '0.12', drift: '-10px' },
-  { id: 9, left: '59%', top: '74%', size: '1px', duration: '20s', delay: '-7s', opacity: '0.05', drift: '5px' },
-  { id: 10, left: '64%', top: '86%', size: '3px', duration: '17s', delay: '-14s', opacity: '0.13', drift: '-7px' },
-  { id: 11, left: '69%', top: '95%', size: '2px', duration: '18s', delay: '-5s', opacity: '0.08', drift: '4px' },
-  { id: 12, left: '74%', top: '79%', size: '2px', duration: '16s', delay: '-10s', opacity: '0.07', drift: '-5px' },
-  { id: 13, left: '78%', top: '89%', size: '1px', duration: '14s', delay: '-4s', opacity: '0.05', drift: '9px' },
-  { id: 14, left: '82%', top: '68%', size: '2px', duration: '19s', delay: '-15s', opacity: '0.06', drift: '-9px' },
-  { id: 15, left: '86%', top: '93%', size: '3px', duration: '15s', delay: '-1s', opacity: '0.14', drift: '6px' },
-  { id: 16, left: '12%', top: '62%', size: '2px', duration: '21s', delay: '-16s', opacity: '0.05', drift: '-3px' },
-  { id: 17, left: '27%', top: '58%', size: '1px', duration: '22s', delay: '-18s', opacity: '0.04', drift: '4px' },
-  { id: 18, left: '46%', top: '64%', size: '2px', duration: '20s', delay: '-17s', opacity: '0.06', drift: '-6px' },
-  { id: 19, left: '67%', top: '56%', size: '1px', duration: '24s', delay: '-20s', opacity: '0.04', drift: '3px' },
-  { id: 20, left: '88%', top: '60%', size: '2px', duration: '21s', delay: '-19s', opacity: '0.05', drift: '-4px' },
+  { id: 1, left: '12%', top: '66%', size: '2px', duration: '5.8s', delay: '-1.8s', opacity: '0.16', drift: '6px' },
+  { id: 2, left: '16%', top: '48%', size: '3px', duration: '6.4s', delay: '-0.9s', opacity: '0.19', drift: '-8px' },
+  { id: 3, left: '20%', top: '34%', size: '2px', duration: '5.2s', delay: '-1.4s', opacity: '0.17', drift: '5px' },
+  { id: 4, left: '24%', top: '74%', size: '4px', duration: '6.8s', delay: '-2.1s', opacity: '0.24', drift: '-10px' },
+  { id: 5, left: '29%', top: '56%', size: '3px', duration: '5.6s', delay: '-0.4s', opacity: '0.22', drift: '12px' },
+  { id: 6, left: '33%', top: '28%', size: '2px', duration: '4.9s', delay: '0.2s', opacity: '0.14', drift: '-4px' },
+  { id: 7, left: '37%', top: '68%', size: '4px', duration: '7.1s', delay: '-1.7s', opacity: '0.26', drift: '8px' },
+  { id: 8, left: '41%', top: '46%', size: '3px', duration: '5.4s', delay: '-0.6s', opacity: '0.21', drift: '-12px' },
+  { id: 9, left: '44%', top: '32%', size: '2px', duration: '6.1s', delay: '0.4s', opacity: '0.15', drift: '7px' },
+  { id: 10, left: '47%', top: '78%', size: '4px', duration: '6.6s', delay: '-1.2s', opacity: '0.23', drift: '-14px' },
+  { id: 11, left: '49%', top: '58%', size: '3px', duration: '5.1s', delay: '-2.0s', opacity: '0.2', drift: '11px' },
+  { id: 12, left: '50%', top: '40%', size: '2px', duration: '7.0s', delay: '-0.2s', opacity: '0.18', drift: '-6px' },
 ] as const;
 
 type ParticleStyle = CSSProperties & Record<string, string>;

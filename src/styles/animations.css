@@ -90,17 +90,17 @@
 
 @keyframes splashParticleFloat {
   0% {
-    transform: translate3d(0, 14vh, 0) scale(0.85);
+    transform: translate3d(0, 8vh, 0) scale(0.82);
     opacity: 0;
   }
-  12% {
-    opacity: var(--particle-opacity, 0.08);
+  16% {
+    opacity: var(--particle-opacity, 0.18);
   }
-  78% {
-    opacity: var(--particle-opacity, 0.08);
+  76% {
+    opacity: var(--particle-opacity, 0.18);
   }
   100% {
-    transform: translate3d(var(--particle-drift, 0px), -120vh, 0) scale(1.15);
+    transform: translate3d(var(--particle-drift, 0px), -38vh, 0) scale(1.04);
     opacity: 0;
   }
 }
@@ -112,8 +112,15 @@
   width: var(--particle-size, 2px);
   height: var(--particle-size, 2px);
   border-radius: 9999px;
-  background: #d4a853;
-  box-shadow: 0 0 12px rgba(212, 168, 83, 0.28);
+  background: radial-gradient(
+    circle at 32% 32%,
+    #e8c068 0%,
+    rgba(232, 192, 104, 0.95) 18%,
+    rgba(212, 168, 83, 0.82) 48%,
+    rgba(212, 168, 83, 0.14) 74%,
+    rgba(212, 168, 83, 0) 100%
+  );
+  box-shadow: 0 0 14px rgba(212, 168, 83, 0.34), 0 0 24px rgba(232, 192, 104, 0.1);
   opacity: 0;
   animation-name: splashParticleFloat;
   animation-duration: var(--particle-duration, 18s);
