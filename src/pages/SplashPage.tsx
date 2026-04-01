@@ -92,7 +92,7 @@ export function SplashPage() {
         .fromTo(
           containerRef.current,
           { backgroundColor: '#000000' },
-          { backgroundColor: '#0A0908', duration: 0.6, ease: 'power2.out' },
+          { backgroundColor: '#000000', duration: 0.6, ease: 'power2.out' },
           0
         )
         .to(logoRef.current, { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 0.3)
@@ -159,7 +159,7 @@ export function SplashPage() {
         })}
       </div>
 
-      <div className="absolute inset-y-0 left-0 w-1/2 overflow-hidden bg-[#0A0908]">
+      <div className="absolute inset-y-0 left-0 w-1/2 overflow-hidden bg-[#000000]">
         <div
           className="relative z-[2] flex h-full flex-col items-center px-2 text-center"
           style={{
@@ -221,13 +221,13 @@ export function SplashPage() {
         <div
           className="pointer-events-none absolute inset-0"
           style={{
-            background: 'linear-gradient(to right, #0A0908 0%, transparent 15%, transparent 85%, #0A0908 100%)',
+            background: 'linear-gradient(to right, #000000 0%, transparent 15%, transparent 85%, #000000 100%)',
           }}
         />
         <div
           className="pointer-events-none absolute inset-0"
           style={{
-            background: 'linear-gradient(to bottom, #0A0908 0%, transparent 10%, transparent 85%, #0A0908 100%)',
+            background: 'linear-gradient(to bottom, #000000 0%, transparent 10%, transparent 85%, #000000 100%)',
           }}
         />
       </div>
