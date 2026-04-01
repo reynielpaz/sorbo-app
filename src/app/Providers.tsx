@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { preloadHomeData } from '@/services/preloader';
 import { authStore } from '@/store/authStore';
 
 interface ProvidersProps {
@@ -10,6 +11,7 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   useEffect(() => {
     void authStore.getState().initialize().catch(() => undefined);
+    void preloadHomeData().catch(() => undefined);
   }, []);
 
   return (

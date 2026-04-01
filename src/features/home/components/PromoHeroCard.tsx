@@ -53,6 +53,8 @@ export function PromoHeroCard({
         src={imageUrl}
         alt={promotion.title}
         className="absolute inset-0 h-full w-full object-cover"
+        loading={isActive ? 'eager' : 'lazy'}
+        fetchPriority={isActive ? 'high' : 'auto'}
         initial={false}
         animate={
           shouldReduceMotion || !isActive

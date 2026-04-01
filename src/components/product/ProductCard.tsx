@@ -66,6 +66,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
   const categorySlug = product.category?.slug;
   const categoryIcon = getCategoryIcon(categorySlug);
   const rating = (4.5 + (index % 5) * 0.1).toFixed(1);
+  const shouldPrioritizeImage = index < 4;
 
   function handleNavigate() {
     navigate(generatePath(ROUTES.PRODUCT, { id: product.id }));
@@ -98,7 +99,8 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
               src={product.imageUrl}
               alt={product.name}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
+              loading={shouldPrioritizeImage ? 'eager' : 'lazy'}
+              fetchPriority={shouldPrioritizeImage ? 'high' : 'auto'}
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
           </>
