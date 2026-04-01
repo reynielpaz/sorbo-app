@@ -70,7 +70,7 @@ export function OnboardingPage() {
   const isLastSlide = currentSlide === SLIDES.length - 1;
 
   return (
-    <div className="fixed inset-0 bg-sorbo-black overflow-hidden z-[90]">
+    <div className="fixed inset-0 bg-black overflow-hidden z-[90]">
 
       {/* Botón Omitir — siempre visible arriba a la derecha */}
       <button
@@ -110,7 +110,7 @@ export function OnboardingPage() {
           exit="exit"
           transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
           className="absolute inset-0"
-          style={{ background: '#0A0908' }}
+          style={{ background: '#000000' }}
         >
           <div className="relative h-full w-full">
             <img
