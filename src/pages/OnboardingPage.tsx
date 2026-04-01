@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
@@ -42,6 +42,11 @@ const slideVariants = {
   exit: { opacity: 0 },
 };
 
+const titleStyle: CSSProperties & { textWrap: string } = {
+  maxWidth: 'min(88vw, 420px)',
+  textWrap: 'balance',
+};
+
 export function OnboardingPage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -80,7 +85,11 @@ export function OnboardingPage() {
       <button
         onClick={handleSkip}
         className="absolute right-4 z-[20] border-none bg-transparent px-3 py-2 font-sans text-[13px] font-medium tracking-[0.02em] cursor-pointer"
-        style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)', color: 'rgba(245,230,200,0.56)' }}
+        style={{
+          top: 'calc(env(safe-area-inset-top, 0px) + 16px)',
+          color: 'rgba(245,230,200,0.64)',
+          textShadow: '0 1px 8px rgba(0,0,0,0.22)',
+        }}
       >
         Omitir
       </button>
@@ -104,7 +113,7 @@ export function OnboardingPage() {
       />
 
       {/* Slides con AnimatePresence */}
-      <AnimatePresence mode="wait" custom={direction}>
+      <AnimatePresence mode="sync" custom={direction}>
         <motion.div
           key={currentSlide}
           custom={direction}
@@ -112,7 +121,7 @@ export function OnboardingPage() {
           initial="enter"
           animate="center"
           exit="exit"
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0"
           style={{ background: '#000000' }}
         >
@@ -123,7 +132,7 @@ export function OnboardingPage() {
               aria-hidden="true"
               initial={{ scale: 1.06, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
               className="absolute inset-0 w-full h-full object-cover"
               style={{ objectPosition: slide.imagePosition }}
             />
@@ -142,9 +151,9 @@ export function OnboardingPage() {
               <motion.h2
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.48, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.46, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
                 className="max-w-full font-playfair text-3xl font-bold leading-[1.02] tracking-[-0.025em] text-sorbo-cream"
-                style={{ maxWidth: 'min(88vw, 420px)' }}
+                style={titleStyle}
               >
                 {slide.title}
               </motion.h2>
@@ -152,7 +161,7 @@ export function OnboardingPage() {
               <motion.p
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.48, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
                 className="mt-3 font-sans text-[15px] leading-[1.55]"
                 style={{ maxWidth: 'min(72vw, 318px)', color: 'rgba(245,230,200,0.76)' }}
               >
@@ -163,12 +172,12 @@ export function OnboardingPage() {
                 <motion.button
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.48, delay: 0.34, ease: [0.22, 1, 0.36, 1] }}
                   onClick={handleFinish}
                   className="pointer-events-auto mt-7 w-fit rounded-[14px] bg-gradient-to-r from-[#D4A853] to-[#E8943A] px-8 py-3 font-sans text-sm font-bold tracking-[0.01em] text-[#0B0F1A]"
                   style={{
-                    border: '1px solid rgba(255,255,255,0.14)',
-                    boxShadow: '0 10px 24px rgba(212,168,83,0.16), inset 0 1px 0 rgba(255,255,255,0.22)',
+                    border: '1px solid rgba(255,255,255,0.17)',
+                    boxShadow: '0 12px 26px rgba(212,168,83,0.18), 0 2px 8px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.24)',
                   }}
                 >
                   Comenzar
@@ -224,10 +233,10 @@ export function OnboardingPage() {
               onClick={handleNext}
               className="cursor-pointer rounded-xl px-6 py-2.5 font-sans text-sm font-medium transition-[border-color,color,background-color,box-shadow]"
               style={{
-                background: 'rgba(255,255,255,0.015)',
-                border: '1px solid rgba(212,168,83,0.22)',
-                color: 'rgba(245,230,200,0.86)',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid rgba(212,168,83,0.27)',
+                color: 'rgba(245,230,200,0.9)',
+                boxShadow: '0 8px 18px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.05)',
               }}
             >
               Siguiente
