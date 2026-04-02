@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Skeleton } from '@/components/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useBusinessStatus } from '../hooks/useBusinessStatus';
+import type { BusinessHourSlot } from '../types';
 
 const CARACAS_TIMEZONE = 'America/Caracas';
 
@@ -73,9 +74,56 @@ function getFirstName(fullName: string) {
   return first ? first.charAt(0).toUpperCase() + first.slice(1).toLowerCase() : '';
 }
 
+function timeToMinutes(time: string) {
+  const [hours = '0', minutes = '0'] = time.split(':');
+  return Number(hours) * 60 + Number(minutes);
+}
+
+function getCurrentCaracasMinutes() {
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: CARACAS_TIMEZONE,
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  });
+
+  const parts = formatter.formatToParts(new Date());
+  const hour = Number(parts.find((part) => part.type === 'hour')?.value ?? '0');
+  const minute = Number(parts.find((part) => part.type === 'minute')?.value ?? '0');
+
+  return hour * 60 + minute;
+}
+
+function formatBusinessTime(time: string) {
+  const [hours = 0, minutes = 0] = time.split(':').map(Number);
+  const normalizedHour = ((hours + 11) % 12) + 1;
+  const meridiem = hours >= 12 ? 'PM' : 'AM';
+  return `${normalizedHour}:${String(minutes).padStart(2, '0')} ${meridiem}`;
+}
+
+function getStatusHint(isOpen: boolean, todaySchedule: BusinessHourSlot[]) {
+  if (todaySchedule.length === 0) return null;
+
+  const currentMinutes = getCurrentCaracasMinutes();
+
+  if (isOpen) {
+    const activeSlot = todaySchedule.find((slot) => {
+      const openMinutes = timeToMinutes(slot.open);
+      const closeMinutes = timeToMinutes(slot.close);
+
+      return currentMinutes >= openMinutes && currentMinutes <= closeMinutes;
+    });
+
+    return activeSlot ? `Hasta ${formatBusinessTime(activeSlot.close)}` : null;
+  }
+
+  const nextSlot = todaySchedule.find((slot) => currentMinutes < timeToMinutes(slot.open));
+  return nextSlot ? `Abre ${formatBusinessTime(nextSlot.open)}` : null;
+}
+
 export function HomeHeader() {
   const { profile, isAuthenticated } = useAuth();
-  const { isOpen, loading } = useBusinessStatus();
+  const { isOpen, todaySchedule, loading } = useBusinessStatus();
 
   const firstName = isAuthenticated ? getFirstName(profile?.fullName ?? '') : '';
   const greetingName = firstName || (isAuthenticated ? 'Bienvenido' : 'Bienvenido');
@@ -84,6 +132,7 @@ export function HomeHeader() {
     const index = Math.floor(Math.random() * INSPIRATIONAL_PHRASES.length);
     return INSPIRATIONAL_PHRASES[index];
   }, []);
+  const statusHint = loading ? null : getStatusHint(isOpen, todaySchedule);
 
   return (
     <div className="px-[18px] pb-2 pt-[calc(env(safe-area-inset-top)+12px)]">
@@ -97,17 +146,30 @@ export function HomeHeader() {
 
         <div>
           {loading ? (
-            <Skeleton className="h-[28px] w-[80px]" rounded />
-          ) : isOpen ? (
-            <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(0,220,130,0.25)] bg-[rgba(0,220,130,0.1)] px-3 py-1 text-[11px] font-semibold text-[#00DC82]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#00DC82] shadow-[0_0_8px_rgba(0,220,130,0.85)]" />
-              Abierto
-            </span>
+            <Skeleton className="h-[42px] w-[108px] rounded-[18px]" rounded />
           ) : (
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1 text-[11px] font-semibold text-white/50">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#EF4444]/40 shadow-[0_0_8px_rgba(239,68,68,0.35)]" />
-              Cerrado
-            </span>
+            <div
+              aria-live="polite"
+              className={`inline-flex min-w-[112px] items-center gap-2.5 rounded-[20px] border px-3.5 py-2 shadow-[0_14px_28px_rgba(0,0,0,0.14),inset_0_1px_0_rgba(255,255,255,0.05)] ${
+                isOpen
+                  ? 'border-[rgba(92,210,150,0.18)] bg-[linear-gradient(180deg,rgba(255,255,255,0.06)_0%,rgba(17,29,23,0.94)_100%)]'
+                  : 'border-[rgba(184,132,144,0.18)] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(26,18,22,0.94)_100%)]'
+              }`}
+            >
+              <span
+                className={`h-2 w-2 shrink-0 rounded-full ${
+                  isOpen
+                    ? 'bg-[#54C78C] shadow-[0_0_10px_rgba(84,199,140,0.55)]'
+                    : 'bg-[#A36876] shadow-[0_0_10px_rgba(163,104,118,0.28)]'
+                }`}
+              />
+              <span className="flex flex-col">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/92">
+                  {isOpen ? 'Abierto' : 'Cerrado'}
+                </span>
+                {statusHint ? <span className="text-[10px] text-white/48">{statusHint}</span> : null}
+              </span>
+            </div>
           )}
         </div>
       </div>
