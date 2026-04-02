@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import { BottomNav } from '@/components/layout/BottomNav';
-import { CategorySlider } from '@/features/home/components/CategorySlider';
 import { FeaturedProducts } from '@/features/home/components/FeaturedProducts';
+import { HomeCollections } from '@/features/home/components/HomeCollections';
+import { HomeMenuCta } from '@/features/home/components/HomeMenuCta';
 import { TopGlassPanel } from '@/features/home/components/TopGlassPanel';
 
 const SECTION_EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
@@ -21,17 +22,21 @@ function getSectionAnimation(delay: number) {
 export function HomePage() {
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="relative z-[1] pb-24">
+      <div className="relative z-[1] pb-32">
         <motion.section {...getSectionAnimation(0)}>
           <TopGlassPanel />
         </motion.section>
 
-        <motion.section {...getSectionAnimation(0.1)}>
-          <CategorySlider />
+        <motion.section {...getSectionAnimation(0.08)}>
+          <HomeCollections />
         </motion.section>
 
-        <motion.section {...getSectionAnimation(0.2)}>
+        <motion.section {...getSectionAnimation(0.16)}>
           <FeaturedProducts />
+        </motion.section>
+
+        <motion.section {...getSectionAnimation(0.24)}>
+          <HomeMenuCta />
         </motion.section>
       </div>
 

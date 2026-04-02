@@ -8,8 +8,8 @@ export function FeaturedProducts() {
   const { products, loading, error } = useFeaturedProducts();
 
   return (
-    <section className="mt-6">
-      <div className="mb-3 flex items-center justify-between gap-3 px-5">
+    <section className="mt-7">
+      <div className="mb-4 flex items-center justify-between gap-3 px-5">
         <h2 className="font-playfair text-[14px] font-semibold text-white/90">Lo más pedido</h2>
         <Link to={ROUTES.MENU} className="text-[11px] font-medium text-[#D4A853]">
           Ver todo →

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import type { PromotionBannerItem } from '@/types';
 import { cn } from '@/utils/cn';
@@ -23,9 +23,26 @@ const ERROR_PROMOTIONS_FALLBACK: PromotionBannerItem = {
   badgeLabel: 'PROMO',
 };
 
+const AUTOPLAY_INTERVAL_MS = 5_000;
+const INTERACTION_PAUSE_MS = 4_000;
+const PROGRAMMATIC_SCROLL_LOCK_MS = 450;
+const HERO_VISIBLE_THRESHOLD = 0.35;
+
+function getTargetScrollLeft(container: HTMLDivElement, targetCard: HTMLElement) {
+  const centeredLeft = targetCard.offsetLeft - (container.clientWidth - targetCard.clientWidth) / 2;
+  const maxScrollLeft = Math.max(container.scrollWidth - container.clientWidth, 0);
+
+  return Math.min(Math.max(centeredLeft, 0), maxScrollLeft);
+}
+
 export function HeroBanner() {
+  const sectionRef = useRef<HTMLElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const autoplayPauseUntilRef = useRef(0);
+  const isProgrammaticScrollRef = useRef(false);
+  const programmaticScrollTimeoutRef = useRef<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
   const { promotions, loading, error } = usePromotions();
   const shouldReduceMotion = useReducedMotion();
   const items = promotions.length > 0
@@ -35,21 +52,47 @@ export function HeroBanner() {
   const showDots = !loading && hasMultiplePromotions;
   const enableAutoplay = hasMultiplePromotions && !shouldReduceMotion;
 
-  function scrollToIndex(index: number) {
-    const container = containerRef.current;
-    const targetCard = container?.children.item(index) as HTMLElement | null;
+  const pauseAutoplay = useCallback((duration = INTERACTION_PAUSE_MS) => {
+    autoplayPauseUntilRef.current = Date.now() + duration;
+  }, []);
 
-    if (!targetCard) return;
+  const scrollToIndex = useCallback(
+    (
+      index: number,
+      options?: {
+        behavior?: ScrollBehavior;
+        pauseAutoplay?: boolean;
+      },
+    ) => {
+      const container = containerRef.current;
+      const targetCard = container?.children.item(index) as HTMLElement | null;
 
-    targetCard.scrollIntoView({
-      behavior: shouldReduceMotion ? 'auto' : 'smooth',
-      inline: 'center',
-      block: 'nearest',
-    });
-    setActiveIndex(index);
-  }
+      if (!container || !targetCard) return;
 
-  function handleScroll() {
+      if (options?.pauseAutoplay ?? true) {
+        pauseAutoplay();
+      }
+
+      if (programmaticScrollTimeoutRef.current !== null) {
+        window.clearTimeout(programmaticScrollTimeoutRef.current);
+      }
+
+      isProgrammaticScrollRef.current = true;
+      container.scrollTo({
+        left: getTargetScrollLeft(container, targetCard),
+        behavior: options?.behavior ?? (shouldReduceMotion ? 'auto' : 'smooth'),
+      });
+      setActiveIndex(index);
+
+      programmaticScrollTimeoutRef.current = window.setTimeout(() => {
+        isProgrammaticScrollRef.current = false;
+        programmaticScrollTimeoutRef.current = null;
+      }, shouldReduceMotion ? 0 : PROGRAMMATIC_SCROLL_LOCK_MS);
+    },
+    [pauseAutoplay, shouldReduceMotion],
+  );
+
+  const handleScroll = useCallback(() => {
     const container = containerRef.current;
 
     if (!container) return;
@@ -70,50 +113,74 @@ export function HeroBanner() {
       }
     });
 
+    if (!isProgrammaticScrollRef.current) {
+      pauseAutoplay();
+    }
+
     setActiveIndex(nextIndex);
-  }
+  }, [pauseAutoplay]);
 
   useEffect(() => {
-    setActiveIndex(0);
-
-    const container = containerRef.current;
-    const firstCard = container?.children.item(0) as HTMLElement | null;
-
-    if (!firstCard) return;
-
-    firstCard.scrollIntoView({
-      behavior: 'auto',
-      inline: 'center',
-      block: 'nearest',
+    const frameId = window.requestAnimationFrame(() => {
+      scrollToIndex(0, { behavior: 'auto', pauseAutoplay: false });
     });
-  }, [items.length]);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [items.length, scrollToIndex]);
 
   useEffect(() => {
-    if (!enableAutoplay) return;
+    const section = sectionRef.current;
+
+    if (!section || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeroVisible(entry.isIntersecting && entry.intersectionRatio >= HERO_VISIBLE_THRESHOLD);
+      },
+      {
+        threshold: [0, HERO_VISIBLE_THRESHOLD, 1],
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!enableAutoplay || !isHeroVisible) return;
 
     const intervalId = window.setInterval(() => {
-      const nextIndex = activeIndex === promotions.length - 1 ? 0 : activeIndex + 1;
-      const container = containerRef.current;
-      const targetCard = container?.children.item(nextIndex) as HTMLElement | null;
+      if (Date.now() < autoplayPauseUntilRef.current || isProgrammaticScrollRef.current) {
+        return;
+      }
 
-      if (!targetCard) return;
+      const nextIndex = activeIndex === items.length - 1 ? 0 : activeIndex + 1;
 
-      targetCard.scrollIntoView({
-        behavior: shouldReduceMotion ? 'auto' : 'smooth',
-        inline: 'center',
-        block: 'nearest',
-      });
-      setActiveIndex(nextIndex);
-    }, 5_000);
+      scrollToIndex(nextIndex, { pauseAutoplay: false });
+    }, AUTOPLAY_INTERVAL_MS);
 
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [activeIndex, enableAutoplay, promotions.length, shouldReduceMotion]);
+  }, [activeIndex, enableAutoplay, isHeroVisible, items.length, scrollToIndex]);
+
+  useEffect(() => {
+    return () => {
+      if (programmaticScrollTimeoutRef.current !== null) {
+        window.clearTimeout(programmaticScrollTimeoutRef.current);
+      }
+    };
+  }, []);
 
   if (loading) {
     return (
       <motion.section
+        ref={sectionRef}
         className="mx-3 mb-4 mt-1"
         initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
         animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
@@ -126,6 +193,7 @@ export function HeroBanner() {
 
   return (
     <motion.section
+      ref={sectionRef}
       className="mx-3 mb-4 mt-1 space-y-3"
       initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
       animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
@@ -134,6 +202,8 @@ export function HeroBanner() {
       <div
         ref={containerRef}
         onScroll={handleScroll}
+        onPointerDown={() => pauseAutoplay()}
+        onWheel={() => pauseAutoplay()}
         className="hide-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto"
       >
         {items.map((promotion, index) => (
