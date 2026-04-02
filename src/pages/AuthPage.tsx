@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input } from '@/components/ui';
@@ -140,6 +141,10 @@ export function AuthPage() {
     'h-14 rounded-2xl !bg-[rgba(10,10,12,0.72)] text-sorbo-cream shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-sm caret-sorbo-gold';
   const authLabelClassName =
     'font-sans uppercase tracking-[0.16em] text-[rgba(245,230,200,0.52)]';
+  const fullNameFieldTransition = {
+    duration: 0.18,
+    ease: [0.22, 1, 0.36, 1] as const,
+  };
 
   return (
     <div className="relative min-h-[100dvh] overflow-hidden bg-sorbo-black">
@@ -161,7 +166,7 @@ export function AuthPage() {
             style={{ filter: 'brightness(0) invert(1) sepia(0.2)' }}
           />
           <p className="mt-4 font-sans text-sm uppercase tracking-[0.2em] text-[rgba(245,230,200,0.66)]">
-            Entra a tu experiencia Sorbo
+            Tu rincón para saborear
           </p>
         </div>
 
@@ -192,7 +197,7 @@ export function AuthPage() {
                     setAuthError('');
                     setSuccessMessage('');
                   }}
-                  className={`flex-1 rounded-full px-4 py-3 text-center font-sans text-[0.82rem] uppercase tracking-[0.18em] transition-all duration-200 ${
+                  className={`flex-1 rounded-full px-4 py-3 text-center font-sans text-[0.82rem] uppercase tracking-[0.18em] transition-[background,border-color,color,box-shadow] duration-150 ${
                     active
                       ? 'border border-[rgba(212,168,83,0.2)] bg-[linear-gradient(180deg,rgba(255,255,255,0.09)_0%,rgba(255,255,255,0.03)_100%)] text-sorbo-cream shadow-[0_10px_24px_rgba(0,0,0,0.26)]'
                       : 'text-[rgba(245,230,200,0.46)] hover:text-[rgba(245,230,200,0.82)]'
@@ -209,104 +214,117 @@ export function AuthPage() {
             role="tabpanel"
             aria-labelledby={`auth-tab-${mode}`}
             onSubmit={handleSubmit}
-            className="relative z-[1] mt-6 space-y-4"
+            className="relative z-[1] mt-6"
           >
-            {mode === 'register' ? (
+            <AnimatePresence initial={false}>
+              {mode === 'register' ? (
+                <motion.div
+                  key="full-name-field"
+                  initial={{ opacity: 0, height: 0, y: -4 }}
+                  animate={{ opacity: 1, height: 'auto', y: 0 }}
+                  exit={{ opacity: 0, height: 0, y: -4 }}
+                  transition={fullNameFieldTransition}
+                  className="overflow-hidden pb-4"
+                >
+                  <Input
+                    label="Nombre completo"
+                    value={form.fullName}
+                    onChange={updateField('fullName')}
+                    error={errors.fullName}
+                    autoComplete="name"
+                    containerClassName={authInputContainerClassName}
+                    inputClassName={authInputClassName}
+                    labelClassName={authLabelClassName}
+                  />
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+
+            <motion.div layout className="space-y-4">
               <Input
-                label="Nombre completo"
-                value={form.fullName}
-                onChange={updateField('fullName')}
-                error={errors.fullName}
-                autoComplete="name"
+                label="Email"
+                type="email"
+                value={form.email}
+                onChange={updateField('email')}
+                error={errors.email}
+                autoComplete="email"
+                autoCapitalize="none"
+                autoCorrect="off"
                 containerClassName={authInputContainerClassName}
                 inputClassName={authInputClassName}
                 labelClassName={authLabelClassName}
               />
-            ) : null}
 
-            <Input
-              label="Email"
-              type="email"
-              value={form.email}
-              onChange={updateField('email')}
-              error={errors.email}
-              autoComplete="email"
-              autoCapitalize="none"
-              autoCorrect="off"
-              containerClassName={authInputContainerClassName}
-              inputClassName={authInputClassName}
-              labelClassName={authLabelClassName}
-            />
+              <Input
+                label="Contraseña"
+                type={showPassword ? 'text' : 'password'}
+                value={form.password}
+                onChange={updateField('password')}
+                error={errors.password}
+                autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+                containerClassName={authInputContainerClassName}
+                inputClassName={authInputClassName}
+                labelClassName={authLabelClassName}
+                rightAdornment={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((current) => !current)}
+                    aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                    className="font-sans text-[11px] uppercase tracking-[0.16em] text-[rgba(245,230,200,0.52)] transition-colors hover:text-sorbo-cream"
+                  >
+                    {showPassword ? 'Ocultar' : 'Mostrar'}
+                  </button>
+                }
+              />
 
-            <Input
-              label="Contraseña"
-              type={showPassword ? 'text' : 'password'}
-              value={form.password}
-              onChange={updateField('password')}
-              error={errors.password}
-              autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-              containerClassName={authInputContainerClassName}
-              inputClassName={authInputClassName}
-              labelClassName={authLabelClassName}
-              rightAdornment={
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((current) => !current)}
-                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                  className="font-sans text-[11px] uppercase tracking-[0.16em] text-[rgba(245,230,200,0.52)] transition-colors hover:text-sorbo-cream"
-                >
-                  {showPassword ? 'Ocultar' : 'Mostrar'}
-                </button>
-              }
-            />
+              {successMessage ? (
+                <p className="rounded-2xl border border-[#BFE6C4]/20 bg-[#BFE6C4]/10 px-4 py-3 text-sm text-[#D9F0DD]">
+                  {successMessage}
+                </p>
+              ) : null}
+              {authError ? (
+                <p className="rounded-2xl border border-[#E53935]/20 bg-[#E53935]/10 px-4 py-3 text-sm text-[#FFB3AC]">
+                  {authError}
+                </p>
+              ) : null}
 
-            {successMessage ? (
-              <p className="rounded-2xl border border-[#BFE6C4]/20 bg-[#BFE6C4]/10 px-4 py-3 text-sm text-[#D9F0DD]">
-                {successMessage}
-              </p>
-            ) : null}
-            {authError ? (
-              <p className="rounded-2xl border border-[#E53935]/20 bg-[#E53935]/10 px-4 py-3 text-sm text-[#FFB3AC]">
-                {authError}
-              </p>
-            ) : null}
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                loading={loading}
+                className="w-full rounded-2xl border border-white/10 shadow-[0_18px_40px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.16)]"
+              >
+                {mode === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
+              </Button>
 
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              loading={loading}
-              className="w-full rounded-2xl border border-white/10 shadow-[0_18px_40px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.16)]"
-            >
-              {mode === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
-            </Button>
+              <div className="flex items-center gap-4 py-2">
+                <div className="h-px flex-1 bg-[linear-gradient(90deg,transparent,rgba(245,230,200,0.16),rgba(245,230,200,0.03))]" />
+                <span className="font-sans text-[0.72rem] uppercase tracking-[0.18em] text-[rgba(245,230,200,0.54)]">
+                  o continúa con
+                </span>
+                <div className="h-px flex-1 bg-[linear-gradient(90deg,rgba(245,230,200,0.03),rgba(245,230,200,0.16),transparent)]" />
+              </div>
 
-            <div className="flex items-center gap-4 py-2">
-              <div className="h-px flex-1 bg-[linear-gradient(90deg,transparent,rgba(245,230,200,0.16),rgba(245,230,200,0.03))]" />
-              <span className="font-sans text-[0.72rem] uppercase tracking-[0.18em] text-[rgba(245,230,200,0.54)]">
-                o continúa con
-              </span>
-              <div className="h-px flex-1 bg-[linear-gradient(90deg,rgba(245,230,200,0.03),rgba(245,230,200,0.16),transparent)]" />
-            </div>
+              <Button
+                type="button"
+                variant="secondary"
+                size="lg"
+                className="w-full rounded-2xl border-white/10 !bg-[rgba(11,11,13,0.72)] text-sorbo-cream shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:border-[rgba(212,168,83,0.22)] hover:!bg-[rgba(16,16,18,0.82)]"
+                onClick={handleGoogle}
+              >
+                <GoogleIcon />
+                Google
+              </Button>
 
-            <Button
-              type="button"
-              variant="secondary"
-              size="lg"
-              className="w-full rounded-2xl border-white/10 !bg-[rgba(11,11,13,0.72)] text-sorbo-cream shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:border-[rgba(212,168,83,0.22)] hover:!bg-[rgba(16,16,18,0.82)]"
-              onClick={handleGoogle}
-            >
-              <GoogleIcon />
-              Google
-            </Button>
-
-            <button
-              type="button"
-              onClick={handleGuest}
-              className="w-full rounded-2xl border border-transparent px-4 py-3 text-center font-sans text-sm tracking-[0.08em] text-[rgba(245,230,200,0.68)] transition-all duration-200 hover:border-white/8 hover:bg-white/[0.035] hover:text-sorbo-cream"
-            >
-              Continuar como invitado
-            </button>
+              <button
+                type="button"
+                onClick={handleGuest}
+                className="w-full rounded-2xl border border-transparent px-4 py-3 text-center font-sans text-sm tracking-[0.08em] text-[rgba(245,230,200,0.68)] transition-all duration-200 hover:border-white/8 hover:bg-white/[0.035] hover:text-sorbo-cream"
+              >
+                Continuar como invitado
+              </button>
+            </motion.div>
           </form>
         </div>
       </div>
