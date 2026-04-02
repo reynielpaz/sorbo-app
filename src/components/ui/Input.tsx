@@ -23,10 +23,15 @@ export function Input({
   onBlur,
   value,
   placeholder,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   disabled = false,
   ...props
 }: InputProps) {
   const generatedId = useId();
+  const inputId = id ?? generatedId;
+  const errorId = `${inputId}-error`;
+  const inputAriaDescribedBy = [ariaDescribedBy, error ? errorId : undefined].filter(Boolean).join(' ') || undefined;
   const [focused, setFocused] = useState(false);
   const hasValue = typeof value === 'string' ? value.length > 0 : value !== undefined && value !== null;
   const isFloating = focused || hasValue;
@@ -35,9 +40,11 @@ export function Input({
     <div className={cn('relative', containerClassName, className)}>
       <input
         {...props}
-        id={id ?? generatedId}
+        id={inputId}
         value={value}
         disabled={disabled}
+        aria-invalid={ariaInvalid ?? Boolean(error)}
+        aria-describedby={inputAriaDescribedBy}
         placeholder={isFloating ? placeholder : ''}
         onFocus={(event) => {
           setFocused(true);
@@ -62,7 +69,7 @@ export function Input({
       />
 
       <label
-        htmlFor={id ?? generatedId}
+        htmlFor={inputId}
         className={cn(
           'pointer-events-none absolute left-4 transition-all duration-200',
           isFloating
@@ -78,7 +85,11 @@ export function Input({
         <div className="absolute right-3 top-1/2 -translate-y-1/2">{rightAdornment}</div>
       ) : null}
 
-      {error ? <p className="mt-1 text-xs text-[#E53935]">{error}</p> : null}
+      {error ? (
+        <p id={errorId} className="mt-1 text-xs text-[#E53935]">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }

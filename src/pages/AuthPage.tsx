@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Input } from '@/components/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { authStore } from '@/store/authStore';
-import { APP_SLOGAN, ROUTES } from '@/utils/constants';
+import { ROUTES } from '@/utils/constants';
 
 type AuthMode = 'login' | 'register';
 
@@ -58,6 +58,7 @@ export function AuthPage() {
   const [form, setForm] = useState<FormState>({ fullName: '', email: '', password: '' });
   const [errors, setErrors] = useState<FormErrors>({});
   const [authError, setAuthError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     if (isAuthenticated || isGuest) {
@@ -70,6 +71,7 @@ export function AuthPage() {
       setForm((current) => ({ ...current, [field]: event.target.value }));
       setErrors((current) => ({ ...current, [field]: undefined }));
       setAuthError('');
+      setSuccessMessage('');
     };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -83,12 +85,31 @@ export function AuthPage() {
 
     setErrors({});
     setAuthError('');
+    setSuccessMessage('');
 
     try {
       if (mode === 'login') {
         await signInWithEmail(form.email.trim(), form.password);
-      } else {
-        await signUpWithEmail(form.email.trim(), form.password, form.fullName.trim());
+        navigate(ROUTES.HOME, { replace: true });
+        return;
+      }
+
+      const { requiresEmailConfirmation } = await signUpWithEmail(
+        form.email.trim(),
+        form.password,
+        form.fullName.trim(),
+      );
+
+      if (requiresEmailConfirmation) {
+        setMode('login');
+        setForm((current) => ({ ...current, password: '' }));
+        setErrors({});
+        setAuthError('');
+        setShowPassword(false);
+        setSuccessMessage(
+          'Te enviamos un correo de confirmación. Revisa tu bandeja e inicia sesión cuando actives tu cuenta.',
+        );
+        return;
       }
 
       navigate(ROUTES.HOME, { replace: true });
@@ -99,6 +120,7 @@ export function AuthPage() {
 
   const handleGoogle = async () => {
     setAuthError('');
+    setSuccessMessage('');
 
     try {
       await signInWithGoogle();
@@ -108,19 +130,27 @@ export function AuthPage() {
   };
 
   const handleGuest = () => {
+    setSuccessMessage('');
     continueAsGuest();
     navigate(ROUTES.HOME, { replace: true });
   };
 
+  const authInputContainerClassName = 'relative';
+  const authInputClassName =
+    'h-14 rounded-2xl !bg-[rgba(10,10,12,0.72)] text-sorbo-cream shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-sm caret-sorbo-gold';
+  const authLabelClassName =
+    'font-sans uppercase tracking-[0.16em] text-[rgba(245,230,200,0.52)]';
+
   return (
     <div className="relative min-h-[100dvh] overflow-hidden bg-sorbo-black">
       <img
-        src="/images/hero/onboarding-1.jpeg"
+        src="/images/auth/auth-hero.jpeg"
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover object-[29%_center]"
       />
-      <div className="absolute inset-0 bg-black/70" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.66)_0%,rgba(0,0,0,0.76)_40%,rgba(0,0,0,0.9)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-[42dvh] bg-[radial-gradient(circle_at_bottom,rgba(212,168,83,0.16)_0%,transparent_62%)]" />
 
       <div className="relative z-[1] flex min-h-[100dvh] flex-col">
         <div className="flex min-h-[25dvh] flex-col items-center justify-center px-8 pt-[calc(env(safe-area-inset-top,0px)+24px)] text-center">
@@ -130,13 +160,21 @@ export function AuthPage() {
             className="w-24 object-contain"
             style={{ filter: 'brightness(0) invert(1) sepia(0.2)' }}
           />
-          <p className="mt-4 font-sans text-sm uppercase tracking-[0.2em] text-[rgba(245,230,200,0.6)]">
-            {APP_SLOGAN}
+          <p className="mt-4 font-sans text-sm uppercase tracking-[0.2em] text-[rgba(245,230,200,0.66)]">
+            Entra a tu experiencia Sorbo
           </p>
         </div>
 
-        <div className="mt-auto rounded-t-3xl border border-[rgba(212,168,83,0.15)] bg-[rgba(26,22,18,0.8)] px-6 pb-[calc(env(safe-area-inset-bottom,0px)+24px)] pt-6 backdrop-blur-md">
-          <div className="flex gap-6 border-b border-[rgba(212,168,83,0.1)]">
+        <div className="relative mt-auto overflow-hidden rounded-t-[32px] border border-white/10 bg-[rgba(8,8,10,0.78)] px-6 pb-[calc(env(safe-area-inset-bottom,0px)+24px)] pt-5 shadow-[0_-26px_70px_rgba(0,0,0,0.56)] backdrop-blur-xl">
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0.02)_16%,rgba(255,255,255,0.01)_100%)]" />
+          <div className="absolute inset-x-6 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(232,214,173,0.56),transparent)]" />
+          <div className="absolute -right-12 top-[-5.5rem] h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(212,168,83,0.16)_0%,transparent_72%)] blur-3xl" />
+
+          <div
+            role="tablist"
+            aria-label="Seleccionar modo de autenticación"
+            className="relative z-[1] flex rounded-full border border-white/8 bg-white/[0.03] p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
+          >
             {(['login', 'register'] as const).map((value) => {
               const active = mode === value;
 
@@ -144,15 +182,20 @@ export function AuthPage() {
                 <button
                   key={value}
                   type="button"
+                  role="tab"
+                  id={`auth-tab-${value}`}
+                  aria-selected={active}
+                  aria-controls="auth-panel"
                   onClick={() => {
                     setMode(value);
                     setErrors({});
                     setAuthError('');
+                    setSuccessMessage('');
                   }}
-                  className={`pb-3 font-sans text-sm transition-colors ${
+                  className={`flex-1 rounded-full px-4 py-3 text-center font-sans text-[0.82rem] uppercase tracking-[0.18em] transition-all duration-200 ${
                     active
-                      ? 'border-b-2 border-sorbo-gold text-sorbo-cream'
-                      : 'text-[rgba(245,230,200,0.4)]'
+                      ? 'border border-[rgba(212,168,83,0.2)] bg-[linear-gradient(180deg,rgba(255,255,255,0.09)_0%,rgba(255,255,255,0.03)_100%)] text-sorbo-cream shadow-[0_10px_24px_rgba(0,0,0,0.26)]'
+                      : 'text-[rgba(245,230,200,0.46)] hover:text-[rgba(245,230,200,0.82)]'
                   }`}
                 >
                   {value === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
@@ -161,7 +204,13 @@ export function AuthPage() {
             })}
           </div>
 
-          <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          <form
+            id="auth-panel"
+            role="tabpanel"
+            aria-labelledby={`auth-tab-${mode}`}
+            onSubmit={handleSubmit}
+            className="relative z-[1] mt-6 space-y-4"
+          >
             {mode === 'register' ? (
               <Input
                 label="Nombre completo"
@@ -169,6 +218,9 @@ export function AuthPage() {
                 onChange={updateField('fullName')}
                 error={errors.fullName}
                 autoComplete="name"
+                containerClassName={authInputContainerClassName}
+                inputClassName={authInputClassName}
+                labelClassName={authLabelClassName}
               />
             ) : null}
 
@@ -179,6 +231,11 @@ export function AuthPage() {
               onChange={updateField('email')}
               error={errors.email}
               autoComplete="email"
+              autoCapitalize="none"
+              autoCorrect="off"
+              containerClassName={authInputContainerClassName}
+              inputClassName={authInputClassName}
+              labelClassName={authLabelClassName}
             />
 
             <Input
@@ -188,30 +245,57 @@ export function AuthPage() {
               onChange={updateField('password')}
               error={errors.password}
               autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+              containerClassName={authInputContainerClassName}
+              inputClassName={authInputClassName}
+              labelClassName={authLabelClassName}
               rightAdornment={
                 <button
                   type="button"
                   onClick={() => setShowPassword((current) => !current)}
-                  className="font-sans text-xs text-[rgba(245,230,200,0.5)] transition-colors hover:text-sorbo-cream"
+                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                  className="font-sans text-[11px] uppercase tracking-[0.16em] text-[rgba(245,230,200,0.52)] transition-colors hover:text-sorbo-cream"
                 >
                   {showPassword ? 'Ocultar' : 'Mostrar'}
                 </button>
               }
             />
 
-            {authError ? <p className="text-sm text-[#E53935]">{authError}</p> : null}
+            {successMessage ? (
+              <p className="rounded-2xl border border-[#BFE6C4]/20 bg-[#BFE6C4]/10 px-4 py-3 text-sm text-[#D9F0DD]">
+                {successMessage}
+              </p>
+            ) : null}
+            {authError ? (
+              <p className="rounded-2xl border border-[#E53935]/20 bg-[#E53935]/10 px-4 py-3 text-sm text-[#FFB3AC]">
+                {authError}
+              </p>
+            ) : null}
 
-            <Button type="submit" variant="primary" size="lg" loading={loading} className="w-full">
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              loading={loading}
+              className="w-full rounded-2xl border border-white/10 shadow-[0_18px_40px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.16)]"
+            >
               {mode === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
             </Button>
 
-            <div className="flex items-center gap-3 py-2">
-              <div className="h-px flex-1 bg-[rgba(212,168,83,0.15)]" />
-              <span className="font-sans text-sm text-[rgba(245,230,200,0.5)]">o continúa con</span>
-              <div className="h-px flex-1 bg-[rgba(212,168,83,0.15)]" />
+            <div className="flex items-center gap-4 py-2">
+              <div className="h-px flex-1 bg-[linear-gradient(90deg,transparent,rgba(245,230,200,0.16),rgba(245,230,200,0.03))]" />
+              <span className="font-sans text-[0.72rem] uppercase tracking-[0.18em] text-[rgba(245,230,200,0.54)]">
+                o continúa con
+              </span>
+              <div className="h-px flex-1 bg-[linear-gradient(90deg,rgba(245,230,200,0.03),rgba(245,230,200,0.16),transparent)]" />
             </div>
 
-            <Button type="button" variant="secondary" size="lg" className="w-full" onClick={handleGoogle}>
+            <Button
+              type="button"
+              variant="secondary"
+              size="lg"
+              className="w-full rounded-2xl border-white/10 !bg-[rgba(11,11,13,0.72)] text-sorbo-cream shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:border-[rgba(212,168,83,0.22)] hover:!bg-[rgba(16,16,18,0.82)]"
+              onClick={handleGoogle}
+            >
               <GoogleIcon />
               Google
             </Button>
@@ -219,7 +303,7 @@ export function AuthPage() {
             <button
               type="button"
               onClick={handleGuest}
-              className="w-full pt-2 text-center font-sans text-sm text-[rgba(245,230,200,0.5)]"
+              className="w-full rounded-2xl border border-transparent px-4 py-3 text-center font-sans text-sm tracking-[0.08em] text-[rgba(245,230,200,0.68)] transition-all duration-200 hover:border-white/8 hover:bg-white/[0.035] hover:text-sorbo-cream"
             >
               Continuar como invitado
             </button>

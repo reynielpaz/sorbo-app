@@ -14,6 +14,10 @@ interface ProfileRow {
   updated_at: string;
 }
 
+interface SignUpWithEmailResult {
+  requiresEmailConfirmation: boolean;
+}
+
 interface AuthState {
   user: SupabaseUser | null;
   profile: Profile | null;
@@ -21,7 +25,7 @@ interface AuthState {
   initialized: boolean;
   initialize: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
-  signUpWithEmail: (email: string, password: string, fullName: string) => Promise<void>;
+  signUpWithEmail: (email: string, password: string, fullName: string) => Promise<SignUpWithEmailResult>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
   continueAsGuest: () => void;
@@ -162,7 +166,19 @@ export const authStore = create<AuthState>((set, get) => ({
       throw new Error(translateAuthError(error.message));
     }
 
-    await syncAuthState(data.session?.user ?? null);
+    if (data.session) {
+      await syncAuthState(data.session.user);
+      return { requiresEmailConfirmation: false };
+    }
+
+    set({
+      user: null,
+      profile: null,
+      loading: false,
+      initialized: true,
+    });
+
+    return { requiresEmailConfirmation: true };
   },
 
   async signInWithGoogle() {
