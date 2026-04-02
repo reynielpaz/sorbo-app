@@ -1,11 +1,35 @@
+import { motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/utils/constants';
 
 export function HomeMenuCta() {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <section className="mt-8 px-5">
       <div className="relative overflow-hidden rounded-[30px] border border-[rgba(212,168,83,0.18)] bg-[radial-gradient(circle_at_top_right,rgba(212,168,83,0.14),transparent_32%),linear-gradient(180deg,rgba(24,18,13,0.96)_0%,rgba(10,10,12,0.98)_100%)] px-5 py-6 shadow-[0_26px_60px_rgba(0,0,0,0.32)]">
         <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(232,214,173,0.46),transparent)]" />
+        <motion.div
+          aria-hidden="true"
+          className="absolute inset-x-[-18%] bottom-[-6.5rem] h-40 rounded-full bg-[radial-gradient(circle,rgba(212,168,83,0.18)_0%,rgba(212,168,83,0.08)_34%,transparent_72%)] blur-3xl"
+          animate={
+            shouldReduceMotion
+              ? undefined
+              : {
+                  opacity: [0.36, 0.56, 0.36],
+                  scale: [0.98, 1.03, 0.98],
+                }
+          }
+          transition={
+            shouldReduceMotion
+              ? undefined
+              : {
+                  duration: 6.8,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }
+          }
+        />
         <div className="absolute -right-12 bottom-[-4rem] h-32 w-32 rounded-full bg-[radial-gradient(circle,rgba(212,168,83,0.12)_0%,transparent_72%)] blur-2xl" />
 
         <div className="relative">

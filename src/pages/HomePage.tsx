@@ -24,7 +24,7 @@ function getSectionAnimation(delay: number) {
 export function HomePage() {
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="relative z-[1] pb-[calc(env(safe-area-inset-bottom)+140px)]">
+      <div className="relative z-[1] pb-[calc(env(safe-area-inset-bottom)+124px)]">
         <motion.section {...getSectionAnimation(0)}>
           <TopGlassPanel />
         </motion.section>
