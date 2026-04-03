@@ -104,10 +104,15 @@ interface GetProductsOptions {
   onlyAvailable?: boolean;
   onlyFeatured?: boolean;
   groupByCategory?: boolean;
+  productId?: string;
 }
 
 async function getProducts(options: GetProductsOptions): Promise<Product[]> {
   let query = supabase.from('products').select(PRODUCT_SELECT);
+
+  if (options.productId) {
+    query = query.eq('id', options.productId);
+  }
 
   if (options.onlyAvailable) {
     query = query.eq('is_available', true);
@@ -185,6 +190,15 @@ export async function getAvailableProducts(): Promise<Product[]> {
     onlyAvailable: true,
     groupByCategory: true,
   });
+}
+
+export async function getProductById(id: string): Promise<Product | null> {
+  const [product] = await getProducts({
+    errorMessage: 'No pudimos cargar este producto.',
+    productId: id,
+  });
+
+  return product ?? null;
 }
 
 export async function getAppConfig<TValue = unknown>(key: string): Promise<TValue | null> {
