@@ -34,6 +34,8 @@ interface AppConfigRow<TValue> {
 }
 
 const VALID_PRODUCT_TAGS: ProductTag[] = ['nuevo', 'popular', 'promo'];
+const PRODUCT_SELECT =
+  'id, category_id, name, description, price, image_url, is_available, is_featured, tags, discount_percent, sort_order, ingredients, customizations, created_at, updated_at';
 
 function mapCategoryRow(row: CategoryRow): Category {
   return {
@@ -73,6 +75,68 @@ function mapProductRow(row: ProductRow, category?: Category): Product {
   };
 }
 
+function sortProducts(products: Product[], options?: { groupByCategory?: boolean }) {
+  const shouldGroupByCategory = options?.groupByCategory ?? false;
+
+  return [...products].sort((left, right) => {
+    if (shouldGroupByCategory) {
+      const categorySortDifference =
+        (left.category?.sortOrder ?? Number.MAX_SAFE_INTEGER) -
+        (right.category?.sortOrder ?? Number.MAX_SAFE_INTEGER);
+
+      if (categorySortDifference !== 0) {
+        return categorySortDifference;
+      }
+    }
+
+    const productSortDifference = left.sortOrder - right.sortOrder;
+
+    if (productSortDifference !== 0) {
+      return productSortDifference;
+    }
+
+    return left.name.localeCompare(right.name, 'es', { sensitivity: 'base' });
+  });
+}
+
+interface GetProductsOptions {
+  errorMessage: string;
+  onlyAvailable?: boolean;
+  onlyFeatured?: boolean;
+  groupByCategory?: boolean;
+}
+
+async function getProducts(options: GetProductsOptions): Promise<Product[]> {
+  let query = supabase.from('products').select(PRODUCT_SELECT);
+
+  if (options.onlyAvailable) {
+    query = query.eq('is_available', true);
+  }
+
+  if (options.onlyFeatured) {
+    query = query.eq('is_featured', true);
+  }
+
+  const { data, error } = await query
+    .order('sort_order', { ascending: true })
+    .order('name', { ascending: true });
+
+  if (error) {
+    throw new Error(options.errorMessage);
+  }
+
+  const rows = (data ?? []) as ProductRow[];
+  const categoryIds = Array.from(
+    new Set(rows.map((row) => row.category_id).filter((value): value is string => Boolean(value)))
+  );
+  const categoriesById = await getCategoriesByIds(categoryIds);
+  const products = rows.map((row) =>
+    mapProductRow(row, row.category_id ? categoriesById.get(row.category_id) : undefined)
+  );
+
+  return sortProducts(products, { groupByCategory: options.groupByCategory });
+}
+
 async function getCategoriesByIds(categoryIds: string[]) {
   if (categoryIds.length === 0) {
     return new Map<string, Category>();
@@ -108,26 +172,19 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getFeaturedProducts(): Promise<Product[]> {
-  const { data, error } = await supabase
-    .from('products')
-    .select(
-      'id, category_id, name, description, price, image_url, is_available, is_featured, tags, discount_percent, sort_order, ingredients, customizations, created_at, updated_at'
-    )
-    .eq('is_featured', true)
-    .eq('is_available', true)
-    .order('sort_order', { ascending: true });
+  return getProducts({
+    errorMessage: 'No pudimos cargar los productos destacados.',
+    onlyAvailable: true,
+    onlyFeatured: true,
+  });
+}
 
-  if (error) {
-    throw new Error('No pudimos cargar los productos destacados.');
-  }
-
-  const rows = (data ?? []) as ProductRow[];
-  const categoryIds = Array.from(
-    new Set(rows.map((row) => row.category_id).filter((value): value is string => Boolean(value)))
-  );
-  const categoriesById = await getCategoriesByIds(categoryIds);
-
-  return rows.map((row) => mapProductRow(row, row.category_id ? categoriesById.get(row.category_id) : undefined));
+export async function getAvailableProducts(): Promise<Product[]> {
+  return getProducts({
+    errorMessage: 'No pudimos cargar el menú.',
+    onlyAvailable: true,
+    groupByCategory: true,
+  });
 }
 
 export async function getAppConfig<TValue = unknown>(key: string): Promise<TValue | null> {
