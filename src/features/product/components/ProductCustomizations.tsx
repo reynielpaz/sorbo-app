@@ -1,8 +1,12 @@
+import { Check } from 'lucide-react';
 import type { ProductCustomization } from '@/types';
 import { formatPrice } from '@/utils/formatPrice';
 
 interface ProductCustomizationsProps {
   customizations?: ProductCustomization[];
+  selectedOptionsByGroup: Record<string, string[]>;
+  missingRequiredGroupIds: string[];
+  onToggleOption: (customization: ProductCustomization, optionId: string) => void;
 }
 
 function buildCustomizationMeta(customization: ProductCustomization) {
@@ -10,9 +14,15 @@ function buildCustomizationMeta(customization: ProductCustomization) {
   return customization.required ? `${selectionLabel} · Obligatorio` : `${selectionLabel} · Opcional`;
 }
 
-export function ProductCustomizations({ customizations }: ProductCustomizationsProps) {
+export function ProductCustomizations({
+  customizations,
+  selectedOptionsByGroup,
+  missingRequiredGroupIds,
+  onToggleOption,
+}: ProductCustomizationsProps) {
   const visibleCustomizations =
     customizations?.filter((customization) => customization.options.length > 0) ?? [];
+  const missingRequiredSet = new Set(missingRequiredGroupIds);
 
   if (visibleCustomizations.length === 0) {
     return null;
@@ -29,10 +39,16 @@ export function ProductCustomizations({ customizations }: ProductCustomizationsP
 
       <div className="mt-5 space-y-3.5">
         {visibleCustomizations.map((customization) => (
-          <article
+          <fieldset
             key={customization.id}
-            className="rounded-[24px] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(9,12,18,0.74)_100%)] px-4 py-4 shadow-[0_12px_24px_rgba(0,0,0,0.16)]"
+            className={`rounded-[24px] border px-4 py-4 shadow-[0_12px_24px_rgba(0,0,0,0.16)] ${
+              missingRequiredSet.has(customization.id)
+                ? 'border-[rgba(212,168,83,0.28)] bg-[linear-gradient(180deg,rgba(212,168,83,0.08)_0%,rgba(10,13,19,0.82)_100%)]'
+                : 'border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(9,12,18,0.74)_100%)]'
+            }`}
           >
+            <legend className="sr-only">{customization.name}</legend>
+
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <h3 className="text-[16px] font-semibold text-white/92">
@@ -42,24 +58,73 @@ export function ProductCustomizations({ customizations }: ProductCustomizationsP
                   {buildCustomizationMeta(customization)}
                 </p>
               </div>
+
+              <span
+                className={`shrink-0 rounded-full border px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.18em] ${
+                  customization.required
+                    ? 'border-[rgba(212,168,83,0.22)] bg-[rgba(212,168,83,0.12)] text-[#E8D6AD]'
+                    : 'border-white/[0.08] bg-white/[0.04] text-white/52'
+                }`}
+              >
+                {customization.required ? 'Obligatorio' : 'Opcional'}
+              </span>
             </div>
 
-            <div className="mt-4 flex flex-wrap gap-2.5">
+            {missingRequiredSet.has(customization.id) ? (
+              <p className="mt-3 text-[12px] leading-5 text-[#E8C068]">
+                Selecciona una opción para continuar con tu pedido.
+              </p>
+            ) : null}
+
+            <div className="mt-4 space-y-2.5">
               {customization.options.map((option) => (
-                <div
+                <label
                   key={option.id}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-[rgba(255,255,255,0.04)] px-3.5 py-2 text-[12px] text-white/76"
+                  className={`flex cursor-pointer items-center justify-between gap-3 rounded-[22px] border px-3.5 py-3 transition-[border-color,background,transform,color] duration-200 hover:-translate-y-0.5 ${
+                    (selectedOptionsByGroup[customization.id] ?? []).includes(option.id)
+                      ? 'border-[rgba(212,168,83,0.42)] bg-[linear-gradient(135deg,rgba(212,168,83,0.14)_0%,rgba(17,21,30,0.92)_100%)] text-white shadow-[0_10px_18px_rgba(0,0,0,0.16)]'
+                      : 'border-white/[0.08] bg-[rgba(255,255,255,0.03)] text-white/72'
+                  }`}
                 >
-                  <span>{option.label}</span>
-                  {typeof option.price === 'number' && option.price > 0 ? (
-                    <span className="font-medium text-[#E8D6AD]">
-                      +{formatPrice(option.price)}
+                  <div className="flex min-w-0 items-center gap-3">
+                    <span
+                      className={`inline-flex h-5 w-5 shrink-0 items-center justify-center border ${
+                        customization.type === 'single' ? 'rounded-full' : 'rounded-[7px]'
+                      } ${
+                        (selectedOptionsByGroup[customization.id] ?? []).includes(option.id)
+                          ? 'border-[#D4A853] bg-[#D4A853] text-[#140F08]'
+                          : 'border-white/[0.16] bg-transparent text-transparent'
+                      }`}
+                    >
+                      <Check size={12} strokeWidth={3} />
                     </span>
-                  ) : null}
-                </div>
+
+                    <div className="min-w-0">
+                      <input
+                        type={customization.type === 'single' ? 'radio' : 'checkbox'}
+                        name={customization.id}
+                        checked={(selectedOptionsByGroup[customization.id] ?? []).includes(option.id)}
+                        onChange={() => onToggleOption(customization, option.id)}
+                        className="sr-only"
+                      />
+                      <p className="text-[13px] font-medium text-current">
+                        {option.label}
+                      </p>
+                      <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-white/32">
+                        {customization.type === 'single' ? 'Selección única' : 'Selección múltiple'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <span className="shrink-0 text-[12px] font-medium text-[#E8D6AD]">
+                    {typeof option.price === 'number' && option.price > 0
+                      ? `+${formatPrice(option.price)}`
+                      : 'Incluido'}
+                  </span>
+                </label>
               ))}
             </div>
-          </article>
+          </fieldset>
         ))}
       </div>
     </section>

@@ -70,7 +70,7 @@ export function ProductHero({ product, onBack }: ProductHeroProps) {
 
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,11,0.46)_0%,rgba(5,7,11,0.12)_30%,rgba(5,7,11,0.22)_58%,rgba(5,7,11,0.94)_100%)]" />
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,11,0.14)_0%,rgba(5,7,11,0.06)_22%,rgba(5,7,11,0.08)_46%,rgba(5,7,11,0.34)_100%)]" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[48%] bg-[linear-gradient(180deg,rgba(6,8,12,0)_0%,rgba(6,8,12,0.76)_100%)]" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[52%] bg-[linear-gradient(180deg,rgba(6,8,12,0)_0%,rgba(6,8,12,0.82)_100%)]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.16),transparent)]" />
 
         <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 px-4 pb-4 pt-[calc(env(safe-area-inset-top,0px)+16px)]">
@@ -92,9 +92,12 @@ export function ProductHero({ product, onBack }: ProductHeroProps) {
           ) : null}
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 px-4 pb-6">
+        <div className="absolute inset-x-0 bottom-0 px-4 pb-10">
           <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#E8D6AD]/82">
             {product.category?.name ?? 'Carta Sorbo'}
+          </p>
+          <p className="mt-2.5 max-w-[22ch] font-playfair text-[34px] font-semibold leading-[0.92] tracking-[-0.04em] text-[#FCF8F0] drop-shadow-[0_14px_24px_rgba(0,0,0,0.28)]">
+            {product.name}
           </p>
         </div>
       </div>

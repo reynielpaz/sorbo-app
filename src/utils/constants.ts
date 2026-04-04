@@ -73,6 +73,17 @@ export const PAYMENT_METHODS = [
   { id: 'efectivo', name: 'Efectivo' },
 ] as const;
 
+/** Métodos de pago disponibles para pedido directo por producto */
+export const PRODUCT_ORDER_PAYMENT_METHODS = [
+  { id: 'pago_movil', name: 'Pago Móvil' },
+  { id: 'binance', name: 'Binance' },
+  { id: 'zelle', name: 'Zelle' },
+  { id: 'efectivo', name: 'Efectivo' },
+  { id: 'punto_venta', name: 'Punto de Venta' },
+] as const;
+
+export type ProductOrderPaymentMethodId = (typeof PRODUCT_ORDER_PAYMENT_METHODS)[number]['id'];
+
 /** Redes sociales */
 export const SOCIAL_LINKS = {
   INSTAGRAM: 'https://www.instagram.com/sorbo.ve',

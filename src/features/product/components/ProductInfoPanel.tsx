@@ -11,17 +11,27 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D4A853]/82">
-            {product.category?.name ?? 'Carta Sorbo'}
+            Pedido directo
           </p>
-          <h1 className="mt-3 font-playfair text-[42px] font-semibold leading-[0.92] tracking-[-0.045em] text-[#FCF8F0]">
-            {product.name}
-          </h1>
+          <p className="mt-3 max-w-[26ch] text-[13px] leading-6 text-white/56">
+            Personaliza tu selección, ajusta la cantidad y envíalo a Sorbo con un pedido ya redactado.
+          </p>
         </div>
+
+        <span
+          className={`shrink-0 rounded-full border px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.2em] ${
+            product.isAvailable
+              ? 'border-[rgba(212,168,83,0.2)] bg-[rgba(212,168,83,0.1)] text-[#E8D6AD]'
+              : 'border-white/[0.08] bg-white/[0.04] text-white/52'
+          }`}
+        >
+          {product.isAvailable ? 'Disponible' : 'No disponible'}
+        </span>
       </div>
 
       <div className="mt-5 border-t border-white/[0.06] pt-5">
         <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-white/42">
-          Precio
+          Precio base
         </p>
         <p className="mt-2 text-[32px] font-semibold tracking-[-0.03em] text-[#F3D7A0]">
           {formatPrice(product.price)}
@@ -32,6 +42,10 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
             {product.description}
           </p>
         ) : null}
+
+        <p className="mt-4 text-[12px] leading-6 text-white/46">
+          Ajusta cantidad, personaliza tu pedido y envíalo directo por WhatsApp.
+        </p>
       </div>
     </section>
   );

@@ -192,6 +192,14 @@ export async function getAvailableProducts(): Promise<Product[]> {
   });
 }
 
+export async function getProductAddOns(productId: string, limit = 8): Promise<Product[]> {
+  const products = await getAvailableProducts();
+
+  return products
+    .filter((product) => product.id !== productId)
+    .slice(0, limit);
+}
+
 export async function getProductById(id: string): Promise<Product | null> {
   const [product] = await getProducts({
     errorMessage: 'No pudimos cargar este producto.',
