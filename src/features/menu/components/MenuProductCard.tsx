@@ -88,7 +88,11 @@ export function MenuProductCard({ product, index = 0 }: MenuProductCardProps) {
   const shouldPrioritizeImage = index < 4;
 
   function handleNavigate() {
-    navigate(generatePath(ROUTES.PRODUCT, { id: product.id }));
+    navigate(generatePath(ROUTES.PRODUCT, { id: product.id }), {
+      state: {
+        productSnapshot: product,
+      },
+    });
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {

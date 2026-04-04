@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
@@ -23,19 +23,35 @@ import { useAuth } from '@/hooks/useAuth';
 export function ProductPage() {
   const navigate = useNavigate();
   const { profile } = useAuth();
-  const { product, loading, error, notFound, reload } = useProductDetails();
+  const { productId, product, snapshotProduct, loading, error, notFound, reload } = useProductDetails();
+  const currentProduct = productId && product?.id === productId ? product : null;
+  const heroProduct = !error && !notFound ? currentProduct ?? (loading ? snapshotProduct : null) : null;
   const [availableAddOns, setAvailableAddOns] = useState<Product[]>([]);
   const [addOnsLoading, setAddOnsLoading] = useState(false);
-  const orderComposer = useProductOrderComposer(product, {
+  const orderComposer = useProductOrderComposer(currentProduct, {
     initialCustomerName: profile?.fullName,
     initialCustomerPhone: profile?.phone,
     availableAddOns,
   });
 
+  useLayoutEffect(() => {
+    if (!productId) {
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: 'auto' });
+
+    const mainElement = document.querySelector('main');
+
+    if (mainElement instanceof HTMLElement) {
+      mainElement.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  }, [productId]);
+
   useEffect(() => {
     let isCancelled = false;
 
-    if (!product) {
+    if (!currentProduct) {
       setAvailableAddOns([]);
       setAddOnsLoading(false);
       return;
@@ -43,7 +59,7 @@ export function ProductPage() {
 
     setAddOnsLoading(true);
 
-    void getProductAddOns(product.id)
+    void getProductAddOns(currentProduct.id)
       .then((nextAddOns) => {
         if (!isCancelled) {
           setAvailableAddOns(nextAddOns);
@@ -63,7 +79,7 @@ export function ProductPage() {
     return () => {
       isCancelled = true;
     };
-  }, [product]);
+  }, [currentProduct]);
 
   function handleBack() {
     const historyIndex = typeof window.history.state?.idx === 'number' ? window.history.state.idx : 0;
@@ -87,7 +103,7 @@ export function ProductPage() {
         <div className="pointer-events-none absolute inset-x-[-14%] top-[208px] h-[300px] rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.42)_0%,rgba(11,15,26,0.1)_46%,transparent_74%)] blur-3xl" />
         <div className="pointer-events-none absolute right-[-32px] top-[340px] h-[180px] w-[180px] rounded-full bg-[radial-gradient(circle,rgba(245,233,212,0.06)_0%,rgba(245,233,212,0.012)_42%,transparent_74%)] blur-3xl" />
 
-        {loading ? <ProductDetailSkeleton /> : null}
+        {loading && !heroProduct ? <ProductDetailSkeleton /> : null}
 
         {!loading && error ? (
           <ProductDetailEmptyState
@@ -108,72 +124,76 @@ export function ProductPage() {
           />
         ) : null}
 
-        {!loading && !error && product ? (
+        {heroProduct ? (
           <>
-            <ProductHero product={product} onBack={handleBack} />
+            <ProductHero product={heroProduct} onBack={handleBack} />
 
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, ease: 'easeOut' }}
-              className="relative -mt-3 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+280px)]"
-            >
-              <div className="space-y-5">
-                <ProductInfoPanel product={product} />
-                <ProductIngredients ingredients={product.ingredients} />
+            {!loading && !error && currentProduct ? (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, ease: 'easeOut' }}
+                  className="relative -mt-3 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+280px)]"
+                >
+                  <div className="mx-auto max-w-[720px] space-y-6">
+                    <ProductInfoPanel product={currentProduct} />
+                    <ProductIngredients ingredients={currentProduct.ingredients} />
 
-                <ProductCustomizations
-                  customizations={product.customizations}
-                  selectedOptionsByGroup={orderComposer.selectedOptionsByGroup}
-                  missingRequiredGroupIds={orderComposer.missingRequiredGroupIds}
-                  onToggleOption={orderComposer.toggleOption}
+                    <ProductCustomizations
+                      customizations={currentProduct.customizations}
+                      selectedOptionsByGroup={orderComposer.selectedOptionsByGroup}
+                      missingRequiredGroupIds={orderComposer.missingRequiredGroupIds}
+                      onToggleOption={orderComposer.toggleOption}
+                    />
+
+                    <ProductSpecialInstructions
+                      value={orderComposer.specialInstructions}
+                      maxLength={orderComposer.specialInstructionsLimit}
+                      currentLength={orderComposer.specialInstructionsCount}
+                      onChange={orderComposer.setSpecialInstructions}
+                    />
+
+                    <ProductAddOns
+                      products={availableAddOns}
+                      selectedAddOnIds={orderComposer.selectedAddOnIds}
+                      loading={addOnsLoading}
+                      onToggleAddOn={orderComposer.toggleAddOn}
+                    />
+
+                    <ProductCustomerDetails
+                      customerName={orderComposer.customerName}
+                      customerPhone={orderComposer.customerPhone}
+                      isNameInvalid={
+                        !orderComposer.isCustomerNameValid &&
+                        orderComposer.customerName.trim().length > 0
+                      }
+                      onCustomerNameChange={orderComposer.setCustomerName}
+                      onCustomerPhoneChange={orderComposer.setCustomerPhone}
+                    />
+
+                    <ProductPaymentMethodSelector
+                      selectedPaymentMethod={orderComposer.selectedPaymentMethod}
+                      isInvalid={!orderComposer.hasSelectedPaymentMethod}
+                      onChange={orderComposer.setSelectedPaymentMethod}
+                    />
+                  </div>
+                </motion.div>
+
+                <ProductActionBar
+                  product={currentProduct}
+                  quantity={orderComposer.quantity}
+                  totalEstimate={orderComposer.totalEstimate}
+                  extrasPerUnit={orderComposer.extrasPerUnit}
+                  addOnsTotal={orderComposer.addOnsTotal}
+                  canSubmit={orderComposer.canSubmit}
+                  disabledReason={orderComposer.disabledReason}
+                  whatsappHref={orderComposer.whatsappHref}
+                  onDecreaseQuantity={orderComposer.decrementQuantity}
+                  onIncreaseQuantity={orderComposer.incrementQuantity}
                 />
-
-                <ProductAddOns
-                  products={availableAddOns}
-                  selectedAddOnIds={orderComposer.selectedAddOnIds}
-                  loading={addOnsLoading}
-                  onToggleAddOn={orderComposer.toggleAddOn}
-                />
-
-                <ProductCustomerDetails
-                  customerName={orderComposer.customerName}
-                  customerPhone={orderComposer.customerPhone}
-                  isNameInvalid={
-                    !orderComposer.isCustomerNameValid &&
-                    orderComposer.customerName.trim().length > 0
-                  }
-                  onCustomerNameChange={orderComposer.setCustomerName}
-                  onCustomerPhoneChange={orderComposer.setCustomerPhone}
-                />
-
-                <ProductPaymentMethodSelector
-                  selectedPaymentMethod={orderComposer.selectedPaymentMethod}
-                  isInvalid={!orderComposer.hasSelectedPaymentMethod}
-                  onChange={orderComposer.setSelectedPaymentMethod}
-                />
-
-                <ProductSpecialInstructions
-                  value={orderComposer.specialInstructions}
-                  maxLength={orderComposer.specialInstructionsLimit}
-                  currentLength={orderComposer.specialInstructionsCount}
-                  onChange={orderComposer.setSpecialInstructions}
-                />
-              </div>
-            </motion.div>
-
-            <ProductActionBar
-              product={product}
-              quantity={orderComposer.quantity}
-              totalEstimate={orderComposer.totalEstimate}
-              extrasPerUnit={orderComposer.extrasPerUnit}
-              addOnsTotal={orderComposer.addOnsTotal}
-              canSubmit={orderComposer.canSubmit}
-              disabledReason={orderComposer.disabledReason}
-              whatsappHref={orderComposer.whatsappHref}
-              onDecreaseQuantity={orderComposer.decrementQuantity}
-              onIncreaseQuantity={orderComposer.incrementQuantity}
-            />
+              </>
+            ) : null}
           </>
         ) : null}
       </div>

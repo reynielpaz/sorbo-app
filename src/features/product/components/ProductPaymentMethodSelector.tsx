@@ -15,13 +15,13 @@ export function ProductPaymentMethodSelector({
   onChange,
 }: ProductPaymentMethodSelectorProps) {
   return (
-    <section className="overflow-hidden rounded-[30px] border border-white/[0.06] bg-[linear-gradient(180deg,rgba(13,16,22,0.98)_0%,rgba(7,9,14,0.98)_100%)] px-5 py-6 shadow-[0_22px_46px_rgba(0,0,0,0.2)]">
+    <section className="overflow-hidden rounded-[30px] border border-white/[0.06] bg-[linear-gradient(180deg,rgba(13,16,22,0.98)_0%,rgba(7,9,14,0.98)_100%)] px-5 py-5 shadow-[0_22px_46px_rgba(0,0,0,0.2)]">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D4A853]/82">
             Pago
           </p>
-          <h2 className="mt-3 font-playfair text-[30px] font-semibold leading-none tracking-[-0.04em] text-[#FCF8F0]">
+          <h2 className="mt-2.5 font-playfair text-[28px] font-semibold leading-none tracking-[-0.04em] text-[#FCF8F0]">
             Cómo vas a pagar
           </h2>
         </div>
@@ -31,7 +31,7 @@ export function ProductPaymentMethodSelector({
         </span>
       </div>
 
-      <fieldset className="mt-5">
+      <fieldset className="mt-4">
         <legend className="sr-only">Selecciona un método de pago</legend>
 
         <div className="grid grid-cols-2 gap-2.5">

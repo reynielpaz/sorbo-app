@@ -29,13 +29,13 @@ export function ProductAddOns({
   }
 
   return (
-    <section className="overflow-hidden rounded-[30px] border border-white/[0.06] bg-[linear-gradient(180deg,rgba(13,16,22,0.98)_0%,rgba(7,9,14,0.98)_100%)] px-5 py-6 shadow-[0_22px_46px_rgba(0,0,0,0.2)]">
+    <section className="overflow-hidden rounded-[28px] border border-white/[0.06] bg-[linear-gradient(180deg,rgba(13,16,22,0.98)_0%,rgba(7,9,14,0.98)_100%)] px-4 py-5 shadow-[0_20px_40px_rgba(0,0,0,0.18)]">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D4A853]/82">
             Adicionales
           </p>
-          <h2 className="mt-3 font-playfair text-[30px] font-semibold leading-none tracking-[-0.04em] text-[#FCF8F0]">
+          <h2 className="mt-2.5 font-playfair text-[28px] font-semibold leading-none tracking-[-0.04em] text-[#FCF8F0]">
             Combina con esto
           </h2>
         </div>
@@ -45,17 +45,17 @@ export function ProductAddOns({
         </span>
       </div>
 
-      <div className="-mx-1 mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="-mx-1 mt-4 flex snap-x snap-mandatory gap-2.5 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {loading
           ? Array.from({ length: 3 }).map((_, index) => (
               <div
                 key={`addon-skeleton-${index}`}
-                className="min-w-[220px] snap-start overflow-hidden rounded-[24px] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(9,12,18,0.78)_100%)] p-3 animate-pulse"
+                className="min-w-[198px] snap-start overflow-hidden rounded-[22px] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(9,12,18,0.78)_100%)] p-2.5 animate-pulse"
               >
-                <div className="h-[138px] rounded-[18px] bg-white/8" />
-                <div className="mt-3 h-3 w-24 rounded-full bg-white/8" />
-                <div className="mt-2 h-4 w-32 rounded-full bg-white/8" />
-                <div className="mt-4 h-10 rounded-full bg-white/8" />
+                <div className="h-[118px] rounded-[16px] bg-white/8" />
+                <div className="mt-3 h-3 w-20 rounded-full bg-white/8" />
+                <div className="mt-2 h-4 w-28 rounded-full bg-white/8" />
+                <div className="mt-4 h-9 rounded-full bg-white/8" />
               </div>
             ))
           : products.map((product) => {
@@ -65,9 +65,9 @@ export function ProductAddOns({
               return (
                 <article
                   key={product.id}
-                  className="min-w-[220px] snap-start overflow-hidden rounded-[24px] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(9,12,18,0.78)_100%)] p-3 shadow-[0_14px_28px_rgba(0,0,0,0.16)]"
+                  className="flex min-w-[198px] snap-start flex-col overflow-hidden rounded-[22px] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(9,12,18,0.78)_100%)] p-2.5 shadow-[0_12px_24px_rgba(0,0,0,0.14)]"
                 >
-                  <div className="relative h-[138px] overflow-hidden rounded-[18px]">
+                  <div className="relative h-[118px] overflow-hidden rounded-[16px]">
                     {product.imageUrl ? (
                       <img
                         src={product.imageUrl}
@@ -88,16 +88,16 @@ export function ProductAddOns({
                     )}
 
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%] bg-[linear-gradient(180deg,rgba(6,8,12,0)_0%,rgba(6,8,12,0.78)_100%)]" />
-                    <p className="absolute inset-x-3 bottom-3 text-[10px] font-medium uppercase tracking-[0.2em] text-white/44">
+                    <p className="absolute inset-x-3 bottom-2.5 text-[9px] font-medium uppercase tracking-[0.2em] text-white/44">
                       Sorbo
                     </p>
                   </div>
 
-                  <div className="mt-3">
-                    <h3 className="font-playfair text-[24px] leading-[0.96] tracking-[-0.03em] text-[#FCF8F0]">
+                  <div className="mt-3 min-h-[86px]">
+                    <h3 className="font-playfair text-[22px] leading-[0.98] tracking-[-0.03em] text-[#FCF8F0]">
                       {product.name}
                     </h3>
-                    <p className="mt-2 text-[18px] font-semibold tracking-[-0.03em] text-[#F3D7A0]">
+                    <p className="mt-2 text-[17px] font-semibold tracking-[-0.03em] text-[#F3D7A0]">
                       {formatPrice(product.price)}
                     </p>
                   </div>
@@ -105,7 +105,7 @@ export function ProductAddOns({
                   <button
                     type="button"
                     onClick={() => onToggleAddOn(product)}
-                    className={`mt-4 inline-flex w-full items-center justify-center rounded-full px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.14em] transition-transform duration-200 hover:-translate-y-0.5 ${
+                    className={`mt-auto inline-flex w-full items-center justify-center rounded-full px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] transition-transform duration-200 hover:-translate-y-0.5 ${
                       isSelected
                         ? 'border border-[rgba(212,168,83,0.24)] bg-[rgba(212,168,83,0.12)] text-[#E8D6AD]'
                         : 'bg-[linear-gradient(135deg,#E8D6AD_0%,#D4A853_50%,#B8923A_100%)] text-[#140F08] shadow-[0_14px_24px_rgba(0,0,0,0.18)]'

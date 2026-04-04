@@ -12,13 +12,13 @@ export function ProductSpecialInstructions({
   onChange,
 }: ProductSpecialInstructionsProps) {
   return (
-    <section className="overflow-hidden rounded-[30px] border border-white/[0.06] bg-[linear-gradient(180deg,rgba(13,16,22,0.98)_0%,rgba(7,9,14,0.98)_100%)] px-5 py-6 shadow-[0_22px_46px_rgba(0,0,0,0.2)]">
+    <section className="overflow-hidden rounded-[30px] border border-white/[0.06] bg-[linear-gradient(180deg,rgba(13,16,22,0.98)_0%,rgba(7,9,14,0.98)_100%)] px-5 py-5 shadow-[0_22px_46px_rgba(0,0,0,0.2)]">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D4A853]/82">
             Instrucciones
           </p>
-          <h2 className="mt-3 font-playfair text-[30px] font-semibold leading-none tracking-[-0.04em] text-[#FCF8F0]">
+          <h2 className="mt-2.5 font-playfair text-[28px] font-semibold leading-none tracking-[-0.04em] text-[#FCF8F0]">
             Un detalle final
           </h2>
         </div>
@@ -28,7 +28,7 @@ export function ProductSpecialInstructions({
         </span>
       </div>
 
-      <div className="mt-5 overflow-hidden rounded-[24px] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.035)_0%,rgba(9,12,18,0.76)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+      <div className="mt-4 overflow-hidden rounded-[24px] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.035)_0%,rgba(9,12,18,0.76)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
         <textarea
           value={value}
           onChange={(event) => onChange(event.target.value)}

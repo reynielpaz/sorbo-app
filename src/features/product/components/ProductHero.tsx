@@ -55,6 +55,7 @@ export function ProductHero({ product, onBack }: ProductHeroProps) {
             className="absolute inset-0 h-full w-full object-cover object-center"
             loading="eager"
             fetchPriority="high"
+            decoding="sync"
           />
         ) : (
           <div className="absolute inset-0 overflow-hidden bg-[linear-gradient(135deg,rgba(14,17,24,1)_0%,rgba(11,15,26,0.96)_42%,rgba(5,7,11,1)_100%)]">

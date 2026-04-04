@@ -1,14 +1,25 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { getProductById } from '@/services/products';
 import type { Product } from '@/types';
 
 const DEFAULT_ERROR_MESSAGE = 'No pudimos cargar este producto.';
 
+interface ProductRouteState {
+  productSnapshot?: Product;
+}
+
 export function useProductDetails() {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
   const productId = id?.trim() ?? '';
-  const [product, setProduct] = useState<Product | null>(null);
+  const snapshotProduct = useMemo(() => {
+    const routeState = location.state as ProductRouteState | null;
+    const candidate = routeState?.productSnapshot;
+
+    return candidate?.id === productId ? candidate : null;
+  }, [location.state, productId]);
+  const [product, setProduct] = useState<Product | null>(snapshotProduct);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,6 +34,9 @@ export function useProductDetails() {
     try {
       setLoading(true);
       setError(null);
+      setProduct((currentProduct) =>
+        currentProduct?.id === productId ? currentProduct : snapshotProduct
+      );
 
       const nextProduct = await getProductById(productId);
       setProduct(nextProduct);
@@ -32,7 +46,7 @@ export function useProductDetails() {
     } finally {
       setLoading(false);
     }
-  }, [productId]);
+  }, [productId, snapshotProduct]);
 
   useEffect(() => {
     void loadProduct();
@@ -41,6 +55,7 @@ export function useProductDetails() {
   return {
     productId: productId || null,
     product,
+    snapshotProduct,
     loading,
     error,
     notFound: !loading && !error && !product,
