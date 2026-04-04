@@ -35,7 +35,7 @@ export function ProductActionBar({
       : disabledReason?.includes('nombre') || disabledReason?.includes('método de pago')
         ? 'Completa tus datos'
       : 'Completa tu selección';
-  const supportCopy = disabledReason ?? 'Se abrirá WhatsApp con tu pedido redactado';
+  const supportCopy = disabledReason ?? 'Tu pedido se abrirá listo en WhatsApp.';
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-30 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+14px)] pt-5">

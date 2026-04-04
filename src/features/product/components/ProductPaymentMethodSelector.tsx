@@ -66,8 +66,8 @@ export function ProductPaymentMethodSelector({
 
       <p className={`mt-4 text-[12px] leading-6 ${isInvalid ? 'text-[#E8C068]' : 'text-white/44'}`}>
         {isInvalid
-          ? 'Selecciona un método de pago para habilitar el pedido.'
-          : 'Este método se incluirá en el mensaje que se abrirá en WhatsApp.'}
+          ? 'Elige cómo pagarás este pedido.'
+          : 'Tu método de pago se enviará junto al pedido.'}
       </p>
     </section>
   );

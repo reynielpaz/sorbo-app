@@ -66,7 +66,7 @@ export function ProductCustomerDetails({
       </div>
 
       <p className="mt-4 text-[12px] leading-6 text-white/44">
-        Usaremos estos datos para redactar mejor tu pedido en WhatsApp.
+        Tu nombre ayudará a identificar el pedido. El teléfono es opcional.
       </p>
     </section>
   );
