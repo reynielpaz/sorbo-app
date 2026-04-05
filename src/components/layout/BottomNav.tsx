@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, UtensilsCrossed, ShoppingBag, User } from 'lucide-react';
+import { CalendarDays, Home, User, UtensilsCrossed } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { ROUTES } from '@/utils/constants';
 
@@ -13,15 +13,11 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { label: 'Inicio', icon: Home, route: ROUTES.HOME },
   { label: 'Menú', icon: UtensilsCrossed, route: ROUTES.MENU },
-  { label: 'Carrito', icon: ShoppingBag, route: ROUTES.CART },
+  { label: 'Reservas', icon: CalendarDays, route: ROUTES.RESERVATIONS },
   { label: 'Perfil', icon: User, route: ROUTES.PROFILE },
 ];
 
-interface BottomNavProps {
-  cartCount?: number;
-}
-
-export function BottomNav({ cartCount = 0 }: BottomNavProps) {
+export function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -38,7 +34,6 @@ export function BottomNav({ cartCount = 0 }: BottomNavProps) {
         {NAV_ITEMS.map((item) => {
           const isActive = location.pathname === item.route;
           const Icon = item.icon;
-          const isCart = item.route === ROUTES.CART;
 
           return (
             <button
@@ -53,29 +48,11 @@ export function BottomNav({ cartCount = 0 }: BottomNavProps) {
                   className="relative flex h-[42px] w-[42px] items-center justify-center rounded-[14px] bg-gradient-to-br from-[#D4A853] to-[#B8923A] shadow-[0_4px_16px_rgba(212,168,83,0.35)]"
                 >
                   <Icon size={20} className="text-[#0B0F1A]" />
-                  {isCart && cartCount > 0 && (
-                    <motion.span
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-sorbo-amber px-1 text-[9px] font-bold text-sorbo-black"
-                    >
-                      {cartCount > 99 ? '99+' : cartCount}
-                    </motion.span>
-                  )}
                 </motion.div>
               ) : (
                 <>
                   <div className="relative">
                     <Icon size={20} className="text-white/35 transition-colors duration-200" />
-                    {isCart && cartCount > 0 && (
-                      <motion.span
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="absolute -right-2 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-sorbo-amber px-1 text-[9px] font-bold text-sorbo-black"
-                      >
-                        {cartCount > 99 ? '99+' : cartCount}
-                      </motion.span>
-                    )}
                   </div>
                   <span className="mt-1 text-[9px] font-medium text-white/40">{item.label}</span>
                 </>

@@ -7,7 +7,6 @@ interface AppShellProps {
   title?: string;
   showHeader?: boolean;
   showBottomNav?: boolean;
-  cartCount?: number;
   className?: string;
 }
 
@@ -22,7 +21,6 @@ export function AppShell({
   title,
   showHeader = true,
   showBottomNav = true,
-  cartCount = 0,
   className,
 }: AppShellProps) {
   return (
@@ -37,7 +35,7 @@ export function AppShell({
       >
         {children}
       </main>
-      {showBottomNav && <BottomNav cartCount={cartCount} />}
+      {showBottomNav && <BottomNav />}
     </div>
   );
 }

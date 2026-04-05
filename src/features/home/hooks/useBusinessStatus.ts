@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getAppConfig } from '@/services/products';
+import { getBusinessHoursConfig } from '@/services/products';
+import { DEFAULT_BUSINESS_HOURS } from '@/utils/businessHours';
 import type { BusinessDayKey, BusinessHourSlot, BusinessHours } from '../types';
 
 interface UseBusinessStatusState {
@@ -9,41 +10,6 @@ interface UseBusinessStatusState {
 }
 
 const BUSINESS_TIMEZONE = 'America/Caracas';
-const DEFAULT_BUSINESS_HOURS: BusinessHours = {
-  mon: [],
-  tue: [],
-  wed: [],
-  thu: [],
-  fri: [],
-  sat: [],
-  sun: [],
-};
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
-
-function isBusinessHourSlot(value: unknown): value is BusinessHourSlot {
-  if (!isRecord(value)) return false;
-  return typeof value.open === 'string' && typeof value.close === 'string';
-}
-
-function normalizeBusinessHours(value: unknown): BusinessHours {
-  if (!isRecord(value)) {
-    return DEFAULT_BUSINESS_HOURS;
-  }
-
-  return {
-    mon: Array.isArray(value.mon) ? value.mon.filter(isBusinessHourSlot) : [],
-    tue: Array.isArray(value.tue) ? value.tue.filter(isBusinessHourSlot) : [],
-    wed: Array.isArray(value.wed) ? value.wed.filter(isBusinessHourSlot) : [],
-    thu: Array.isArray(value.thu) ? value.thu.filter(isBusinessHourSlot) : [],
-    fri: Array.isArray(value.fri) ? value.fri.filter(isBusinessHourSlot) : [],
-    sat: Array.isArray(value.sat) ? value.sat.filter(isBusinessHourSlot) : [],
-    sun: Array.isArray(value.sun) ? value.sun.filter(isBusinessHourSlot) : [],
-  };
-}
-
 function timeToMinutes(time: string) {
   const [hours = '0', minutes = '0'] = time.split(':');
   return Number(hours) * 60 + Number(minutes);
@@ -105,8 +71,7 @@ export function useBusinessStatus(): UseBusinessStatusState {
 
     async function loadBusinessHours() {
       try {
-        const config = await getAppConfig('business_hours');
-        const normalizedBusinessHours = normalizeBusinessHours(config);
+        const normalizedBusinessHours = await getBusinessHoursConfig();
 
         if (!active) return;
 

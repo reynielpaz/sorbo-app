@@ -1,5 +1,7 @@
 import { supabase } from '@/lib/supabase';
+import type { BusinessHours } from '@/features/home/types';
 import type { Category, Product, ProductCustomization, ProductTag } from '@/types';
+import { normalizeBusinessHours } from '@/utils/businessHours';
 
 interface CategoryRow {
   id: string;
@@ -222,4 +224,9 @@ export async function getAppConfig<TValue = unknown>(key: string): Promise<TValu
 
   const row = data as AppConfigRow<TValue> | null;
   return row?.value ?? null;
+}
+
+export async function getBusinessHoursConfig(): Promise<BusinessHours> {
+  const config = await getAppConfig('business_hours');
+  return normalizeBusinessHours(config);
 }

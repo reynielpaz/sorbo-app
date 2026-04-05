@@ -35,6 +35,7 @@ export const ROUTES = {
   MENU: '/menu',
   MENU_CATEGORY: '/menu/:categorySlug',
   PRODUCT: '/product/:id',
+  RESERVATIONS: '/reservations',
   CART: '/cart',
   CHECKOUT: '/checkout',
   ORDERS: '/orders',
