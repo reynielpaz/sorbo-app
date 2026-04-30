@@ -29,7 +29,7 @@ export function ProductCustomizations({
   }
 
   return (
-    <section className="overflow-hidden rounded-[30px] border border-white/[0.06] bg-[linear-gradient(180deg,rgba(13,16,22,0.98)_0%,rgba(7,9,14,0.98)_100%)] px-5 py-6 shadow-[0_22px_46px_rgba(0,0,0,0.2)]">
+    <section className="overflow-hidden rounded-[28px] border border-white/[0.035] bg-[#05070B]/70 px-5 py-5 shadow-[0_10px_24px_rgba(0,0,0,0.12)]">
       <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D4A853]/82">
         Customizaciones
       </p>
@@ -41,10 +41,10 @@ export function ProductCustomizations({
         {visibleCustomizations.map((customization) => (
           <fieldset
             key={customization.id}
-            className={`rounded-[24px] border px-4 py-4 shadow-[0_12px_24px_rgba(0,0,0,0.16)] ${
+            className={`rounded-[22px] border px-4 py-4 ${
               missingRequiredSet.has(customization.id)
-                ? 'border-[rgba(212,168,83,0.28)] bg-[linear-gradient(180deg,rgba(212,168,83,0.08)_0%,rgba(10,13,19,0.82)_100%)]'
-                : 'border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(9,12,18,0.74)_100%)]'
+                ? 'border-[rgba(212,168,83,0.24)] bg-[rgba(212,168,83,0.055)]'
+                : 'border-white/[0.04] bg-black/[0.24]'
             }`}
           >
             <legend className="sr-only">{customization.name}</legend>
@@ -62,8 +62,8 @@ export function ProductCustomizations({
               <span
                 className={`shrink-0 rounded-full border px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.18em] ${
                   customization.required
-                    ? 'border-[rgba(212,168,83,0.22)] bg-[rgba(212,168,83,0.12)] text-[#E8D6AD]'
-                    : 'border-white/[0.08] bg-white/[0.04] text-white/52'
+                    ? 'border-[rgba(212,168,83,0.18)] bg-[rgba(212,168,83,0.08)] text-[#E8D6AD]'
+                    : 'border-white/[0.04] bg-black/[0.24] text-white/52'
                 }`}
               >
                 {customization.required ? 'Obligatorio' : 'Opcional'}
@@ -82,8 +82,8 @@ export function ProductCustomizations({
                   key={option.id}
                   className={`flex cursor-pointer items-center justify-between gap-3 rounded-[22px] border px-3.5 py-3 transition-[border-color,background,transform,color] duration-200 hover:-translate-y-0.5 ${
                     (selectedOptionsByGroup[customization.id] ?? []).includes(option.id)
-                      ? 'border-[rgba(212,168,83,0.42)] bg-[linear-gradient(135deg,rgba(212,168,83,0.14)_0%,rgba(17,21,30,0.92)_100%)] text-white shadow-[0_10px_18px_rgba(0,0,0,0.16)]'
-                      : 'border-white/[0.08] bg-[rgba(255,255,255,0.03)] text-white/72'
+                      ? 'border-[rgba(212,168,83,0.34)] bg-[rgba(212,168,83,0.08)] text-white'
+                      : 'border-white/[0.04] bg-black/[0.18] text-white/72'
                   }`}
                 >
                   <div className="flex min-w-0 items-center gap-3">

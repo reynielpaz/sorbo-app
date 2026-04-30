@@ -12,7 +12,7 @@ export function ProductQuantitySelector({
   onIncrease,
 }: ProductQuantitySelectorProps) {
   return (
-    <div className="shrink-0 rounded-[24px] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(8,10,15,0.82)_100%)] px-3 py-3 shadow-[0_12px_24px_rgba(0,0,0,0.16)]">
+    <div className="shrink-0 rounded-[22px] border border-white/[0.04] bg-black/[0.24] px-3 py-3">
       <p className="text-[9px] font-semibold uppercase tracking-[0.26em] text-white/36">
         Cantidad
       </p>
@@ -22,7 +22,7 @@ export function ProductQuantitySelector({
           type="button"
           onClick={onDecrease}
           aria-label="Restar cantidad"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.08] bg-[rgba(255,255,255,0.04)] text-white/74 transition-[border-color,color,transform] duration-200 hover:-translate-y-0.5 hover:border-white/[0.16] hover:text-white"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.04] bg-black/[0.22] text-white/74 transition-[border-color,color,transform] duration-200 hover:-translate-y-0.5 hover:border-white/[0.08] hover:text-white"
         >
           <Minus size={16} strokeWidth={2.1} />
         </button>
@@ -35,7 +35,7 @@ export function ProductQuantitySelector({
           type="button"
           onClick={onIncrease}
           aria-label="Sumar cantidad"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.08] bg-[rgba(255,255,255,0.04)] text-white/74 transition-[border-color,color,transform] duration-200 hover:-translate-y-0.5 hover:border-white/[0.16] hover:text-white"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.04] bg-black/[0.22] text-white/74 transition-[border-color,color,transform] duration-200 hover:-translate-y-0.5 hover:border-white/[0.08] hover:text-white"
         >
           <Plus size={16} strokeWidth={2.1} />
         </button>

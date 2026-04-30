@@ -35,14 +35,14 @@ export function ProductActionBar({
       : 'Completa tu selección';
   const supportCopy =
     disabledReason ??
-    'Revisa tu selección y agrégala al pedido cuando esté lista.';
+    'Agrega esta selección al pedido. El carrito se activará en la siguiente fase.';
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-30 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+14px)] pt-5">
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(180deg,rgba(5,7,11,0)_0%,rgba(5,7,11,0.82)_42%,rgba(5,7,11,0.98)_100%)]" />
 
-      <section className="relative mx-auto max-w-[720px] overflow-hidden rounded-[32px] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(14,17,24,0.98)_0%,rgba(8,10,15,0.98)_100%)] p-4 shadow-[0_28px_56px_rgba(0,0,0,0.34)] backdrop-blur-md">
-        <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent)]" />
+      <section className="relative mx-auto max-w-[720px] overflow-hidden rounded-[28px] border border-white/[0.035] bg-[#05070B]/95 p-3.5 shadow-[0_14px_30px_rgba(0,0,0,0.28)]">
+        <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(232,192,104,0.14),transparent)]" />
 
         <div className="flex items-end gap-3">
           <ProductQuantitySelector
@@ -51,7 +51,7 @@ export function ProductActionBar({
             onIncrease={onIncreaseQuantity}
           />
 
-          <div className="min-w-0 flex-1 rounded-[24px] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(9,12,18,0.78)_100%)] px-4 py-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+          <div className="min-w-0 flex-1 px-2 py-1">
             <p className="text-[9px] font-semibold uppercase tracking-[0.26em] text-white/36">
               Total estimado
             </p>
@@ -77,10 +77,10 @@ export function ProductActionBar({
           type="button"
           disabled={!canSubmit}
           onClick={onAddToOrder}
-          className={`mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-3.5 text-[11px] font-semibold uppercase tracking-[0.14em] shadow-[0_16px_28px_rgba(0,0,0,0.18)] transition-transform duration-200 ${
+          className={`mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-3.5 text-[11px] font-semibold uppercase tracking-[0.14em] shadow-[0_8px_16px_rgba(0,0,0,0.14)] transition-transform duration-200 ${
             canSubmit
-              ? 'bg-[linear-gradient(135deg,#E8D6AD_0%,#D4A853_50%,#B8923A_100%)] text-[#140F08] hover:-translate-y-0.5'
-              : 'border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(10,13,19,0.86)_100%)] text-white/36'
+              ? 'bg-[linear-gradient(135deg,#E8C068_0%,#D4A853_48%,#B8923A_100%)] text-[#120E09] hover:-translate-y-0.5'
+              : 'border border-white/[0.04] bg-black/[0.24] text-white/36'
           }`}
         >
           <ShoppingBag size={16} strokeWidth={2.2} />

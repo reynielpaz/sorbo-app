@@ -7,29 +7,29 @@ interface ProductInfoPanelProps {
 
 export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
   return (
-    <section className="overflow-hidden rounded-[30px] border border-white/[0.06] bg-[linear-gradient(180deg,rgba(15,18,25,0.98)_0%,rgba(8,10,15,0.98)_100%)] px-5 py-6 shadow-[0_26px_54px_rgba(0,0,0,0.22)]">
+    <section className="overflow-hidden rounded-[28px] border border-white/[0.035] bg-[#05070B]/70 px-5 py-5 shadow-[0_10px_24px_rgba(0,0,0,0.14)]">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D4A853]/82">
             Detalle Sorbo
           </p>
-          <p className="mt-3 max-w-[26ch] text-[13px] leading-6 text-white/56">
-            Revisa los ingredientes, personaliza tu selección y agrégala al pedido.
+          <p className="mt-2.5 max-w-[25ch] text-[13px] leading-6 text-white/54">
+            Revisa lo esencial y personaliza tu selección.
           </p>
         </div>
 
         <span
           className={`shrink-0 rounded-full border px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.2em] ${
             product.isAvailable
-              ? 'border-[rgba(212,168,83,0.2)] bg-[rgba(212,168,83,0.1)] text-[#E8D6AD]'
-              : 'border-white/[0.08] bg-white/[0.04] text-white/52'
+              ? 'border-[rgba(212,168,83,0.18)] bg-[rgba(212,168,83,0.08)] text-[#E8D6AD]'
+              : 'border-white/[0.045] bg-black/[0.24] text-white/52'
           }`}
         >
           {product.isAvailable ? 'Disponible' : 'No disponible'}
         </span>
       </div>
 
-      <div className="mt-5 border-t border-white/[0.06] pt-5">
+      <div className="mt-5 border-t border-white/[0.035] pt-5">
         <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-white/42">
           Precio base
         </p>
@@ -43,7 +43,7 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
           </p>
         ) : null}
 
-        <p className="mt-4 text-[12px] leading-6 text-white/46">
+        <p className="mt-4 text-[12px] leading-6 text-white/44">
           Ajusta cantidad y deja tu selección lista para agregar al pedido.
         </p>
       </div>

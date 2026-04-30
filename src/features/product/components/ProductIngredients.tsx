@@ -10,7 +10,7 @@ export function ProductIngredients({ ingredients }: ProductIngredientsProps) {
   }
 
   return (
-    <section className="overflow-hidden rounded-[30px] border border-white/[0.06] bg-[linear-gradient(180deg,rgba(13,16,22,0.98)_0%,rgba(7,9,14,0.98)_100%)] px-5 py-6 shadow-[0_22px_46px_rgba(0,0,0,0.2)]">
+    <section className="overflow-hidden rounded-[28px] border border-white/[0.035] bg-[#05070B]/70 px-5 py-5 shadow-[0_10px_24px_rgba(0,0,0,0.12)]">
       <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D4A853]/82">
         Ingredientes
       </p>
@@ -25,7 +25,7 @@ export function ProductIngredients({ ingredients }: ProductIngredientsProps) {
         {visibleIngredients.map((ingredient) => (
           <span
             key={ingredient}
-            className="inline-flex rounded-full border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(9,12,18,0.76)_100%)] px-3.5 py-2 text-[12px] text-white/76 shadow-[0_8px_16px_rgba(0,0,0,0.16)]"
+            className="inline-flex rounded-full border border-white/[0.04] bg-black/[0.24] px-3.5 py-2 text-[12px] text-white/74"
           >
             {ingredient}
           </span>

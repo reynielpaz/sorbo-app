@@ -29,7 +29,7 @@ export function ProductAddOns({
   }
 
   return (
-    <section className="overflow-hidden rounded-[28px] border border-white/[0.06] bg-[linear-gradient(180deg,rgba(13,16,22,0.98)_0%,rgba(7,9,14,0.98)_100%)] px-4 py-5 shadow-[0_20px_40px_rgba(0,0,0,0.18)]">
+    <section className="overflow-hidden rounded-[28px] border border-white/[0.035] bg-[#05070B]/70 px-4 py-5 shadow-[0_10px_24px_rgba(0,0,0,0.12)]">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D4A853]/82">
@@ -50,7 +50,7 @@ export function ProductAddOns({
           ? Array.from({ length: 3 }).map((_, index) => (
               <div
                 key={`addon-skeleton-${index}`}
-                className="min-w-[198px] snap-start overflow-hidden rounded-[22px] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(9,12,18,0.78)_100%)] p-2.5 animate-pulse"
+                className="min-w-[198px] snap-start overflow-hidden rounded-[22px] border border-white/[0.04] bg-black/[0.24] p-2.5 animate-pulse"
               >
                 <div className="h-[118px] rounded-[16px] bg-white/8" />
                 <div className="mt-3 h-3 w-20 rounded-full bg-white/8" />
@@ -65,7 +65,7 @@ export function ProductAddOns({
               return (
                 <article
                   key={product.id}
-                  className="flex min-w-[198px] snap-start flex-col overflow-hidden rounded-[22px] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(9,12,18,0.78)_100%)] p-2.5 shadow-[0_12px_24px_rgba(0,0,0,0.14)]"
+                  className="flex min-w-[198px] snap-start flex-col overflow-hidden rounded-[22px] border border-white/[0.04] bg-black/[0.24] p-2.5 shadow-[0_8px_18px_rgba(0,0,0,0.12)]"
                 >
                   <div className="relative h-[118px] overflow-hidden rounded-[16px]">
                     {product.imageUrl ? (
@@ -107,8 +107,8 @@ export function ProductAddOns({
                     onClick={() => onToggleAddOn(product)}
                     className={`mt-auto inline-flex w-full items-center justify-center rounded-full px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] transition-transform duration-200 hover:-translate-y-0.5 ${
                       isSelected
-                        ? 'border border-[rgba(212,168,83,0.24)] bg-[rgba(212,168,83,0.12)] text-[#E8D6AD]'
-                        : 'bg-[linear-gradient(135deg,#E8D6AD_0%,#D4A853_50%,#B8923A_100%)] text-[#140F08] shadow-[0_14px_24px_rgba(0,0,0,0.18)]'
+                        ? 'border border-[rgba(212,168,83,0.22)] bg-[rgba(212,168,83,0.1)] text-[#E8D6AD]'
+                        : 'bg-[linear-gradient(135deg,#E8C068_0%,#D4A853_48%,#B8923A_100%)] text-[#120E09] shadow-[0_6px_12px_rgba(0,0,0,0.1)]'
                     }`}
                   >
                     {isSelected ? 'Quitar' : 'Añadir'}

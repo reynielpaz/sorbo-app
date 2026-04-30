@@ -121,8 +121,8 @@ export function ProductPage() {
     <AppShell showHeader={false} showBottomNav={false}>
       <div className="relative min-h-full overflow-x-hidden">
         <div className="pointer-events-none absolute inset-x-0 top-[-146px] h-[430px] bg-[radial-gradient(circle_at_top,rgba(0,0,0,0.72)_0%,rgba(5,7,12,0.52)_34%,rgba(11,15,26,0.14)_62%,rgba(11,15,26,0)_84%)]" />
-        <div className="pointer-events-none absolute inset-x-[-14%] top-[208px] h-[300px] rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.42)_0%,rgba(11,15,26,0.1)_46%,transparent_74%)] blur-3xl" />
-        <div className="pointer-events-none absolute right-[-32px] top-[340px] h-[180px] w-[180px] rounded-full bg-[radial-gradient(circle,rgba(245,233,212,0.06)_0%,rgba(245,233,212,0.012)_42%,transparent_74%)] blur-3xl" />
+        <div className="pointer-events-none absolute inset-x-[-14%] top-[208px] h-[260px] rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.36)_0%,rgba(5,7,11,0.08)_46%,transparent_74%)] blur-2xl" />
+        <div className="pointer-events-none absolute right-[-32px] top-[340px] h-[160px] w-[160px] rounded-full bg-[radial-gradient(circle,rgba(232,192,104,0.045)_0%,rgba(212,168,83,0.01)_42%,transparent_74%)] blur-2xl" />
 
         {loading && !heroProduct ? <ProductDetailSkeleton /> : null}
 
@@ -155,9 +155,9 @@ export function ProductPage() {
                   initial={{ opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.35, ease: 'easeOut' }}
-                  className="relative -mt-3 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+280px)]"
+                  className="relative -mt-3 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+260px)]"
                 >
-                  <div className="mx-auto max-w-[720px] space-y-6">
+                  <div className="mx-auto max-w-[720px] space-y-5">
                     <ProductInfoPanel product={currentProduct} />
                     <ProductIngredients ingredients={currentProduct.ingredients} />
 
@@ -193,7 +193,7 @@ export function ProductPage() {
                     transition={{ duration: 0.24, ease: 'easeOut' }}
                     className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom,0px)+238px)] z-40 px-4"
                   >
-                    <div className="mx-auto max-w-[720px] rounded-[24px] border border-[rgba(212,168,83,0.22)] bg-[linear-gradient(180deg,rgba(18,21,29,0.98)_0%,rgba(8,10,15,0.98)_100%)] px-4 py-3 text-[12px] font-medium leading-5 text-[#F3D7A0] shadow-[0_18px_34px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md">
+                    <div className="mx-auto max-w-[720px] rounded-[24px] border border-[rgba(212,168,83,0.2)] bg-[#05070B]/95 px-4 py-3 text-[12px] font-medium leading-5 text-[#F3D7A0] shadow-[0_10px_24px_rgba(0,0,0,0.22)]">
                       Producto preparado para el pedido. El carrito se activará en la siguiente fase.
                     </div>
                   </motion.div>

@@ -47,7 +47,7 @@ export function ProductHero({ product, onBack }: ProductHeroProps) {
 
   return (
     <section className="relative">
-      <div className="relative min-h-[420px] overflow-hidden rounded-b-[36px] border-b border-white/[0.06] bg-[linear-gradient(180deg,rgba(9,12,18,0.98)_0%,rgba(5,7,11,1)_100%)] shadow-[0_32px_64px_rgba(0,0,0,0.3)]">
+      <div className="relative min-h-[420px] overflow-hidden rounded-b-[36px] border-b border-white/[0.035] bg-[#05070B] shadow-[0_18px_42px_rgba(0,0,0,0.24)]">
         {product.imageUrl ? (
           <img
             src={product.imageUrl}
@@ -58,7 +58,7 @@ export function ProductHero({ product, onBack }: ProductHeroProps) {
             decoding="sync"
           />
         ) : (
-          <div className="absolute inset-0 overflow-hidden bg-[linear-gradient(135deg,rgba(14,17,24,1)_0%,rgba(11,15,26,0.96)_42%,rgba(5,7,11,1)_100%)]">
+          <div className="absolute inset-0 overflow-hidden bg-[linear-gradient(135deg,rgba(3,4,7,1)_0%,rgba(7,9,14,0.98)_42%,rgba(0,0,0,1)_100%)]">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(245,233,212,0.11)_0%,rgba(245,233,212,0.03)_24%,transparent_52%)]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(212,168,83,0.14)_0%,rgba(212,168,83,0.02)_28%,transparent_54%)]" />
             <div className="absolute inset-0 flex items-center justify-center">
@@ -79,14 +79,14 @@ export function ProductHero({ product, onBack }: ProductHeroProps) {
             type="button"
             onClick={onBack}
             aria-label="Volver"
-            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[18px] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_0%,rgba(12,14,20,0.72)_100%)] text-white/84 shadow-[0_14px_24px_rgba(0,0,0,0.18)] backdrop-blur-md transition-[border-color,transform,color] duration-200 hover:-translate-y-0.5 hover:border-white/[0.16] hover:text-white"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[18px] border border-white/[0.045] bg-black/[0.28] text-white/84 shadow-[0_8px_16px_rgba(0,0,0,0.14)] transition-[border-color,transform,color,background] duration-200 hover:-translate-y-0.5 hover:border-white/[0.08] hover:bg-black/[0.36] hover:text-white"
           >
             <ChevronLeft size={18} />
           </button>
 
           {badge ? (
             <span
-              className={`inline-flex rounded-full border px-3 py-1.5 text-[10px] font-semibold tracking-[0.18em] backdrop-blur-sm ${badge.className}`}
+              className={`inline-flex rounded-full border px-3 py-1.5 text-[10px] font-semibold tracking-[0.18em] ${badge.className}`}
             >
               {badge.label}
             </span>
