@@ -4,14 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
 import { ProductAddOns } from '@/features/product/components/ProductAddOns';
 import { ProductActionBar } from '@/features/product/components/ProductActionBar';
-import { ProductCustomerDetails } from '@/features/product/components/ProductCustomerDetails';
 import { ProductCustomizations } from '@/features/product/components/ProductCustomizations';
 import { ProductDetailEmptyState } from '@/features/product/components/ProductDetailEmptyState';
 import { ProductDetailSkeleton } from '@/features/product/components/ProductDetailSkeleton';
 import { ProductHero } from '@/features/product/components/ProductHero';
 import { ProductInfoPanel } from '@/features/product/components/ProductInfoPanel';
 import { ProductIngredients } from '@/features/product/components/ProductIngredients';
-import { ProductPaymentMethodSelector } from '@/features/product/components/ProductPaymentMethodSelector';
 import { useProductDetails } from '@/features/product/hooks/useProductDetails';
 import { useProductOrderComposer } from '@/features/product/hooks/useProductOrderComposer';
 import { ProductSpecialInstructions } from '@/features/product/components/ProductSpecialInstructions';
@@ -182,23 +180,6 @@ export function ProductPage() {
                       selectedAddOnIds={orderComposer.selectedAddOnIds}
                       loading={addOnsLoading}
                       onToggleAddOn={orderComposer.toggleAddOn}
-                    />
-
-                    <ProductCustomerDetails
-                      customerName={orderComposer.customerName}
-                      customerPhone={orderComposer.customerPhone}
-                      isNameInvalid={
-                        !orderComposer.isCustomerNameValid &&
-                        orderComposer.customerName.trim().length > 0
-                      }
-                      onCustomerNameChange={orderComposer.setCustomerName}
-                      onCustomerPhoneChange={orderComposer.setCustomerPhone}
-                    />
-
-                    <ProductPaymentMethodSelector
-                      selectedPaymentMethod={orderComposer.selectedPaymentMethod}
-                      isInvalid={!orderComposer.hasSelectedPaymentMethod}
-                      onChange={orderComposer.setSelectedPaymentMethod}
                     />
                   </div>
                 </motion.div>

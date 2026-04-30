@@ -32,12 +32,10 @@ export function ProductActionBar({
     ? 'Producto no disponible'
     : canSubmit
       ? 'Agregar al pedido'
-      : disabledReason?.includes('nombre') || disabledReason?.includes('método de pago')
-        ? 'Completa tus datos'
       : 'Completa tu selección';
   const supportCopy =
     disabledReason ??
-    'Revisa tu selección y agrégala al pedido. El checkout se completa en el carrito.';
+    'Revisa tu selección y agrégala al pedido cuando esté lista.';
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-30 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+14px)] pt-5">

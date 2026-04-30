@@ -11,10 +11,10 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D4A853]/82">
-            Pedido directo
+            Detalle Sorbo
           </p>
           <p className="mt-3 max-w-[26ch] text-[13px] leading-6 text-white/56">
-            Personaliza tu selección, ajusta la cantidad y envíalo a Sorbo con un pedido ya redactado.
+            Revisa los ingredientes, personaliza tu selección y agrégala al pedido.
           </p>
         </div>
 
@@ -44,7 +44,7 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
         ) : null}
 
         <p className="mt-4 text-[12px] leading-6 text-white/46">
-          Ajusta cantidad, personaliza tu pedido y envíalo directo por WhatsApp.
+          Ajusta cantidad y deja tu selección lista para agregar al pedido.
         </p>
       </div>
     </section>

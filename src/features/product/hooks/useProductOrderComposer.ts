@@ -235,9 +235,7 @@ export function useProductOrderComposer(
   const hasSelectedPaymentMethod = Boolean(selectedPaymentMethod);
   const canSubmit =
     Boolean(product?.isAvailable) &&
-    missingRequiredGroupIds.length === 0 &&
-    isCustomerNameValid &&
-    hasSelectedPaymentMethod;
+    missingRequiredGroupIds.length === 0;
 
   const disabledReason = !product
     ? 'Producto no disponible en este momento'
@@ -245,10 +243,6 @@ export function useProductOrderComposer(
     ? 'Producto no disponible en este momento'
     : missingRequiredGroupIds.length > 0
       ? 'Selecciona las opciones obligatorias para continuar'
-      : !isCustomerNameValid
-        ? 'Ingresa tu nombre para continuar'
-        : !hasSelectedPaymentMethod
-          ? 'Selecciona un método de pago para continuar'
       : null;
 
   const whatsappMessage = useMemo(
