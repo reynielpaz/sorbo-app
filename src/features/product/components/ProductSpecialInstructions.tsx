@@ -32,15 +32,12 @@ export function ProductSpecialInstructions({
         <textarea
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          rows={4}
+          rows={3}
           maxLength={maxLength}
           placeholder="Ej. término medio, sin cebolla..."
-          className="min-h-[128px] w-full resize-none bg-transparent px-4 py-4 text-[14px] leading-7 text-white/84 outline-none placeholder:text-white/30"
+          className="min-h-[96px] w-full resize-none bg-transparent px-4 py-3.5 text-[14px] leading-6 text-white/84 outline-none placeholder:text-white/30"
         />
-        <div className="flex items-center justify-between border-t border-white/[0.035] px-4 py-3">
-          <p className="text-[11px] leading-5 text-white/42">
-            Si queda vacío, no se incluirá en el pedido.
-          </p>
+        <div className="flex items-center justify-end border-t border-white/[0.035] px-4 py-2.5">
           <span className="text-[11px] font-medium tracking-[0.02em] text-white/34">
             {currentLength}/{maxLength}
           </span>

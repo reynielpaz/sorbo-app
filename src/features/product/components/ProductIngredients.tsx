@@ -17,9 +17,6 @@ export function ProductIngredients({ ingredients }: ProductIngredientsProps) {
       <h2 className="mt-3 font-playfair text-[30px] font-semibold leading-none tracking-[-0.04em] text-[#FCF8F0]">
         Lo que lleva
       </h2>
-      <p className="mt-3 text-[12px] leading-6 text-white/48">
-        Una lectura rápida de la base del producto antes de pedir.
-      </p>
 
       <div className="mt-5 flex flex-wrap gap-2.5">
         {visibleIngredients.map((ingredient) => (

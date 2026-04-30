@@ -155,7 +155,7 @@ export function ProductPage() {
                   initial={{ opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.35, ease: 'easeOut' }}
-                  className="relative -mt-3 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+260px)]"
+                  className="relative -mt-3 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+188px)]"
                 >
                   <div className="mx-auto max-w-[720px] space-y-5">
                     <ProductInfoPanel product={currentProduct} />
@@ -191,7 +191,7 @@ export function ProductPage() {
                     initial={{ opacity: 0, y: 10, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ duration: 0.24, ease: 'easeOut' }}
-                    className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom,0px)+238px)] z-40 px-4"
+                    className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom,0px)+164px)] z-40 px-4"
                   >
                     <div className="mx-auto max-w-[720px] rounded-[24px] border border-[rgba(212,168,83,0.2)] bg-[#05070B]/95 px-4 py-3 text-[12px] font-medium leading-5 text-[#F3D7A0] shadow-[0_10px_24px_rgba(0,0,0,0.22)]">
                       Producto preparado para el pedido. El carrito se activará en la siguiente fase.

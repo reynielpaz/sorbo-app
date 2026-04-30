@@ -13,9 +13,6 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
           <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D4A853]/82">
             Detalle Sorbo
           </p>
-          <p className="mt-2.5 max-w-[25ch] text-[13px] leading-6 text-white/54">
-            Revisa lo esencial y personaliza tu selección.
-          </p>
         </div>
 
         <span
@@ -42,10 +39,6 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
             {product.description}
           </p>
         ) : null}
-
-        <p className="mt-4 text-[12px] leading-6 text-white/44">
-          Ajusta cantidad y deja tu selección lista para agregar al pedido.
-        </p>
       </div>
     </section>
   );
