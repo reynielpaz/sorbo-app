@@ -1,4 +1,4 @@
-import { ArrowUpRight, MessageCircle } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
 import type { Product } from '@/types';
 import { formatPrice } from '@/utils/formatPrice';
 import { ProductQuantitySelector } from './ProductQuantitySelector';
@@ -11,7 +11,7 @@ interface ProductActionBarProps {
   addOnsTotal: number;
   canSubmit: boolean;
   disabledReason: string | null;
-  whatsappHref: string | null;
+  onAddToOrder: () => void;
   onDecreaseQuantity: () => void;
   onIncreaseQuantity: () => void;
 }
@@ -24,18 +24,20 @@ export function ProductActionBar({
   addOnsTotal,
   canSubmit,
   disabledReason,
-  whatsappHref,
+  onAddToOrder,
   onDecreaseQuantity,
   onIncreaseQuantity,
 }: ProductActionBarProps) {
   const ctaLabel = !product.isAvailable
     ? 'Producto no disponible'
     : canSubmit
-      ? 'Pedir por WhatsApp'
+      ? 'Agregar al pedido'
       : disabledReason?.includes('nombre') || disabledReason?.includes('método de pago')
         ? 'Completa tus datos'
       : 'Completa tu selección';
-  const supportCopy = disabledReason ?? 'Tu pedido se abrirá listo en WhatsApp.';
+  const supportCopy =
+    disabledReason ??
+    'Revisa tu selección y agrégala al pedido. El checkout se completa en el carrito.';
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-30 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+14px)] pt-5">
@@ -73,27 +75,19 @@ export function ProductActionBar({
           {supportCopy}
         </p>
 
-        {canSubmit && whatsappHref ? (
-          <a
-            href={whatsappHref}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#E8D6AD_0%,#D4A853_50%,#B8923A_100%)] px-4 py-3.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#140F08] shadow-[0_16px_28px_rgba(0,0,0,0.22)] transition-transform duration-200 hover:-translate-y-0.5"
-          >
-            <MessageCircle size={16} strokeWidth={2.2} />
-            {ctaLabel}
-            <ArrowUpRight size={14} strokeWidth={2.2} />
-          </a>
-        ) : (
-          <button
-            type="button"
-            disabled
-            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(10,13,19,0.86)_100%)] px-4 py-3.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/36 shadow-[0_16px_28px_rgba(0,0,0,0.16)]"
-          >
-            <MessageCircle size={16} strokeWidth={2.2} />
-            {ctaLabel}
-          </button>
-        )}
+        <button
+          type="button"
+          disabled={!canSubmit}
+          onClick={onAddToOrder}
+          className={`mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-3.5 text-[11px] font-semibold uppercase tracking-[0.14em] shadow-[0_16px_28px_rgba(0,0,0,0.18)] transition-transform duration-200 ${
+            canSubmit
+              ? 'bg-[linear-gradient(135deg,#E8D6AD_0%,#D4A853_50%,#B8923A_100%)] text-[#140F08] hover:-translate-y-0.5'
+              : 'border border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(10,13,19,0.86)_100%)] text-white/36'
+          }`}
+        >
+          <ShoppingBag size={16} strokeWidth={2.2} />
+          {ctaLabel}
+        </button>
       </section>
     </div>
   );

@@ -28,6 +28,7 @@ export function ProductPage() {
   const heroProduct = !error && !notFound ? currentProduct ?? (loading ? snapshotProduct : null) : null;
   const [availableAddOns, setAvailableAddOns] = useState<Product[]>([]);
   const [addOnsLoading, setAddOnsLoading] = useState(false);
+  const [orderDraftFeedbackVisible, setOrderDraftFeedbackVisible] = useState(false);
   const orderComposer = useProductOrderComposer(currentProduct, {
     initialCustomerName: profile?.fullName,
     initialCustomerPhone: profile?.phone,
@@ -81,6 +82,20 @@ export function ProductPage() {
     };
   }, [currentProduct]);
 
+  useEffect(() => {
+    if (!orderDraftFeedbackVisible) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setOrderDraftFeedbackVisible(false);
+    }, 3600);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [orderDraftFeedbackVisible]);
+
   function handleBack() {
     const historyIndex = typeof window.history.state?.idx === 'number' ? window.history.state.idx : 0;
 
@@ -94,6 +109,14 @@ export function ProductPage() {
 
   function handleGoToMenu() {
     navigate(ROUTES.MENU);
+  }
+
+  function handleAddToOrder() {
+    if (!orderComposer.productOrderDraft) {
+      return;
+    }
+
+    setOrderDraftFeedbackVisible(true);
   }
 
   return (
@@ -180,6 +203,21 @@ export function ProductPage() {
                   </div>
                 </motion.div>
 
+                {orderDraftFeedbackVisible ? (
+                  <motion.div
+                    role="status"
+                    aria-live="polite"
+                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.24, ease: 'easeOut' }}
+                    className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom,0px)+238px)] z-40 px-4"
+                  >
+                    <div className="mx-auto max-w-[720px] rounded-[24px] border border-[rgba(212,168,83,0.22)] bg-[linear-gradient(180deg,rgba(18,21,29,0.98)_0%,rgba(8,10,15,0.98)_100%)] px-4 py-3 text-[12px] font-medium leading-5 text-[#F3D7A0] shadow-[0_18px_34px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md">
+                      Producto preparado para el pedido. El carrito se activará en la siguiente fase.
+                    </div>
+                  </motion.div>
+                ) : null}
+
                 <ProductActionBar
                   product={currentProduct}
                   quantity={orderComposer.quantity}
@@ -188,7 +226,7 @@ export function ProductPage() {
                   addOnsTotal={orderComposer.addOnsTotal}
                   canSubmit={orderComposer.canSubmit}
                   disabledReason={orderComposer.disabledReason}
-                  whatsappHref={orderComposer.whatsappHref}
+                  onAddToOrder={handleAddToOrder}
                   onDecreaseQuantity={orderComposer.decrementQuantity}
                   onIncreaseQuantity={orderComposer.incrementQuantity}
                 />

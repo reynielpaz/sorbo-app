@@ -4,7 +4,6 @@ import {
   APP_NAME,
   PRODUCT_ORDER_PAYMENT_METHODS,
   type ProductOrderPaymentMethodId,
-  WHATSAPP_NUMBER,
 } from '@/utils/constants';
 import { formatPrice } from '@/utils/formatPrice';
 
@@ -13,6 +12,20 @@ type SelectedOptionsByGroup = Record<string, string[]>;
 interface SelectedCustomizationGroup {
   customization: ProductCustomization;
   selectedOptions: CustomizationOption[];
+}
+
+interface ProductOrderDraft {
+  product: Product;
+  quantity: number;
+  selectedCustomizationGroups: SelectedCustomizationGroup[];
+  selectedAddOns: Product[];
+  specialInstructions: string;
+  customerName: string;
+  customerPhone: string;
+  selectedPaymentMethod: ProductOrderPaymentMethodId | null;
+  selectedPaymentMethodName: string;
+  totalEstimate: number;
+  whatsappMessage: string;
 }
 
 const SPECIAL_INSTRUCTIONS_LIMIT = 240;
@@ -269,9 +282,37 @@ export function useProductOrderComposer(
     ]
   );
 
-  const whatsappHref = canSubmit && selectedPaymentMethodName
-    ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`
-    : null;
+  const productOrderDraft = useMemo<ProductOrderDraft | null>(() => {
+    if (!product) {
+      return null;
+    }
+
+    return {
+      product,
+      quantity,
+      selectedCustomizationGroups,
+      selectedAddOns,
+      specialInstructions: sanitizedSpecialInstructions,
+      customerName: sanitizedCustomerName,
+      customerPhone: sanitizedCustomerPhone,
+      selectedPaymentMethod,
+      selectedPaymentMethodName,
+      totalEstimate,
+      whatsappMessage,
+    };
+  }, [
+    product,
+    quantity,
+    sanitizedSpecialInstructions,
+    sanitizedCustomerName,
+    sanitizedCustomerPhone,
+    selectedAddOns,
+    selectedCustomizationGroups,
+    selectedPaymentMethod,
+    selectedPaymentMethodName,
+    totalEstimate,
+    whatsappMessage,
+  ]);
 
   function incrementQuantity() {
     setQuantity((currentQuantity) => currentQuantity + 1);
@@ -363,7 +404,7 @@ export function useProductOrderComposer(
     estimatedUnitTotal,
     totalEstimate,
     whatsappMessage,
-    whatsappHref,
+    productOrderDraft,
     canSubmit,
     disabledReason,
     isCustomerNameValid,
