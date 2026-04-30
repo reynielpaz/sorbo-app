@@ -107,13 +107,10 @@ export function MenuPage() {
   return (
     <AppShell showHeader={false}>
       <div className="relative min-h-full overflow-x-hidden">
-        <div className="pointer-events-none absolute inset-x-0 top-[-132px] h-[380px] bg-[radial-gradient(circle_at_top,rgba(0,0,0,0.68)_0%,rgba(5,7,12,0.56)_28%,rgba(11,15,26,0.16)_56%,rgba(11,15,26,0)_78%)]" />
-        <div className="pointer-events-none absolute inset-x-[-12%] top-[34px] h-[260px] rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.42)_0%,rgba(11,15,26,0.12)_48%,transparent_76%)] blur-3xl" />
-        <div className="pointer-events-none absolute right-[-18px] top-[56px] h-[132px] w-[132px] rounded-full bg-[radial-gradient(circle,rgba(245,233,212,0.06)_0%,rgba(245,233,212,0.015)_34%,transparent_74%)] blur-2xl" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-[linear-gradient(180deg,rgba(0,0,0,0.34)_0%,rgba(0,0,0,0)_100%)]" />
 
-        <div className="sticky top-0 z-20 border-b border-white/[0.035] bg-[linear-gradient(180deg,rgba(6,8,13,0.86)_0%,rgba(10,13,20,0.8)_58%,rgba(11,15,26,0.08)_100%)] backdrop-blur-[18px]">
-          <div className="relative px-4 pb-3.5 pt-[calc(env(safe-area-inset-top,0px)+12px)]">
-            <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent)]" />
+        <div className="sticky top-0 z-20 border-b border-white/[0.025] bg-[rgba(5,7,11,0.88)] backdrop-blur-[8px]">
+          <div className="relative px-4 pb-3.5 pt-[calc(env(safe-area-inset-top,0px)+10px)]">
             <div className="space-y-2.5">
               <MenuTopBar
                 onBack={handleBack}
@@ -142,11 +139,11 @@ export function MenuPage() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="relative z-[1] px-4 pb-[calc(env(safe-area-inset-bottom,0px)+56px)] pt-3.5"
+          className="relative z-[1] px-4 pb-[calc(env(safe-area-inset-bottom,0px)+48px)] pt-3"
         >
-          <div className="mb-4 flex items-center justify-between gap-3 px-1">
+          <div className="mb-3 flex items-center justify-between gap-3 px-1">
             <div className="min-w-0">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#D4A853]/78">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/42">
                 Explora con calma
               </p>
               <p className="mt-1 text-sm text-white/56">{resultsLine}</p>
@@ -156,7 +153,7 @@ export function MenuPage() {
               <button
                 type="button"
                 onClick={clearFilters}
-                className="shrink-0 rounded-full border border-white/8 bg-white/[0.04] px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/68 transition-colors duration-200 hover:border-[rgba(212,168,83,0.18)] hover:text-white"
+                className="shrink-0 rounded-full border border-white/[0.045] bg-black/[0.24] px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/68 transition-colors duration-200 hover:border-white/[0.045] hover:text-white"
               >
                 Limpiar
               </button>
@@ -189,7 +186,7 @@ export function MenuPage() {
           ) : null}
 
           {!loading && !error && filteredProducts.length > 0 ? (
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {filteredProducts.map((product, index) => (
                 <MenuProductCard key={product.id} product={product} index={index} />
               ))}
