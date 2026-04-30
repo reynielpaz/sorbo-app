@@ -1,11 +1,10 @@
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle } from 'lucide-react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import type { Product } from '@/types';
 import { cn } from '@/utils/cn';
 import { formatPrice } from '@/utils/formatPrice';
-import { getCategoryIcon, ROUTES, WHATSAPP_NUMBER } from '@/utils/constants';
+import { getCategoryIcon, ROUTES } from '@/utils/constants';
 
 interface MenuProductCardProps {
   product: Product;
@@ -73,18 +72,12 @@ function resolveSupportingText(product: Product) {
   return 'Una elección pensada para saborearla con calma.';
 }
 
-function buildWhatsAppHref(product: Product) {
-  const message = `Hola, quiero pedir ${product.name}.`;
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-}
-
 export function MenuProductCard({ product, index = 0 }: MenuProductCardProps) {
   const navigate = useNavigate();
   const badge = resolveBadge(product.tags);
   const categorySlug = product.category?.slug;
   const categoryIcon = getCategoryIcon(categorySlug);
   const supportingText = resolveSupportingText(product);
-  const whatsappHref = buildWhatsAppHref(product);
   const shouldPrioritizeImage = index < 4;
 
   function handleNavigate() {
@@ -102,8 +95,9 @@ export function MenuProductCard({ product, index = 0 }: MenuProductCardProps) {
     }
   }
 
-  function handleWhatsAppClick(event: MouseEvent<HTMLAnchorElement>) {
+  function handleViewClick(event: MouseEvent<HTMLButtonElement>) {
     event.stopPropagation();
+    handleNavigate();
   }
 
   return (
@@ -175,16 +169,13 @@ export function MenuProductCard({ product, index = 0 }: MenuProductCardProps) {
             {formatPrice(product.price)}
           </p>
 
-          <a
-            href={whatsappHref}
-            target="_blank"
-            rel="noreferrer"
-            onClick={handleWhatsAppClick}
-            className="relative z-[2] inline-flex shrink-0 items-center gap-2 rounded-full bg-[linear-gradient(135deg,#E8D6AD_0%,#D4A853_48%,#B8923A_100%)] px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#120E09] shadow-[0_16px_28px_rgba(0,0,0,0.24)] transition-transform duration-200 hover:-translate-y-0.5"
+          <button
+            type="button"
+            onClick={handleViewClick}
+            className="relative z-[2] inline-flex shrink-0 items-center rounded-full bg-[linear-gradient(135deg,#E8D6AD_0%,#D4A853_48%,#B8923A_100%)] px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#120E09] shadow-[0_16px_28px_rgba(0,0,0,0.24)] transition-transform duration-200 hover:-translate-y-0.5"
           >
-            <MessageCircle size={14} strokeWidth={2.2} />
-            Pedir
-          </a>
+            Ver
+          </button>
         </div>
       </div>
     </motion.article>
