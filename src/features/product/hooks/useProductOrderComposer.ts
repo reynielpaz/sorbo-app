@@ -17,6 +17,7 @@ interface SelectedCustomizationGroup {
 
 const SPECIAL_INSTRUCTIONS_LIMIT = 240;
 const EMPTY_CUSTOMIZATIONS: ProductCustomization[] = [];
+const EMPTY_PRODUCTS: Product[] = [];
 const CUSTOMER_NAME_LIMIT = 80;
 const CUSTOMER_PHONE_LIMIT = 24;
 
@@ -179,7 +180,7 @@ export function useProductOrderComposer(
   }, [hasEditedCustomerPhone, options?.initialCustomerPhone]);
 
   const customizations = product?.customizations ?? EMPTY_CUSTOMIZATIONS;
-  const availableAddOns = options?.availableAddOns ?? [];
+  const availableAddOns = options?.availableAddOns ?? EMPTY_PRODUCTS;
 
   const selectedCustomizationGroups = useMemo(
     () => buildSelectedCustomizationGroups(customizations, selectedOptionsByGroup),
@@ -331,8 +332,9 @@ export function useProductOrderComposer(
         : [...currentSelection, optionId];
 
       if (nextSelection.length === 0) {
-        const { [customization.id]: _removedGroup, ...rest } = current;
-        return rest;
+        const nextSelectedOptionsByGroup = { ...current };
+        delete nextSelectedOptionsByGroup[customization.id];
+        return nextSelectedOptionsByGroup;
       }
 
       return {
