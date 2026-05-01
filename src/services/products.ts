@@ -101,6 +101,139 @@ function sortProducts(products: Product[], options?: { groupByCategory?: boolean
   });
 }
 
+function normalizeRecommendationText(value: string) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function getProductCategorySlug(product: Product): string {
+  return normalizeRecommendationText(product.category?.slug ?? '');
+}
+
+function getProductCategoryName(product: Product): string {
+  return normalizeRecommendationText(product.category?.name ?? '');
+}
+
+function includesAnyKeyword(value: string, keywords: string[]) {
+  return keywords.some((keyword) => value.includes(keyword));
+}
+
+function isDrinkProduct(product: Product): boolean {
+  const categorySlug = getProductCategorySlug(product);
+  const categoryName = getProductCategoryName(product);
+  const productName = normalizeRecommendationText(product.name);
+  const drinkCategoryKeywords = [
+    'bebidas',
+    'bebida',
+    'cocteles',
+    'coctel',
+    'cafe',
+  ];
+  const drinkNameKeywords = [
+    'agua',
+    'refresco',
+    'gatorade',
+    'cafe',
+    'jugo',
+    'te',
+    'cocacola',
+    'coca cola',
+    'coca-cola',
+    'pepsi',
+  ];
+
+  return (
+    includesAnyKeyword(categorySlug, drinkCategoryKeywords) ||
+    includesAnyKeyword(categoryName, drinkCategoryKeywords) ||
+    includesAnyKeyword(productName, drinkNameKeywords)
+  );
+}
+
+function isSideOrComplementProduct(product: Product): boolean {
+  const categorySlug = getProductCategorySlug(product);
+  const categoryName = getProductCategoryName(product);
+  const productName = normalizeRecommendationText(product.name);
+  const sideCategoryKeywords = ['menu-kids', 'menu kids', 'kids', 'especiales'];
+  const sideNameKeywords = ['tequenos', 'nuggets', 'papas', 'postre', 'ensalada'];
+
+  return (
+    includesAnyKeyword(categorySlug, sideCategoryKeywords) ||
+    includesAnyKeyword(categoryName, sideCategoryKeywords) ||
+    includesAnyKeyword(productName, sideNameKeywords)
+  );
+}
+
+function isMainFoodProduct(product: Product): boolean {
+  const categorySlug = getProductCategorySlug(product);
+  const categoryName = getProductCategoryName(product);
+  const productName = normalizeRecommendationText(product.name);
+  const mainFoodCategoryKeywords = [
+    'hamburguesas',
+    'perros calientes',
+    'perros-calientes',
+    'patacones',
+    'ensaladas',
+    'especiales',
+    'menu-kids',
+    'menu kids',
+  ];
+  const mainFoodNameKeywords = [
+    'burger',
+    'hamburguesa',
+    'sorbo',
+    'perro',
+    'hotdog',
+    'hot dog',
+    'tradicional',
+    'especial',
+    'patacon',
+    'ensalada',
+    'cobb',
+    'cesar',
+  ];
+
+  return (
+    includesAnyKeyword(categorySlug, mainFoodCategoryKeywords) ||
+    includesAnyKeyword(categoryName, mainFoodCategoryKeywords) ||
+    includesAnyKeyword(productName, mainFoodNameKeywords)
+  );
+}
+
+function getAddOnRecommendationScore(product: Product): number {
+  if (isDrinkProduct(product)) return 0;
+  if (isSideOrComplementProduct(product)) return 1;
+  if (isMainFoodProduct(product)) return 2;
+  if (
+    product.isFeatured ||
+    product.tags.includes('popular') ||
+    product.tags.includes('nuevo')
+  ) {
+    return 2;
+  }
+
+  return 3;
+}
+
+function sortRecommendedAddOns(products: Product[]): Product[] {
+  return [...products].sort((left, right) => {
+    const scoreDifference = getAddOnRecommendationScore(left) - getAddOnRecommendationScore(right);
+
+    if (scoreDifference !== 0) {
+      return scoreDifference;
+    }
+
+    const sortOrderDifference = left.sortOrder - right.sortOrder;
+
+    if (sortOrderDifference !== 0) {
+      return sortOrderDifference;
+    }
+
+    return left.name.localeCompare(right.name, 'es', { sensitivity: 'base' });
+  });
+}
+
 interface GetProductsOptions {
   errorMessage: string;
   onlyAvailable?: boolean;
@@ -194,12 +327,66 @@ export async function getAvailableProducts(): Promise<Product[]> {
   });
 }
 
-export async function getProductAddOns(productId: string, limit = 8): Promise<Product[]> {
+export async function getProductAddOns(productId: string, limit = 10): Promise<Product[]> {
   const products = await getAvailableProducts();
+  const recommendationLimit = Math.max(0, limit);
+  const candidates = products.filter((product) => product.id !== productId);
 
-  return products
-    .filter((product) => product.id !== productId)
-    .slice(0, limit);
+  if (recommendationLimit === 0) {
+    return [];
+  }
+
+  const recommendedProducts = sortRecommendedAddOns(candidates);
+  const recommendations: Product[] = [];
+  const recommendedProductIds = new Set<string>();
+
+  function addUniqueProducts(nextProducts: Product[], maxItems: number) {
+    for (const product of nextProducts) {
+      if (recommendations.length >= recommendationLimit || maxItems <= 0) {
+        return;
+      }
+
+      if (recommendedProductIds.has(product.id)) {
+        continue;
+      }
+
+      recommendations.push(product);
+      recommendedProductIds.add(product.id);
+      maxItems -= 1;
+    }
+  }
+
+  const drinkProducts = recommendedProducts.filter(isDrinkProduct);
+  const sideOrComplementProducts = recommendedProducts.filter(
+    (product) => !isDrinkProduct(product) && isSideOrComplementProduct(product)
+  );
+  const mainFoodProducts = recommendedProducts.filter(
+    (product) =>
+      !isDrinkProduct(product) &&
+      !isSideOrComplementProduct(product) &&
+      isMainFoodProduct(product)
+  );
+  const remainingProducts = recommendedProducts.filter(
+    (product) =>
+      !isDrinkProduct(product) &&
+      !isSideOrComplementProduct(product) &&
+      !isMainFoodProduct(product)
+  );
+
+  addUniqueProducts(drinkProducts, 4);
+  addUniqueProducts(sideOrComplementProducts, 2);
+  addUniqueProducts(mainFoodProducts, 4);
+  addUniqueProducts(remainingProducts, recommendationLimit - recommendations.length);
+  addUniqueProducts(
+    recommendedProducts,
+    recommendationLimit - recommendations.length
+  );
+
+  if (recommendations.length === 0) {
+    return candidates.slice(0, recommendationLimit);
+  }
+
+  return recommendations;
 }
 
 export async function getProductById(id: string): Promise<Product | null> {
