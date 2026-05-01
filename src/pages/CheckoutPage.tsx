@@ -33,6 +33,8 @@ const ORDER_TYPES: Array<{ id: OrderType; label: string }> = [
   { id: 'dine_in', label: 'Comer en local' },
 ];
 const DEFAULT_PHONE_PREFIX = VENEZUELAN_MOBILE_PREFIXES[0].value;
+const AUTOFILL_DARK_FIELD_CLASS =
+  'caret-[#D4A853] [color-scheme:dark] [&:-webkit-autofill]:[-webkit-text-fill-color:#FFFFFF] [&:-webkit-autofill]:[box-shadow:0_0_0px_1000px_#05070B_inset] [&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s]';
 
 type VenezuelanMobilePrefix = (typeof VENEZUELAN_MOBILE_PREFIXES)[number]['value'];
 
@@ -459,7 +461,7 @@ export function CheckoutPage() {
                   value={customerName}
                   onChange={(event) => setCustomerName(event.target.value)}
                   placeholder="Tu nombre"
-                  className="mt-2 h-12 w-full rounded-[16px] border border-white/[0.04] bg-[#05070B]/72 px-4 text-[14px] text-white outline-none transition-colors duration-200 placeholder:text-white/24 focus:border-[rgba(212,168,83,0.28)]"
+                  className={`mt-2 h-12 w-full rounded-[16px] border border-white/[0.04] bg-[#05070B]/72 px-4 text-[14px] text-white outline-none transition-colors duration-200 placeholder:text-white/24 focus:border-[rgba(212,168,83,0.28)] ${AUTOFILL_DARK_FIELD_CLASS}`}
                   autoComplete="name"
                   required
                 />
@@ -534,7 +536,7 @@ export function CheckoutPage() {
                       setPhoneLocalNumber(sanitizeLocalPhoneNumber(event.target.value))
                     }
                     placeholder="1234567"
-                    className="h-full min-w-0 flex-1 rounded-r-[15px] bg-transparent px-4 text-[14px] text-white outline-none placeholder:text-white/24"
+                    className={`h-full min-w-0 flex-1 rounded-r-[15px] bg-transparent px-4 text-[14px] text-white outline-none placeholder:text-white/24 ${AUTOFILL_DARK_FIELD_CLASS}`}
                     inputMode="numeric"
                     autoComplete="tel"
                     maxLength={7}
@@ -645,7 +647,7 @@ export function CheckoutPage() {
                 onChange={(event) => setNotes(event.target.value)}
                 placeholder="Ej. sin cebolla, término medio…"
                 rows={2}
-                className="mt-2 w-full resize-none rounded-[18px] border border-white/[0.04] bg-[#05070B]/72 px-4 py-2.5 text-[14px] leading-5 text-white outline-none transition-colors duration-200 placeholder:text-white/24 focus:border-[rgba(212,168,83,0.28)]"
+                className={`mt-2 w-full resize-none rounded-[18px] border border-white/[0.04] bg-[#05070B]/72 px-4 py-2.5 text-[14px] leading-5 text-white outline-none transition-colors duration-200 placeholder:text-white/24 focus:border-[rgba(212,168,83,0.28)] ${AUTOFILL_DARK_FIELD_CLASS}`}
               />
             </section>
 

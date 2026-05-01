@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Minus, Plus, ShoppingBag, Trash2, UtensilsCrossed } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -151,6 +152,65 @@ function CartItemRow({ item, onIncrement, onDecrement, onRemove }: CartItemRowPr
   );
 }
 
+interface ClearCartDialogProps {
+  onCancel: () => void;
+  onConfirm: () => void;
+}
+
+function ClearCartDialog({ onCancel, onConfirm }: ClearCartDialogProps) {
+  return (
+    <motion.div
+      className="fixed inset-0 z-[80] flex items-end justify-center bg-black/70 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+18px)] pt-6 sm:items-center sm:pb-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.18, ease: 'easeOut' }}
+      role="presentation"
+      onClick={onCancel}
+    >
+      <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="clear-cart-dialog-title"
+        className="w-full max-w-[360px] rounded-[24px] border border-white/[0.06] bg-[#05070B] p-5 text-left shadow-[0_24px_70px_rgba(0,0,0,0.55)]"
+        initial={{ opacity: 0, y: 18, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.22, ease: 'easeOut' }}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex h-12 w-12 items-center justify-center rounded-[16px] border border-[rgba(212,168,83,0.16)] bg-black/[0.28] text-[#F3D7A0]">
+          <Trash2 size={20} strokeWidth={1.9} />
+        </div>
+        <h2
+          id="clear-cart-dialog-title"
+          className="mt-4 font-playfair text-[26px] font-semibold leading-tight text-sorbo-cream"
+        >
+          Vaciar pedido
+        </h2>
+        <p className="mt-2 text-[14px] leading-6 text-white/54">
+          Se eliminarán todos los productos del carrito.
+        </p>
+
+        <div className="mt-5 grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="inline-flex h-11 items-center justify-center rounded-full border border-white/[0.05] bg-black/[0.28] px-4 text-[11px] font-semibold uppercase tracking-[0.13em] text-white/62 transition-colors duration-200 hover:text-white"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="inline-flex h-11 items-center justify-center rounded-full border border-[rgba(212,168,83,0.18)] bg-black/[0.28] px-4 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#F3D7A0] transition-colors duration-200 hover:border-[rgba(212,168,83,0.32)] hover:bg-black/[0.36]"
+          >
+            Vaciar
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export function CartPage() {
   const navigate = useNavigate();
   const items = useCartStore((state) => state.items);
@@ -161,10 +221,29 @@ export function CartPage() {
   const getItemCount = useCartStore((state) => state.getItemCount);
   const getSubtotal = useCartStore((state) => state.getSubtotal);
   const hasItems = useCartStore((state) => state.hasItems);
+  const [isClearCartDialogOpen, setIsClearCartDialogOpen] = useState(false);
 
   const itemCount = getItemCount();
   const subtotal = getSubtotal();
   const cartHasItems = hasItems();
+
+  useEffect(() => {
+    if (!isClearCartDialogOpen) {
+      return;
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setIsClearCartDialogOpen(false);
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isClearCartDialogOpen]);
 
   function handleGoToMenu() {
     navigate(ROUTES.MENU);
@@ -179,9 +258,12 @@ export function CartPage() {
   }
 
   function handleClearCart() {
-    if (window.confirm('¿Vaciar todo el pedido?')) {
-      clearCart();
-    }
+    setIsClearCartDialogOpen(true);
+  }
+
+  function handleConfirmClearCart() {
+    clearCart();
+    setIsClearCartDialogOpen(false);
   }
 
   return (
@@ -273,6 +355,13 @@ export function CartPage() {
           <EmptyCartState onGoToMenu={handleGoToMenu} />
         )}
       </div>
+
+      {isClearCartDialogOpen ? (
+        <ClearCartDialog
+          onCancel={() => setIsClearCartDialogOpen(false)}
+          onConfirm={handleConfirmClearCart}
+        />
+      ) : null}
     </AppShell>
   );
 }
