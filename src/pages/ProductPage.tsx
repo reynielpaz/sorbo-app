@@ -10,6 +10,8 @@ import { ProductDetailSkeleton } from '@/features/product/components/ProductDeta
 import { ProductHero } from '@/features/product/components/ProductHero';
 import { ProductInfoPanel } from '@/features/product/components/ProductInfoPanel';
 import { ProductIngredients } from '@/features/product/components/ProductIngredients';
+import { useCartStore } from '@/features/cart/store/cartStore';
+import type { AddCartItemInput } from '@/features/cart/types';
 import { useProductDetails } from '@/features/product/hooks/useProductDetails';
 import { useProductOrderComposer } from '@/features/product/hooks/useProductOrderComposer';
 import { ProductSpecialInstructions } from '@/features/product/components/ProductSpecialInstructions';
@@ -21,6 +23,7 @@ import { useAuth } from '@/hooks/useAuth';
 export function ProductPage() {
   const navigate = useNavigate();
   const { profile } = useAuth();
+  const addItem = useCartStore((state) => state.addItem);
   const { productId, product, snapshotProduct, loading, error, notFound, reload } = useProductDetails();
   const currentProduct = productId && product?.id === productId ? product : null;
   const heroProduct = !error && !notFound ? currentProduct ?? (loading ? snapshotProduct : null) : null;
@@ -110,10 +113,39 @@ export function ProductPage() {
   }
 
   function handleAddToOrder() {
-    if (!orderComposer.productOrderDraft) {
+    const draft = orderComposer.productOrderDraft;
+
+    if (!draft) {
       return;
     }
 
+    const cartItemInput: AddCartItemInput = {
+      productId: draft.product.id,
+      name: draft.product.name,
+      price: draft.product.price,
+      imageUrl: draft.product.imageUrl,
+      quantity: draft.quantity,
+      categoryName: draft.product.category?.name,
+      specialInstructions: draft.specialInstructions,
+      customizations: draft.selectedCustomizationGroups.flatMap((group) =>
+        group.selectedOptions.map((option) => ({
+          groupId: group.customization.id,
+          groupName: group.customization.name,
+          optionId: option.id,
+          optionName: option.label,
+          priceDelta: option.price ?? 0,
+        }))
+      ),
+      addOns: draft.selectedAddOns.map((addOn) => ({
+        productId: addOn.id,
+        name: addOn.name,
+        price: addOn.price,
+        imageUrl: addOn.imageUrl,
+      })),
+      lineTotal: draft.totalEstimate,
+    };
+
+    addItem(cartItemInput);
     setOrderDraftFeedbackVisible(true);
   }
 
@@ -194,7 +226,7 @@ export function ProductPage() {
                     className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom,0px)+164px)] z-40 px-4"
                   >
                     <div className="mx-auto max-w-[720px] rounded-[24px] border border-[rgba(212,168,83,0.2)] bg-[#05070B]/95 px-4 py-3 text-[12px] font-medium leading-5 text-[#F3D7A0] shadow-[0_10px_24px_rgba(0,0,0,0.22)]">
-                      Producto preparado para el pedido. El carrito se activará en la siguiente fase.
+                      Producto agregado al pedido.
                     </div>
                   </motion.div>
                 ) : null}
