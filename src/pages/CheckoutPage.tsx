@@ -99,6 +99,15 @@ interface EmptyCheckoutStateProps {
   onGoToMenu: () => void;
 }
 
+interface SubmittedCheckoutStateProps {
+  ticket: string;
+  total: number | null;
+  feedbackMessage: string | null;
+  onReopenWhatsapp: () => void;
+  onNewOrder: () => void;
+  onGoHome: () => void;
+}
+
 function EmptyCheckoutState({ onGoToMenu }: EmptyCheckoutStateProps) {
   return (
     <motion.section
@@ -128,6 +137,80 @@ function EmptyCheckoutState({ onGoToMenu }: EmptyCheckoutStateProps) {
   );
 }
 
+function SubmittedCheckoutState({
+  ticket,
+  total,
+  feedbackMessage,
+  onReopenWhatsapp,
+  onNewOrder,
+  onGoHome,
+}: SubmittedCheckoutStateProps) {
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.28, ease: 'easeOut' }}
+      className="mt-8 rounded-[22px] border border-[rgba(212,168,83,0.16)] bg-[#05070B]/72 p-5 text-center shadow-[0_18px_42px_rgba(0,0,0,0.26)]"
+    >
+      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-[18px] border border-[rgba(212,168,83,0.18)] bg-black/[0.28] text-[#F3D7A0]">
+        <Check size={24} strokeWidth={2.2} />
+      </div>
+
+      <h2 className="mt-5 font-playfair text-[30px] font-semibold leading-tight text-sorbo-cream">
+        Pedido enviado
+      </h2>
+      <p className="mx-auto mt-2 max-w-[320px] text-[14px] leading-6 text-white/54">
+        Tu pedido fue registrado correctamente.
+      </p>
+
+      <div className="mt-5 space-y-1.5">
+        <p className="text-[13px] font-semibold text-[#F3D7A0]">Ticket: {ticket}</p>
+        {total !== null ? (
+          <p className="text-[13px] font-medium text-white/58">Total: {formatPrice(total)}</p>
+        ) : null}
+      </div>
+
+      <p className="mx-auto mt-4 max-w-[310px] text-[12px] leading-5 text-white/42">
+        Si necesitas revisar el mensaje, puedes reabrir WhatsApp.
+      </p>
+
+      {feedbackMessage ? (
+        <p
+          role="status"
+          aria-live="polite"
+          className="mt-4 rounded-full border border-[rgba(212,168,83,0.16)] bg-black/[0.28] px-4 py-2 text-center text-[12px] font-medium text-[#F3D7A0]"
+        >
+          {feedbackMessage}
+        </p>
+      ) : null}
+
+      <div className="mt-5 space-y-2.5">
+        <button
+          type="button"
+          onClick={onReopenWhatsapp}
+          className="inline-flex w-full items-center justify-center rounded-full bg-[linear-gradient(135deg,#E8C068_0%,#D4A853_48%,#B8923A_100%)] px-5 py-3.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#120E09] transition-transform duration-200 hover:-translate-y-0.5"
+        >
+          Reabrir WhatsApp
+        </button>
+        <button
+          type="button"
+          onClick={onNewOrder}
+          className="inline-flex w-full items-center justify-center rounded-full border border-white/[0.05] bg-black/[0.28] px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/64 transition-colors duration-200 hover:text-[#F3D7A0]"
+        >
+          Hacer otro pedido
+        </button>
+        <button
+          type="button"
+          onClick={onGoHome}
+          className="inline-flex w-full items-center justify-center rounded-full px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/42 transition-colors duration-200 hover:text-white/64"
+        >
+          Ir al inicio
+        </button>
+      </div>
+    </motion.section>
+  );
+}
+
 export function CheckoutPage() {
   const navigate = useNavigate();
   const { profile, user } = useAuth();
@@ -136,6 +219,7 @@ export function CheckoutPage() {
   const getItemCount = useCartStore((state) => state.getItemCount);
   const getSubtotal = useCartStore((state) => state.getSubtotal);
   const hasItems = useCartStore((state) => state.hasItems);
+  const clearCart = useCartStore((state) => state.clearCart);
   const [customerName, setCustomerName] = useState(profile?.fullName?.trim() ?? '');
   const [phonePrefix, setPhonePrefix] = useState<VenezuelanMobilePrefix>(
     profilePhone.prefix ?? DEFAULT_PHONE_PREFIX,
@@ -147,6 +231,9 @@ export function CheckoutPage() {
   const [notes, setNotes] = useState('');
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittedTicket, setSubmittedTicket] = useState<string | null>(null);
+  const [lastWhatsappUrl, setLastWhatsappUrl] = useState<string | null>(null);
+  const [submittedTotal, setSubmittedTotal] = useState<number | null>(null);
 
   const itemCount = getItemCount();
   const subtotal = getSubtotal();
@@ -199,6 +286,19 @@ export function CheckoutPage() {
 
   function handleGoToMenu() {
     navigate(ROUTES.MENU);
+  }
+
+  function handleGoHome() {
+    navigate(ROUTES.HOME);
+  }
+
+  function handleReopenWhatsapp() {
+    if (!lastWhatsappUrl) {
+      return;
+    }
+
+    window.open(lastWhatsappUrl, '_blank', 'noopener,noreferrer');
+    setFeedbackMessage('Pedido reabierto en WhatsApp.');
   }
 
   function buildWhatsAppOrderMessage(ticket: string) {
@@ -260,6 +360,11 @@ export function CheckoutPage() {
   }
 
   async function handlePrepareOrder() {
+    if (submittedTicket !== null) {
+      handleReopenWhatsapp();
+      return;
+    }
+
     if (!canPrepareOrder || isSubmitting || selectedPaymentMethod === null) {
       return;
     }
@@ -286,6 +391,10 @@ export function CheckoutPage() {
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
       window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      setSubmittedTicket(ticket);
+      setLastWhatsappUrl(whatsappUrl);
+      setSubmittedTotal(subtotal);
+      clearCart();
       setFeedbackMessage('Pedido registrado y abierto en WhatsApp.');
     } catch (error) {
       console.error('[Sorbo] No pudimos registrar el pedido.', error);
@@ -322,7 +431,16 @@ export function CheckoutPage() {
           </div>
         </motion.header>
 
-        {!cartHasItems ? (
+        {submittedTicket ? (
+          <SubmittedCheckoutState
+            ticket={submittedTicket}
+            total={submittedTotal}
+            feedbackMessage={feedbackMessage}
+            onReopenWhatsapp={handleReopenWhatsapp}
+            onNewOrder={handleGoToMenu}
+            onGoHome={handleGoHome}
+          />
+        ) : !cartHasItems ? (
           <EmptyCheckoutState onGoToMenu={handleGoToMenu} />
         ) : (
           <motion.div
