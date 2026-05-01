@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
 import { useCartStore } from '@/features/cart/store/cartStore';
 import { useAuth } from '@/hooks/useAuth';
+import { createOrder } from '@/services/orders';
 import type { OrderType } from '@/types/order';
 import {
   PAYMENT_METHODS,
@@ -129,7 +130,7 @@ function EmptyCheckoutState({ onGoToMenu }: EmptyCheckoutStateProps) {
 
 export function CheckoutPage() {
   const navigate = useNavigate();
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const profilePhone = parseProfilePhone(profile?.phone);
   const items = useCartStore((state) => state.items);
   const getItemCount = useCartStore((state) => state.getItemCount);
@@ -144,7 +145,8 @@ export function CheckoutPage() {
   const [orderType, setOrderType] = useState<OrderType>('takeout');
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodId | null>(null);
   const [notes, setNotes] = useState('');
-  const [feedbackVisible, setFeedbackVisible] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const itemCount = getItemCount();
   const subtotal = getSubtotal();
@@ -161,6 +163,7 @@ export function CheckoutPage() {
     customerName.trim().length > 0 &&
     isPhoneValid &&
     selectedPaymentMethod !== null;
+  const isSubmitDisabled = !canPrepareOrder || isSubmitting;
 
   useEffect(() => {
     const parsedPhone = parseProfilePhone(profile?.phone);
@@ -177,18 +180,18 @@ export function CheckoutPage() {
   }, [phoneLocalNumber, profile?.fullName, profile?.phone]);
 
   useEffect(() => {
-    if (!feedbackVisible) {
+    if (!feedbackMessage) {
       return;
     }
 
     const timeoutId = window.setTimeout(() => {
-      setFeedbackVisible(false);
+      setFeedbackMessage(null);
     }, FEEDBACK_TIMEOUT);
 
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [feedbackVisible]);
+  }, [feedbackMessage]);
 
   function handleBackToCart() {
     navigate(ROUTES.CART);
@@ -256,17 +259,40 @@ export function CheckoutPage() {
     return messageLines.join('\n');
   }
 
-  function handlePrepareOrder() {
-    if (!canPrepareOrder) {
+  async function handlePrepareOrder() {
+    if (!canPrepareOrder || isSubmitting || selectedPaymentMethod === null) {
       return;
     }
 
     const ticket = generateTemporaryOrderTicket();
-    const message = buildWhatsAppOrderMessage(ticket);
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-    setFeedbackVisible(true);
+    try {
+      setIsSubmitting(true);
+      setFeedbackMessage(null);
+
+      await createOrder({
+        userId: user?.id ?? null,
+        items,
+        total: subtotal,
+        paymentMethod: selectedPaymentMethod,
+        orderType,
+        notes,
+        ticket,
+        customerName: customerName.trim(),
+        customerPhone,
+      });
+
+      const message = buildWhatsAppOrderMessage(ticket);
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      setFeedbackMessage('Pedido registrado y abierto en WhatsApp.');
+    } catch (error) {
+      console.error('[Sorbo] No pudimos registrar el pedido.', error);
+      setFeedbackMessage('No pudimos registrar el pedido. Intenta de nuevo.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -540,27 +566,28 @@ export function CheckoutPage() {
               </div>
             </section>
 
-            {feedbackVisible ? (
+            {feedbackMessage ? (
               <p
                 role="status"
                 aria-live="polite"
                 className="rounded-full border border-[rgba(212,168,83,0.16)] bg-black/[0.28] px-4 py-2 text-center text-[12px] font-medium text-[#F3D7A0]"
               >
-                Pedido abierto en WhatsApp.
+                {feedbackMessage}
               </p>
             ) : null}
 
             <button
               type="button"
-              disabled={!canPrepareOrder}
+              disabled={isSubmitDisabled}
+              aria-busy={isSubmitting}
               onClick={handlePrepareOrder}
               className={`inline-flex w-full items-center justify-center rounded-full px-5 py-3.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition-transform duration-200 ${
-                canPrepareOrder
-                  ? 'bg-[linear-gradient(135deg,#E8C068_0%,#D4A853_48%,#B8923A_100%)] text-[#120E09] hover:-translate-y-0.5'
-                  : 'border border-white/[0.05] bg-white/[0.03] text-white/40'
+                isSubmitDisabled
+                  ? 'border border-white/[0.05] bg-white/[0.03] text-white/40'
+                  : 'bg-[linear-gradient(135deg,#E8C068_0%,#D4A853_48%,#B8923A_100%)] text-[#120E09] hover:-translate-y-0.5'
               }`}
             >
-              Enviar por WhatsApp
+              {isSubmitting ? 'Registrando…' : 'Enviar por WhatsApp'}
             </button>
 
             {!canPrepareOrder ? (
