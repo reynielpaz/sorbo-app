@@ -21,6 +21,7 @@ import {
   PAYMENT_METHODS,
   ROUTES,
   VENEZUELAN_MOBILE_PREFIXES,
+  WHATSAPP_NUMBER,
   type PaymentMethodId,
 } from '@/utils/constants';
 import { formatPrice } from '@/utils/formatPrice';
@@ -36,6 +37,22 @@ type VenezuelanMobilePrefix = (typeof VENEZUELAN_MOBILE_PREFIXES)[number]['value
 
 function formatArticleCount(count: number) {
   return count === 1 ? '1 artículo' : `${count} artículos`;
+}
+
+function formatTicketDatePart(value: number) {
+  return value.toString().padStart(2, '0');
+}
+
+function generateTemporaryOrderTicket() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = formatTicketDatePart(now.getMonth() + 1);
+  const day = formatTicketDatePart(now.getDate());
+  const hours = formatTicketDatePart(now.getHours());
+  const minutes = formatTicketDatePart(now.getMinutes());
+  const randomCode = Math.random().toString(36).slice(2, 6).toUpperCase().padEnd(4, '0');
+
+  return `SB-${year}${month}${day}-${hours}${minutes}-${randomCode}`;
 }
 
 function isVenezuelanMobilePrefix(value: string): value is VenezuelanMobilePrefix {
@@ -181,11 +198,74 @@ export function CheckoutPage() {
     navigate(ROUTES.MENU);
   }
 
+  function buildWhatsAppOrderMessage(ticket: string) {
+    const orderTypeLabel =
+      ORDER_TYPES.find((type) => type.id === orderType)?.label ?? 'Retirar';
+    const paymentMethodLabel =
+      PAYMENT_METHODS.find((paymentMethod) => paymentMethod.id === selectedPaymentMethod)?.label ??
+      '';
+    const messageLines = [
+      'Hola Sorbo, quiero confirmar este pedido:',
+      '',
+      '*Pedido*',
+      `Ticket: ${ticket}`,
+      '',
+      '*Cliente*',
+      `Nombre: ${customerName.trim()}`,
+      `Teléfono: ${customerPhone}`,
+      '',
+      '*Tipo de pedido*',
+      orderTypeLabel,
+      '',
+      '*Pedido*',
+    ];
+
+    items.forEach((item, itemIndex) => {
+      messageLines.push(
+        `${itemIndex + 1}. ${item.quantity}x ${item.name} — ${formatPrice(item.lineTotal)}`,
+      );
+
+      item.customizations.forEach((customization) => {
+        const priceDelta =
+          customization.priceDelta > 0 ? ` (+${formatPrice(customization.priceDelta)})` : '';
+
+        messageLines.push(
+          `   · ${customization.groupName}: ${customization.optionName}${priceDelta}`,
+        );
+      });
+
+      item.addOns.forEach((addOn) => {
+        messageLines.push(`   · Extra: ${addOn.name} (+${formatPrice(addOn.price)})`);
+      });
+
+      if (item.specialInstructions.trim()) {
+        messageLines.push(`   · Nota: ${item.specialInstructions.trim()}`);
+      }
+    });
+
+    if (paymentMethodLabel) {
+      messageLines.push('', '*Pago*', paymentMethodLabel);
+    }
+
+    if (notes.trim()) {
+      messageLines.push('', '*Nota*', notes.trim());
+    }
+
+    messageLines.push('', '*Total*', formatPrice(subtotal), '', 'Enviado desde la app de Sorbo.');
+
+    return messageLines.join('\n');
+  }
+
   function handlePrepareOrder() {
     if (!canPrepareOrder) {
       return;
     }
 
+    const ticket = generateTemporaryOrderTicket();
+    const message = buildWhatsAppOrderMessage(ticket);
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
     setFeedbackVisible(true);
   }
 
@@ -466,7 +546,7 @@ export function CheckoutPage() {
                 aria-live="polite"
                 className="rounded-full border border-[rgba(212,168,83,0.16)] bg-black/[0.28] px-4 py-2 text-center text-[12px] font-medium text-[#F3D7A0]"
               >
-                Pedido listo para enviar en el siguiente paso.
+                Pedido abierto en WhatsApp.
               </p>
             ) : null}
 
@@ -480,7 +560,7 @@ export function CheckoutPage() {
                   : 'border border-white/[0.05] bg-white/[0.03] text-white/40'
               }`}
             >
-              Preparar pedido
+              Enviar por WhatsApp
             </button>
 
             {!canPrepareOrder ? (
