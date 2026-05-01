@@ -107,7 +107,7 @@ export function ProductAddOns({
                     onClick={() => onToggleAddOn(product)}
                     className={`mt-auto inline-flex w-full items-center justify-center rounded-full px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] transition-transform duration-200 hover:-translate-y-0.5 ${
                       isSelected
-                        ? 'border border-[rgba(212,168,83,0.22)] bg-[rgba(212,168,83,0.1)] text-[#E8D6AD]'
+                        ? 'border border-[rgba(212,168,83,0.22)] bg-[#05070B]/80 text-[#F3D7A0] shadow-[0_4px_10px_rgba(0,0,0,0.1)]'
                         : 'bg-[linear-gradient(135deg,#E8C068_0%,#D4A853_48%,#B8923A_100%)] text-[#120E09] shadow-[0_6px_12px_rgba(0,0,0,0.1)]'
                     }`}
                   >

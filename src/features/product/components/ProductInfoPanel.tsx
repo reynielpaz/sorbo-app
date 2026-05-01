@@ -18,7 +18,7 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
         <span
           className={`shrink-0 rounded-full border px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.2em] ${
             product.isAvailable
-              ? 'border-[rgba(212,168,83,0.18)] bg-[rgba(212,168,83,0.08)] text-[#E8D6AD]'
+              ? 'border-[rgba(212,168,83,0.18)] bg-black/[0.28] text-[#F3D7A0]'
               : 'border-white/[0.045] bg-black/[0.24] text-white/52'
           }`}
         >

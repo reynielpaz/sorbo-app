@@ -29,7 +29,6 @@ export function ProductPage() {
   const heroProduct = !error && !notFound ? currentProduct ?? (loading ? snapshotProduct : null) : null;
   const [availableAddOns, setAvailableAddOns] = useState<Product[]>([]);
   const [addOnsLoading, setAddOnsLoading] = useState(false);
-  const [orderDraftFeedbackVisible, setOrderDraftFeedbackVisible] = useState(false);
   const orderComposer = useProductOrderComposer(currentProduct, {
     initialCustomerName: profile?.fullName,
     initialCustomerPhone: profile?.phone,
@@ -83,20 +82,6 @@ export function ProductPage() {
     };
   }, [currentProduct]);
 
-  useEffect(() => {
-    if (!orderDraftFeedbackVisible) {
-      return;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      setOrderDraftFeedbackVisible(false);
-    }, 3600);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
-  }, [orderDraftFeedbackVisible]);
-
   function handleBack() {
     const historyIndex = typeof window.history.state?.idx === 'number' ? window.history.state.idx : 0;
 
@@ -146,7 +131,7 @@ export function ProductPage() {
     };
 
     addItem(cartItemInput);
-    setOrderDraftFeedbackVisible(true);
+    navigate(ROUTES.CART);
   }
 
   return (
@@ -215,21 +200,6 @@ export function ProductPage() {
                     />
                   </div>
                 </motion.div>
-
-                {orderDraftFeedbackVisible ? (
-                  <motion.div
-                    role="status"
-                    aria-live="polite"
-                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.24, ease: 'easeOut' }}
-                    className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom,0px)+164px)] z-40 px-4"
-                  >
-                    <div className="mx-auto max-w-[720px] rounded-[24px] border border-[rgba(212,168,83,0.2)] bg-[#05070B]/95 px-4 py-3 text-[12px] font-medium leading-5 text-[#F3D7A0] shadow-[0_10px_24px_rgba(0,0,0,0.22)]">
-                      Producto agregado al pedido.
-                    </div>
-                  </motion.div>
-                ) : null}
 
                 <ProductActionBar
                   product={currentProduct}
