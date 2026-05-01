@@ -10,6 +10,7 @@ import { HomePage } from '@/pages/HomePage';
 import { MenuPage } from '@/pages/MenuPage';
 import { ProductPage } from '@/pages/ProductPage';
 import { CartPage } from '@/pages/CartPage';
+import { CheckoutPage } from '@/pages/CheckoutPage';
 import { ReservationsPage } from '@/pages/ReservationsPage';
 import { ProfilePage } from '@/pages/ProfilePage';
 
@@ -33,6 +34,7 @@ export function Router() {
         <Route path={ROUTES.PRODUCT} element={<ProductPage />} />
         <Route path={ROUTES.RESERVATIONS} element={<ReservationsPage />} />
         <Route path={ROUTES.CART} element={<CartPage />} />
+        <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
         <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
         {/* Redirige cualquier ruta desconocida al splash */}
         <Route path="*" element={<Navigate to={ROUTES.SPLASH} replace />} />

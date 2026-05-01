@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Minus, Plus, ShoppingBag, Trash2, UtensilsCrossed } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -7,8 +6,6 @@ import { useCartStore } from '@/features/cart/store/cartStore';
 import type { CartItem } from '@/features/cart/types';
 import { ROUTES } from '@/utils/constants';
 import { formatPrice } from '@/utils/formatPrice';
-
-const CHECKOUT_FEEDBACK_TIMEOUT = 2800;
 
 function formatArticleCount(count: number) {
   return count === 1 ? '1 artículo' : `${count} artículos`;
@@ -164,32 +161,21 @@ export function CartPage() {
   const getItemCount = useCartStore((state) => state.getItemCount);
   const getSubtotal = useCartStore((state) => state.getSubtotal);
   const hasItems = useCartStore((state) => state.hasItems);
-  const [checkoutFeedbackVisible, setCheckoutFeedbackVisible] = useState(false);
 
   const itemCount = getItemCount();
   const subtotal = getSubtotal();
   const cartHasItems = hasItems();
-
-  useEffect(() => {
-    if (!checkoutFeedbackVisible) {
-      return;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      setCheckoutFeedbackVisible(false);
-    }, CHECKOUT_FEEDBACK_TIMEOUT);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
-  }, [checkoutFeedbackVisible]);
 
   function handleGoToMenu() {
     navigate(ROUTES.MENU);
   }
 
   function handleContinue() {
-    setCheckoutFeedbackVisible(true);
+    if (!cartHasItems) {
+      return;
+    }
+
+    navigate(ROUTES.CHECKOUT);
   }
 
   function handleClearCart() {
@@ -254,16 +240,6 @@ export function CartPage() {
               <p className="mt-1 text-[11px] leading-5 text-white/42">
                 El pago se confirma en el siguiente paso.
               </p>
-
-              {checkoutFeedbackVisible ? (
-                <p
-                  role="status"
-                  aria-live="polite"
-                  className="mt-3 text-center text-[12px] font-medium text-[#F3D7A0]"
-                >
-                  Checkout disponible en el siguiente paso.
-                </p>
-              ) : null}
 
               <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                 <button

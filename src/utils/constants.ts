@@ -68,10 +68,43 @@ export const MENU_CATEGORIES = [
 
 /** Métodos de pago disponibles */
 export const PAYMENT_METHODS = [
-  { id: 'pago_movil', name: 'Pago Móvil' },
-  { id: 'binance', name: 'Binance' },
-  { id: 'zelle', name: 'Zelle' },
-  { id: 'efectivo', name: 'Efectivo' },
+  {
+    id: 'pago_movil',
+    label: 'Pago Móvil',
+    description: 'Transferencia nacional',
+  },
+  {
+    id: 'tarjeta',
+    label: 'Tarjeta / Punto',
+    description: 'Punto de venta',
+  },
+  {
+    id: 'binance',
+    label: 'Binance',
+    description: 'Pago cripto',
+  },
+  {
+    id: 'zelle',
+    label: 'Zelle',
+    description: 'Transferencia USD',
+  },
+  {
+    id: 'efectivo',
+    label: 'Efectivo',
+    description: 'Pago al retirar',
+  },
+] as const;
+
+export type PaymentMethodId = (typeof PAYMENT_METHODS)[number]['id'];
+
+/** Prefijos móviles venezolanos permitidos en checkout */
+export const VENEZUELAN_MOBILE_PREFIXES = [
+  { value: '0412', label: '0412' },
+  { value: '0422', label: '0422' },
+  { value: '0414', label: '0414' },
+  { value: '0424', label: '0424' },
+  { value: '0416', label: '0416' },
+  { value: '0426', label: '0426' },
 ] as const;
 
 /** Métodos de pago disponibles para pedido directo por producto */
