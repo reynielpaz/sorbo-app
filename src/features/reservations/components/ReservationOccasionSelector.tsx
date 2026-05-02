@@ -24,7 +24,7 @@ export function ReservationOccasionSelector({
   onChange,
 }: ReservationOccasionSelectorProps) {
   return (
-    <div className="flex flex-wrap gap-2.5">
+    <div className="flex flex-wrap gap-1.5">
       {options.map((option) => {
         const Icon = OCCASION_ICON_MAP[option.value];
         const isSelected = value === option.value;
@@ -35,24 +35,24 @@ export function ReservationOccasionSelector({
             type="button"
             onClick={() => onChange(option.value)}
             className={cn(
-              'group inline-flex items-center gap-2.5 rounded-full border px-3.5 py-2.5 text-left transition-[border-color,transform,background-color,box-shadow,color] duration-200 hover:-translate-y-0.5',
+              'group inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-left transition-[border-color,transform,background-color,color] duration-200 hover:-translate-y-0.5',
               isSelected
-                ? 'border-[rgba(212,168,83,0.22)] bg-[linear-gradient(180deg,rgba(212,168,83,0.12)_0%,rgba(212,168,83,0.05)_100%)] text-[#FCF8F0] shadow-[0_10px_20px_rgba(0,0,0,0.16)]'
-                : 'border-white/[0.08] bg-[rgba(255,255,255,0.028)] text-white/64 hover:border-white/[0.12] hover:text-white/80'
+                ? 'border-[rgba(212,168,83,0.2)] bg-[#D4A853]/10 text-[#FCF8F0]'
+                : 'border-white/[0.05] bg-black/[0.2] text-white/56 hover:border-white/[0.1] hover:text-white/76'
             )}
           >
             <span
               className={cn(
-                'inline-flex h-8 w-8 items-center justify-center rounded-full border transition-colors duration-200',
+                'inline-flex h-5 w-5 items-center justify-center rounded-full border transition-colors duration-200',
                 isSelected
-                  ? 'border-[#D4A853]/18 bg-[#D4A853]/12 text-[#E9C982]'
-                  : 'border-white/[0.08] bg-white/[0.025] text-white/50 group-hover:text-white/70'
+                  ? 'border-[#D4A853]/14 bg-black/[0.18] text-[#E8C068]'
+                  : 'border-white/[0.045] bg-black/[0.18] text-white/44 group-hover:text-white/64'
               )}
             >
-              <Icon size={15} />
+              <Icon size={11} />
             </span>
 
-            <span className="text-[13px] font-medium">
+            <span className="text-[12px] font-medium">
               {option.label}
             </span>
           </button>
