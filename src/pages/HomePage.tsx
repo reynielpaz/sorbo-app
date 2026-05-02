@@ -29,7 +29,7 @@ export function HomePage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-[#03060A]">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[240px] bg-[linear-gradient(180deg,rgba(3,6,10,0.72)_0%,rgba(3,6,10,0)_100%)]" />
       <div className="relative z-[1] pb-[calc(env(safe-area-inset-bottom)+124px)]">
         <motion.section {...getSectionAnimation(0)}>

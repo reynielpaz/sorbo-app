@@ -138,7 +138,7 @@ export function AuthPage() {
 
   const authInputContainerClassName = 'relative';
   const authInputClassName =
-    'h-14 rounded-2xl !bg-[rgba(10,10,12,0.72)] text-sorbo-cream shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-sm caret-sorbo-gold';
+    'h-14 rounded-2xl !bg-[rgba(5,7,11,0.78)] text-sorbo-cream shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] caret-sorbo-gold';
   const authLabelClassName =
     'font-sans uppercase tracking-[0.16em] text-[rgba(245,230,200,0.52)]';
   const fullNameFieldTransition = {
@@ -155,7 +155,6 @@ export function AuthPage() {
         className="absolute inset-0 h-full w-full object-cover object-[29%_center]"
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.66)_0%,rgba(0,0,0,0.76)_40%,rgba(0,0,0,0.9)_100%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-[42dvh] bg-[radial-gradient(circle_at_bottom,rgba(212,168,83,0.16)_0%,transparent_62%)]" />
 
       <div className="relative z-[1] flex min-h-[100dvh] flex-col">
         <div className="flex min-h-[25dvh] flex-col items-center justify-center px-8 pt-[calc(env(safe-area-inset-top,0px)+24px)] text-center">
@@ -170,15 +169,13 @@ export function AuthPage() {
           </p>
         </div>
 
-        <div className="relative mt-auto overflow-hidden rounded-t-[32px] border border-white/10 bg-[rgba(8,8,10,0.78)] px-6 pb-[calc(env(safe-area-inset-bottom,0px)+24px)] pt-5 shadow-[0_-26px_70px_rgba(0,0,0,0.56)] backdrop-blur-xl">
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0.02)_16%,rgba(255,255,255,0.01)_100%)]" />
-          <div className="absolute inset-x-6 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(232,214,173,0.56),transparent)]" />
-          <div className="absolute -right-12 top-[-5.5rem] h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(212,168,83,0.16)_0%,transparent_72%)] blur-3xl" />
+        <div className="relative mt-auto overflow-hidden rounded-t-[32px] border border-white/[0.04] bg-[#03060A]/88 px-6 pb-[calc(env(safe-area-inset-bottom,0px)+24px)] pt-5 shadow-[0_-26px_70px_rgba(0,0,0,0.56)] backdrop-blur-sm">
+          <div className="absolute inset-x-6 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(232,214,173,0.36),transparent)]" />
 
           <div
             role="tablist"
             aria-label="Seleccionar modo de autenticación"
-            className="relative z-[1] flex rounded-full border border-white/8 bg-white/[0.03] p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
+            className="relative z-[1] flex rounded-full border border-white/[0.04] bg-[#03060A]/60 p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
           >
             {(['login', 'register'] as const).map((value) => {
               const active = mode === value;
@@ -199,7 +196,7 @@ export function AuthPage() {
                   }}
                   className={`flex-1 rounded-full px-4 py-3 text-center font-sans text-[0.82rem] uppercase tracking-[0.18em] transition-[background,border-color,color,box-shadow] duration-150 ${
                     active
-                      ? 'border border-[rgba(212,168,83,0.2)] bg-[linear-gradient(180deg,rgba(255,255,255,0.09)_0%,rgba(255,255,255,0.03)_100%)] text-sorbo-cream shadow-[0_10px_24px_rgba(0,0,0,0.26)]'
+                      ? 'border border-[rgba(212,168,83,0.22)] bg-[#05070B]/90 text-sorbo-cream shadow-[0_10px_24px_rgba(0,0,0,0.32)]'
                       : 'text-[rgba(245,230,200,0.46)] hover:text-[rgba(245,230,200,0.82)]'
                   }`}
                 >
