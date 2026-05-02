@@ -99,12 +99,22 @@ export function ProfilePage() {
   }
 
   return (
-    <AppShell showHeader={false} showBottomNav={true} className="bg-[#030303]">
-      <div className="mx-auto flex min-h-full max-w-[720px] flex-col px-4 pb-[calc(env(safe-area-inset-bottom,0px)+124px)] pt-[calc(env(safe-area-inset-top,0px)+24px)]">
+    <AppShell showHeader={false} showBottomNav={true}>
+      <div className="relative isolate mx-auto flex min-h-full max-w-[720px] flex-col px-4 pb-[calc(env(safe-area-inset-bottom,0px)+124px)] pt-[calc(env(safe-area-inset-top,0px)+24px)]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(0,0,0,0.55),transparent_48%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_70%,rgba(11,15,26,0.45),transparent_42%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_60%,rgba(11,15,26,0.35),transparent_42%)]" />
+        </div>
+
         <motion.header
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, ease: 'easeOut' }}
+          className="relative z-10"
         >
           <button
             type="button"
@@ -129,9 +139,9 @@ export function ProfilePage() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut', delay: 0.04 }}
-          className="mt-7 space-y-5"
+          className="relative z-10 mt-7 space-y-5"
         >
-          <section className="rounded-[20px] border border-white/[0.04] bg-[#050505]/74 p-5 shadow-[0_14px_34px_rgba(0,0,0,0.2)]">
+          <section className="rounded-[20px] border border-white/[0.04] bg-[#05070B]/68 p-5 shadow-[0_14px_34px_rgba(0,0,0,0.2)]">
             <h2 className="truncate text-[26px] font-semibold leading-tight text-white">
               {displayName}
             </h2>
@@ -157,7 +167,7 @@ export function ProfilePage() {
                     key={action.label}
                     type="button"
                     onClick={() => navigate(action.route)}
-                    className="flex min-h-[62px] items-center gap-3 rounded-[16px] border border-white/[0.04] bg-[#050505]/72 p-3 text-left transition-colors duration-200 hover:border-[rgba(212,168,83,0.16)]"
+                    className="flex min-h-[62px] items-center gap-3 rounded-[16px] border border-white/[0.04] bg-[#05070B]/62 p-3 text-left transition-colors duration-200 hover:border-[rgba(212,168,83,0.16)]"
                   >
                     <span className="flex h-10 w-10 flex-none items-center justify-center rounded-[14px] border border-white/[0.05] bg-black/[0.24] text-[#D4A853]">
                       <ActionIcon size={19} strokeWidth={1.9} />
