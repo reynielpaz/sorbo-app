@@ -141,33 +141,33 @@ export function HomeHeader() {
         <img
           src="/images/brand/logo-sorbo.png"
           alt="Sorbo Café • Bistró"
-          className="h-16 w-auto object-contain brightness-0 invert"
+          className="h-[72px] w-auto object-contain brightness-0 invert"
         />
 
         <div>
           {loading ? (
-            <Skeleton className="h-[42px] w-[108px] rounded-[18px]" rounded />
+            <Skeleton className="h-8 w-[92px] rounded-full" rounded />
           ) : (
             <div
               aria-live="polite"
-              className={`inline-flex min-w-[112px] items-center gap-2.5 rounded-[20px] border px-3.5 py-2 shadow-[0_14px_28px_rgba(0,0,0,0.14),inset_0_1px_0_rgba(255,255,255,0.05)] ${
+              className={`inline-flex min-w-[92px] items-center gap-2 rounded-full border px-2.5 py-1.5 ${
                 isOpen
-                  ? 'border-[rgba(92,210,150,0.18)] bg-[linear-gradient(180deg,rgba(255,255,255,0.06)_0%,rgba(17,29,23,0.94)_100%)]'
-                  : 'border-[rgba(184,132,144,0.18)] bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(26,18,22,0.94)_100%)]'
+                  ? 'border-white/[0.05] bg-[#05070B]/88 text-white/72 shadow-[0_16px_36px_rgba(0,0,0,0.38)]'
+                  : 'border-white/[0.04] bg-[#03060A]/90 text-white/50 shadow-[0_16px_36px_rgba(0,0,0,0.38)]'
               }`}
             >
               <span
-                className={`h-2 w-2 shrink-0 rounded-full ${
+                className={`h-1.5 w-1.5 shrink-0 rounded-full ${
                   isOpen
-                    ? 'bg-[#54C78C] shadow-[0_0_10px_rgba(84,199,140,0.55)]'
-                    : 'bg-[#A36876] shadow-[0_0_10px_rgba(163,104,118,0.28)]'
+                    ? 'bg-[#54C78C]/80 shadow-[0_0_8px_rgba(84,199,140,0.36)]'
+                    : 'bg-[#EF4444]/40 shadow-[0_0_8px_rgba(239,68,68,0.35)]'
                 }`}
               />
               <span className="flex flex-col">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/92">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.12em]">
                   {isOpen ? 'Abierto' : 'Cerrado'}
                 </span>
-                {statusHint ? <span className="text-[10px] text-white/48">{statusHint}</span> : null}
+                {statusHint ? <span className="text-[9px] leading-3 text-white/42">{statusHint}</span> : null}
               </span>
             </div>
           )}

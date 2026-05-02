@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { generatePath, useNavigate } from 'react-router-dom';
 import type { Product } from '@/types';
@@ -61,7 +60,6 @@ function resolveBadge(tags: Product['tags']) {
 
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
   const navigate = useNavigate();
-  const [isFavorite, setIsFavorite] = useState(false);
   const badge = resolveBadge(product.tags);
   const categorySlug = product.category?.slug;
   const categoryIcon = getCategoryIcon(categorySlug);
@@ -72,25 +70,12 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
     navigate(generatePath(ROUTES.PRODUCT, { id: product.id }));
   }
 
-  function handleFavorite(event: React.MouseEvent<HTMLButtonElement>) {
-    event.stopPropagation();
-    setIsFavorite((current) => !current);
-  }
-
-  function handleAddToCart(event: React.MouseEvent<HTMLButtonElement>) {
-    event.stopPropagation();
-
-    if (import.meta.env.DEV) {
-      console.log('add to cart', product.id);
-    }
-  }
-
   return (
     <motion.article
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.97 }}
       onClick={handleNavigate}
-      className="group w-[80vw] max-w-[340px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] border border-white/[0.06] bg-white/[0.04]"
+      className="group w-[80vw] max-w-[340px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] border border-white/[0.04] bg-[#05070B]/82"
     >
       <div className="relative h-[160px] overflow-hidden rounded-t-[20px]">
         {product.imageUrl ? (
@@ -129,26 +114,6 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
           <span className="text-[11px] font-semibold text-white">{rating}</span>
         </div>
 
-        <button
-          type="button"
-          aria-label={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
-          onClick={handleFavorite}
-          className="absolute right-2.5 top-2.5 flex h-[30px] w-[30px] items-center justify-center rounded-full bg-black/40"
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill={isFavorite ? '#E8943A' : 'none'}
-            stroke={isFavorite ? '#E8943A' : 'rgba(255,255,255,0.5)'}
-            strokeWidth="2"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-          </svg>
-        </button>
-
         {badge ? (
           <span
             className={cn(
@@ -161,21 +126,17 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         ) : null}
       </div>
 
-      <div className="flex items-center justify-between px-3 py-2.5">
+      <div className="flex items-center justify-between gap-3 border-t border-white/[0.035] bg-[#03060A]/96 px-3 py-2.5">
         <div className="min-w-0 flex-1">
           <h3 className="line-clamp-1 font-playfair text-[14px] font-bold text-white">{product.name}</h3>
           <p className="mt-0.5 text-[10px] italic text-white/35">{getAppetitePhrase(index)}</p>
           <span className="mt-1 block text-[16px] font-extrabold text-[#E8943A]">{formatPrice(product.price)}</span>
         </div>
 
-        <button
-          type="button"
-          aria-label={`Agregar ${product.name}`}
-          onClick={handleAddToCart}
-          className="ml-3 flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-[10px] bg-gradient-to-br from-[#D4A853] to-[#B8923A] text-[13px] font-bold text-[#0B0F1A]"
-        >
-          +
-        </button>
+        <span className="shrink-0 inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.16em] text-[#E8C068]/85 transition-colors duration-200 group-hover:text-[#E8C068]">
+          <span className="h-px w-3 shrink-0 bg-[#D4A853]/40 transition-colors duration-200 group-hover:bg-[#D4A853]/65" aria-hidden="true" />
+          Ver detalle
+        </span>
       </div>
     </motion.article>
   );

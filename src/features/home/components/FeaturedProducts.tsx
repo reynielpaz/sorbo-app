@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductCardSkeleton } from '@/components/ui';
 import { useFeaturedProducts } from '../hooks/useFeaturedProducts';
@@ -6,14 +6,15 @@ import { ROUTES } from '@/utils/constants';
 
 export function FeaturedProducts() {
   const { products, loading, error } = useFeaturedProducts();
+  const navigate = useNavigate();
 
   return (
     <section className="mt-7">
       <div className="mb-4 flex items-center justify-between gap-3 px-5">
-        <h2 className="font-playfair text-[14px] font-semibold text-white/90">Lo más pedido</h2>
-        <Link to={ROUTES.MENU} className="text-[11px] font-medium text-[#D4A853]">
+        <h2 className="font-playfair text-[20px] font-semibold text-white/92">Lo más pedido</h2>
+        <button type="button" onClick={() => navigate(ROUTES.MENU, { state: { fromCta: true } })} className="text-[11px] font-medium text-[#D4A853]">
           Ver todo →
-        </Link>
+        </button>
       </div>
 
       {loading ? (

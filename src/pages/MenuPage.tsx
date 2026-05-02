@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
@@ -75,6 +76,10 @@ export function MenuPage() {
     clearFilters,
     reload,
   } = useMenuProducts();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
 
   const categoryName = activeCategory?.name;
   const subtitle = buildSubtitle({

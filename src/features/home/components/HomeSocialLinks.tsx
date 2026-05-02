@@ -67,7 +67,7 @@ export function HomeSocialLinks() {
             target="_blank"
             rel="noreferrer"
             aria-label={link.label}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06)_0%,rgba(16,16,18,0.94)_100%)] text-white/78 shadow-[0_14px_24px_rgba(0,0,0,0.16),inset_0_1px_0_rgba(255,255,255,0.04)] transition-[transform,border-color,color,background] duration-200 hover:-translate-y-[1px] hover:border-[rgba(212,168,83,0.18)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_0%,rgba(18,18,20,0.96)_100%)] hover:text-[#E8D6AD]"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.045] bg-[#05070B]/90 text-white/62 shadow-[0_18px_36px_rgba(0,0,0,0.34)] transition-[transform,border-color,color,background] duration-200 hover:-translate-y-[1px] active:-translate-y-[1px] hover:border-[#D4A853]/25 hover:bg-black/[0.36] hover:text-[#E8C068] active:border-[#D4A853]/25 active:bg-black/[0.36] active:text-[#E8C068]"
           >
             {link.icon}
           </a>

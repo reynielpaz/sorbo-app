@@ -20,6 +20,7 @@ const NAV_ITEMS: NavItem[] = [
 export function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
+  const fromCta = (location.state as { fromCta?: boolean } | null)?.fromCta === true;
 
   return (
     <nav
@@ -43,7 +44,8 @@ export function BottomNav() {
             >
               {isActive ? (
                 <motion.div
-                  layoutId="nav-indicator"
+                  layoutId={fromCta ? undefined : "nav-indicator"}
+                  initial={false}
                   transition={{ duration: 0.2 }}
                   className="relative flex h-[42px] w-[42px] items-center justify-center rounded-[14px] bg-gradient-to-br from-[#D4A853] to-[#B8923A] shadow-[0_4px_16px_rgba(212,168,83,0.35)]"
                 >
