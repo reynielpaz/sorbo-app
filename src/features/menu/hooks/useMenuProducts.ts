@@ -5,7 +5,6 @@ import { getAvailableProducts, getCategories } from '@/services/products';
 import type { Category, Product } from '@/types';
 import { preloadImages } from '@/utils/preloadImages';
 
-const MENU_PRODUCTS_CACHE_KEY = 'menu:products';
 const PRELOADED_MENU_IMAGE_URLS = new Set<string>();
 
 interface LoadMenuDataOptions {
@@ -20,7 +19,7 @@ interface LoadMenuDataResult {
 async function loadMenuData(options: LoadMenuDataOptions = {}): Promise<LoadMenuDataResult> {
   const shouldIgnoreCache = options.ignoreCache ?? false;
   const cachedCategories = shouldIgnoreCache ? null : getCached<Category[]>(CACHE_KEYS.CATEGORIES);
-  const cachedProducts = shouldIgnoreCache ? null : getCached<Product[]>(MENU_PRODUCTS_CACHE_KEY);
+  const cachedProducts = shouldIgnoreCache ? null : getCached<Product[]>(CACHE_KEYS.MENU_PRODUCTS);
 
   const [categories, products] = await Promise.all([
     cachedCategories && cachedCategories.length > 0 ? Promise.resolve(cachedCategories) : getCategories(),
@@ -28,7 +27,7 @@ async function loadMenuData(options: LoadMenuDataOptions = {}): Promise<LoadMenu
   ]);
 
   setCache(CACHE_KEYS.CATEGORIES, categories);
-  setCache(MENU_PRODUCTS_CACHE_KEY, products);
+  setCache(CACHE_KEYS.MENU_PRODUCTS, products);
 
   return { categories, products };
 }

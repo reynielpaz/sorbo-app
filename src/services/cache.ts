@@ -22,4 +22,5 @@ export const CACHE_KEYS = {
   PROMOTIONS: 'home:promotions',
   FEATURED_PRODUCTS: 'home:featuredProducts',
   CATEGORIES: 'home:categories',
+  MENU_PRODUCTS: 'menu:products',
 } as const;
