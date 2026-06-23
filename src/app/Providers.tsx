@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { ErrorBoundary } from '@/components/layout/ErrorBoundary';
 import { preloadHomeData } from '@/services/preloader';
 import { authStore } from '@/store/authStore';
 
@@ -15,8 +16,10 @@ export function Providers({ children }: ProvidersProps) {
   }, []);
 
   return (
-    <BrowserRouter>
-      {children}
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        {children}
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
