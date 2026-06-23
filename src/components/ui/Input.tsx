@@ -31,7 +31,8 @@ export function Input({
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const errorId = `${inputId}-error`;
-  const inputAriaDescribedBy = [ariaDescribedBy, error ? errorId : undefined].filter(Boolean).join(' ') || undefined;
+  const inputAriaDescribedBy =
+    [ariaDescribedBy, error ? errorId : undefined].filter(Boolean).join(' ') || undefined;
   const [focused, setFocused] = useState(false);
   const hasValue = typeof value === 'string' ? value.length > 0 : value !== undefined && value !== null;
   const isFloating = focused || hasValue;
@@ -43,7 +44,7 @@ export function Input({
         id={inputId}
         value={value}
         disabled={disabled}
-        aria-invalid={ariaInvalid ?? Boolean(error)}
+        aria-invalid={error ? true : ariaInvalid}
         aria-describedby={inputAriaDescribedBy}
         placeholder={isFloating ? placeholder : ''}
         onFocus={(event) => {
@@ -86,7 +87,7 @@ export function Input({
       ) : null}
 
       {error ? (
-        <p id={errorId} className="mt-1 text-xs text-[#E53935]">
+        <p id={errorId} role="alert" className="mt-1 text-xs text-[#E53935]">
           {error}
         </p>
       ) : null}

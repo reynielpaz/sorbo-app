@@ -24,6 +24,7 @@ export function BottomNav() {
 
   return (
     <nav
+      aria-label="Navegación principal"
       className={cn(
         'fixed left-[14px] right-[14px] z-30',
         'bottom-[calc(env(safe-area-inset-bottom)+14px)] h-[65px]',
@@ -39,7 +40,10 @@ export function BottomNav() {
           return (
             <button
               key={item.route}
+              type="button"
               onClick={() => navigate(item.route)}
+              aria-current={isActive ? 'page' : undefined}
+              aria-label={isActive ? `${item.label}, página actual` : `Ir a ${item.label}`}
               className="flex h-full flex-1 cursor-pointer flex-col items-center justify-center"
             >
               {isActive ? (

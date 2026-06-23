@@ -1,18 +1,17 @@
-import { motion } from 'framer-motion';
+import { motion, type HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/utils/cn';
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg' | 'full';
 
-interface ButtonProps {
+interface ButtonProps
+  extends Omit<HTMLMotionProps<'button'>, 'children' | 'className' | 'disabled' | 'size'> {
   children: React.ReactNode;
   variant?: ButtonVariant;
   size?: ButtonSize;
   disabled?: boolean;
   loading?: boolean;
-  onClick?: () => void;
   className?: string;
-  type?: 'button' | 'submit' | 'reset';
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
@@ -37,17 +36,21 @@ export function Button({
   size = 'md',
   disabled = false,
   loading = false,
-  onClick,
   className,
   type = 'button',
+  role,
+  'aria-busy': ariaBusy,
+  ...buttonProps
 }: ButtonProps) {
   const isDisabled = disabled || loading;
 
   return (
     <motion.button
+      {...buttonProps}
       type={type}
-      onClick={onClick}
+      role={role ?? 'button'}
       disabled={isDisabled}
+      aria-busy={loading ? true : ariaBusy}
       whileHover={isDisabled ? {} : { scale: 1.02 }}
       whileTap={isDisabled ? {} : { scale: 0.98 }}
       transition={{ duration: 0.15 }}
