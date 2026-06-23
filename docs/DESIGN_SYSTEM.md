@@ -90,11 +90,12 @@ nativas como `bg-sorbo-glass`, `border-sorbo-glass-border` y `shadow-sorbo-gold`
 | `text-sm` | 14px | Labels, subtítulos |
 | `text-xs` | 12px | Badges, metadata |
 
-### Importación (fonts.css)
+### Carga optimizada
 
-```css
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400&display=swap');
-```
+Las fuentes se declaran en `index.html` con `preconnect`, precarga de la hoja y activación
+no bloqueante. `src/styles/fonts.css` no contiene `@import`. Workbox conserva en runtime
+la hoja de `fonts.googleapis.com` y los archivos de `fonts.gstatic.com` para reutilizarlos
+offline después de la primera carga exitosa.
 
 ---
 
@@ -229,7 +230,11 @@ const tapScale = {
 };
 ```
 
-### Partículas Doradas (tsParticles config)
+### Partículas Doradas
+
+El splash actual usa partículas CSS ligeras definidas en `animations.css`. La integración
+con tsParticles sigue en roadmap y no debe describirse como activa. Configuración de
+referencia futura:
 
 ```typescript
 const particlesConfig = {

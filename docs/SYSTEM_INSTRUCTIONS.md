@@ -20,6 +20,16 @@ elegante, moderna, provocativa y enganchadora que maximice las ventas.
 **Target de usuarios:** Clientes del restaurante en Venezuela, principalmente desde
 celulares Android e iPhone. La app DEBE verse espectacular en móvil primero.
 
+### Estado real del repositorio (Junio 2026)
+
+- La base de **Fase 0/1 está estabilizada**.
+- Splash, onboarding, auth, home, menú, detalle de producto, carrito, checkout,
+  reservaciones y perfil tienen implementación local.
+- Los servicios usan Supabase, pero el esquema/migraciones de producción todavía no
+  están versionados en el repositorio.
+- Admin, historial de órdenes, tracking, lealtad, 3D y push notifications siguen en roadmap.
+- GSAP se usa en el splash. Lenis y tsParticles están instalados, pero aún no se usan.
+
 ---
 
 ## 2. TECH STACK (NO cambiar sin autorización)
@@ -31,9 +41,10 @@ FRONTEND
 ├── Vite 6                → Bundler y dev server
 ├── Tailwind CSS 4        → Utility-first CSS
 ├── Framer Motion         → Animaciones de componentes y transiciones de página
-├── GSAP + ScrollTrigger  → Animaciones scroll-driven (splash, onboarding)
-├── Lenis                 → Smooth scrolling
-├── tsParticles           → Partículas decorativas
+├── GSAP                  → Timeline del splash (activo)
+├── GSAP ScrollTrigger    → Roadmap para animaciones scroll-driven
+├── Lenis                 → Instalado, uso futuro
+├── tsParticles           → Instalado, uso futuro; hoy las partículas son CSS
 ├── Zustand               → State management global
 ├── React Router v7       → Navegación SPA
 └── vite-plugin-pwa       → PWA (manifest, service worker, install prompt)
@@ -46,8 +57,8 @@ BACKEND
 └── Supabase Realtime     → Updates en tiempo real (opcional)
 
 DEPLOY
-├── Vercel                → Hosting + CDN + SSL
-└── GitHub                → Repo privado, rama main + develop
+├── Vercel                → Destino previsto; despliegue productivo no verificado en repo
+└── GitHub                → main + ramas de trabajo con PR
 
 EXTRAS
 ├── n8n                   → Automatización (notificaciones, registro de ventas)
@@ -71,7 +82,8 @@ EXTRAS
 - Exportar tipos desde `types/` o desde el `types.ts` de cada feature
 
 ### Componentes React
-- Functional components SOLAMENTE (no class components)
+- Functional components por defecto; `ErrorBoundary` es la excepción legítima porque
+  React todavía requiere una class boundary para `componentDidCatch`
 - Hooks en la parte superior del componente
 - Props destructuradas con tipos
 - Un componente por archivo (excepto sub-componentes internos pequeños)
@@ -136,30 +148,22 @@ OBLIGATORIO:
 ### Paleta de Colores
 
 ```css
-/* PRIMARIOS — Del local real de Sorbo */
---sorbo-black:        #0A0908;     /* Fondo principal */
---sorbo-dark:         #1A1612;     /* Superficies elevadas, cards */
---sorbo-dark-warm:    #2A2420;     /* Bordes, separadores */
-
-/* ACENTOS — Apetito + Lujo */
---sorbo-gold:         #D4A853;     /* CTA principal, precios, destacados */
---sorbo-cream:        #F5E6C8;     /* Texto principal sobre fondo oscuro */
---sorbo-amber:        #E8943A;     /* Notificaciones, badges, urgencia */
-
-/* FUNCIONALES */
---sorbo-neon:         #00B4FF;     /* Hover, estados activos (del neón real) */
---sorbo-green:        #4CAF50;     /* Éxito, confirmaciones */
---sorbo-red:          #E53935;     /* Errores, "agotado" */
-
-/* GLASSMORPHISM */
---sorbo-glass:        rgba(26, 22, 18, 0.65);
---sorbo-glass-light:  rgba(245, 230, 200, 0.08);
---sorbo-glass-border: rgba(212, 168, 83, 0.15);
-
-/* GRADIENTES */
---sorbo-gradient-hero:  linear-gradient(135deg, #0A0908 0%, #1A1612 50%, #2A1A0A 100%);
---sorbo-gradient-gold:  linear-gradient(135deg, #D4A853 0%, #E8943A 100%);
+@theme {
+  --color-sorbo-black: #0b0f1a;
+  --color-sorbo-dark: #0e1225;
+  --color-sorbo-warm: #131830;
+  --color-sorbo-gold: #d4a853;
+  --color-sorbo-gold-light: #e8c068;
+  --color-sorbo-gold-dark: #b8923a;
+  --color-sorbo-amber: #e8943a;
+  --color-sorbo-cream: #ffffff;
+  --color-sorbo-green: #00dc82;
+  --color-sorbo-red: #ef4444;
+}
 ```
+
+Los efectos glass, gradientes y sombras complejas permanecen en `:root`. No duplicar
+la paleta base fuera de `@theme`.
 
 ### Tipografía
 - **Display/Títulos:** Playfair Display (serif, elegante, para headings grandes)
@@ -174,9 +178,10 @@ OBLIGATORIO:
 
 ### Animaciones
 - **Transiciones de página:** Framer Motion AnimatePresence con fade + slide
-- **Scroll animations:** GSAP ScrollTrigger (solo en splash/onboarding)
+- **Splash:** GSAP timeline
+- **Scroll animations:** GSAP ScrollTrigger (roadmap; no está conectado hoy)
 - **Micro-interacciones:** Framer Motion (hover, tap, layout animations)
-- **Partículas:** tsParticles con color dorado (#D4A853)
+- **Partículas actuales:** CSS; tsParticles queda reservado para una fase futura
 - **Timing:** `ease: [0.25, 0.1, 0.25, 1]` (ease-out suave) como default
 - **Duration:** 0.3s para micro, 0.6s para transiciones, 1-2s para reveals
 
@@ -184,34 +189,38 @@ OBLIGATORIO:
 
 ## 5. ARQUITECTURA DE LA APP
 
-### Flujo de Pantallas
+### Flujo de Pantallas Actual
 ```
 SPLASH (3-4s) → ONBOARDING (2-3 slides, skip) → AUTH → HOME
                                                          ↓
                                                ┌─────────────────────┐
                                                │   BOTTOM NAV        │
-                                               │ Home│Menu│Cart│Perfil│
+                                               │Home│Menú│Reserva│Perfil│
                                                └─────────────────────┘
                                                     ↓        ↓
-                                              Product Detail  Checkout → WhatsApp
-                                                              ↓
-                                                         Order Tracking
+                                              Product Detail  Reserva → WhatsApp
+                                                     ↓
+                                              Cart → Checkout → WhatsApp
 ```
 
-### Rutas
+### Rutas implementadas
 ```
 /                   → Splash + redirect
 /onboarding         → Slides de bienvenida
 /auth               → Login / Register / Guest
 /home               → Home screen (default after auth)
 /menu               → Catálogo completo
-/menu/:categorySlug → Categoría específica
 /product/:id        → Detalle de producto
+/reservations       → Solicitud de reserva por WhatsApp
 /cart               → Carrito de compras
 /checkout           → Proceso de pago → WhatsApp
+/profile            → Perfil del usuario
+```
+
+### Rutas reservadas para roadmap
+```
 /orders             → Historial de pedidos
 /orders/:id         → Detalle + tracking de orden
-/profile            → Perfil del usuario
 /admin              → Panel admin (protegido con rol admin)
 /admin/products     → CRUD de productos
 /admin/orders       → Ver pedidos
@@ -220,11 +229,14 @@ SPLASH (3-4s) → ONBOARDING (2-3 slides, skip) → AUTH → HOME
 
 ### Roles de Usuario
 ```
-guest    → Puede ver menú, NO puede hacer pedidos
-user     → Puede ver menú + hacer pedidos + ver historial
-admin    → Todo lo anterior + panel de administración
+guest    → Puede navegar, usar carrito y completar el handoff a WhatsApp
+user     → Puede autenticarse, hacer pedidos y ver su perfil
+admin    → Rol previsto para el panel de administración futuro
 ```
-La protección se hace con Supabase RLS + middleware en React Router.
+
+La implementación actual permite al invitado navegar, usar el carrito y completar el
+handoff a WhatsApp. Todavía no incluye guards para orders/admin. La protección final debe
+combinar guards de React Router con Supabase RLS.
 
 ---
 
@@ -235,15 +247,14 @@ La protección se hace con Supabase RLS + middleware en React Router.
 2. Toca "Ir al Checkout"
 3. Ve un Bottom Sheet o pantalla con:
    a. Resumen de productos con fotos mini, nombres, cantidades, precios
-   b. Total a pagar (en Bs y opcionalmente USD)
+   b. Total a pagar (actualmente mostrado en USD; el helper soporta VES)
    c. Selector de tipo de pedido: "Para llevar" / "Comer aquí"
    d. Campo de notas especiales (opcional)
    e. Selector de método de pago con botones (Pago Móvil, Binance, Zelle, etc.)
-4. Al seleccionar método de pago, se despliega una card elegante con:
-   - Los datos bancarios/wallet de Sorbo para ese método
-   - Botón "Copiar" para cada dato
-5. Botón "Enviar pedido por WhatsApp"
-6. Se abre WhatsApp con mensaje pre-armado:
+4. Selecciona un método de pago disponible.
+5. Completa nombre y teléfono.
+6. Toca "Enviar pedido por WhatsApp".
+7. La app intenta registrar el pedido en Supabase y abre WhatsApp con un mensaje pre-armado:
    "🍔 *Nuevo pedido Sorbo*
    
    👤 Nombre: [nombre del usuario]
@@ -257,8 +268,7 @@ La protección se hace con Supabase RLS + middleware en React Router.
    🏷️ Tipo: Para llevar
    
    ✅ Enviado desde Sorbo App"
-7. El pedido se guarda en Supabase con estado "pending"
-8. El usuario puede ver el estado en /orders
+8. La pantalla muestra un ticket temporal y permite reabrir WhatsApp.
 ```
 
 **IMPORTANTE:** NO implementar pasarela de pago real. El pago se hace externo
@@ -266,9 +276,9 @@ La protección se hace con Supabase RLS + middleware en React Router.
 
 ---
 
-## 7. PANEL ADMIN
+## 7. PANEL ADMIN (ROADMAP)
 
-Ruta: `/admin` — Protegida por Supabase RLS (solo rol `admin`)
+Ruta prevista: `/admin` — todavía no registrada en el router actual.
 
 ### Funcionalidades del Admin
 ```
@@ -286,11 +296,11 @@ Ruta: `/admin` — Protegida por Supabase RLS (solo rol `admin`)
 └── Configuración    → Datos de pago, horario, redes sociales
 ```
 
-### Seguridad del Admin
+### Seguridad prevista del Admin
 ```sql
--- En Supabase, tabla user_roles:
--- Solo el dueño de Sorbo tiene role = 'admin'
--- RLS policy: admin routes solo accesibles si user.role = 'admin'
+-- El rol administrativo vive en public.profiles.role.
+-- Las policies deben usar public.is_admin() SECURITY DEFINER
+-- o un claim de app_metadata gestionado desde servidor.
 -- No hay "botón secreto" — es una ruta protegida con autenticación real
 ```
 
@@ -301,13 +311,13 @@ Ruta: `/admin` — Protegida por Supabase RLS (solo rol `admin`)
 ```
 sorbo-app/
 ├── public/
-│   ├── manifest.json
-│   ├── icons/
 │   ├── images/
+│   │   ├── auth/
+│   │   ├── brand/
 │   │   ├── hero/
-│   │   ├── products/
-│   │   └── brand/
-│   └── fonts/
+│   │   ├── menu/
+│   │   ├── payments/
+│   │   └── reservations/
 ├── src/
 │   ├── app/
 │   │   ├── App.tsx
@@ -316,21 +326,16 @@ sorbo-app/
 │   ├── components/
 │   │   ├── ui/               ← Primitivos reutilizables
 │   │   ├── layout/           ← AppShell, BottomNav, Header
-│   │   ├── product/          ← ProductCard, ProductGrid, etc.
-│   │   ├── cart/             ← CartItem, CartSummary, etc.
-│   │   └── animations/       ← SplashScreen, ParticleBackground, etc.
+│   │   ├── motion/           ← Transiciones compartidas
+│   │   └── product/          ← ProductCard
 │   ├── features/
-│   │   ├── auth/
 │   │   ├── home/
 │   │   ├── menu/
 │   │   ├── cart/
-│   │   ├── checkout/
-│   │   ├── orders/
-│   │   ├── profile/
-│   │   ├── onboarding/
-│   │   └── admin/            ← Panel de administración
+│   │   ├── product/
+│   │   └── reservations/
 │   ├── hooks/
-│   ├── lib/                  ← Config de Supabase, GSAP, analytics
+│   ├── lib/                  ← Cliente de Supabase
 │   ├── services/             ← API calls a Supabase
 │   ├── store/                ← Zustand stores
 │   ├── styles/
@@ -347,13 +352,14 @@ sorbo-app/
 │   ├── TECH_SPEC.md
 │   ├── DESIGN_SYSTEM.md
 │   ├── ROADMAP.md
-│   ├── MENU_DATA.md
-│   └── ARCHITECTURE.md
+│   └── MENU_DATA.md
 ├── supabase/
-│   ├── migrations/
-│   └── seed.sql
-└── [configs: vite, tailwind, ts, eslint, prettier, git]
+│   └── migrations/           ← Placeholder; no hay migraciones versionadas todavía
+└── [configs: vite, ts, eslint, vitest, git]
 ```
+
+El manifest PWA se genera desde `vite.config.ts` mediante `vite-plugin-pwa`; no existe
+un archivo de manifest mantenido manualmente.
 
 **REGLA:** Si no sabes dónde va un archivo, PREGUNTA. No inventes carpetas nuevas.
 
@@ -405,7 +411,7 @@ npm run lint             # ESLint check
 npm run format           # Prettier format
 
 # Git
-git checkout develop     # Siempre trabajar en develop
+git switch codex/menu-premium-experience  # Rama de trabajo actual (Junio 2026)
 git pull                 # Antes de empezar
 git add .
 git commit -m "feat(feature): descripción corta"
@@ -441,5 +447,5 @@ chore(deps): update framer-motion to v12
 
 ---
 
-*Última actualización: Marzo 2026*
+*Última actualización: Junio 2026*
 *Proyecto por: OpenSyntheAI (https://www.opensyntheai.com)*

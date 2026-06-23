@@ -15,43 +15,64 @@
   <img src="https://img.shields.io/badge/Vite-6-646CFF?style=flat-square&logo=vite" alt="Vite 6"/>
   <img src="https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat-square&logo=tailwindcss" alt="Tailwind 4"/>
   <img src="https://img.shields.io/badge/Supabase-Backend-3FCF8E?style=flat-square&logo=supabase" alt="Supabase"/>
-  <img src="https://img.shields.io/badge/PWA-Installable-5A0FC8?style=flat-square" alt="PWA"/>
+  <img src="https://img.shields.io/badge/PWA-Service_Worker-5A0FC8?style=flat-square" alt="PWA service worker"/>
 </p>
 
 ---
 
 ## About
 
-Sorbo App is a **premium Progressive Web App** built for Sorbo Café • Bistró, a restaurant and coffee shop in Venezuela. The app delivers a cinematic, engagement-first digital experience optimized for mobile devices — installable directly from the browser without any app store.
+Sorbo App is a mobile-first Progressive Web App for **Sorbo Café • Bistró**, a
+restaurant and coffee shop in Venezuela.
 
-### Key Features
+### Current development status — June 2026
 
-- **Cinematic Splash Intro** — GSAP-powered animations with golden particles
-- **Dark Luxury Design** — Black + gold palette inspired by the real venue
-- **Full Product Catalog** — Visual menu with categories, customization, and search
-- **Smart Cart + WhatsApp Checkout** — Seamless order flow redirecting to WhatsApp
-- **Admin Panel** — Protected dashboard for the owner to manage products and promotions
-- **Recommendation Engine** — Smart product suggestions based on user behavior
-- **PWA** — Installable on Android and iOS, works offline for core features
-- **Mobile-First** — Designed for 375px+ viewports, responsive up to desktop
+The **Phase 0/1 foundation is stabilized**: strict TypeScript, CI, design system,
+accessible UI primitives, route transitions, error handling, PWA generation, cinematic
+splash and onboarding are in place.
+
+The current branch also contains working implementations for auth, home, menu, product
+detail, persistent cart, checkout through WhatsApp, reservations and profile. These flows
+still require a correctly configured Supabase project, schema and production data before
+they can be considered production-ready.
+
+#### Implemented now
+
+- **Cinematic splash** using GSAP and lightweight CSS particles
+- **Onboarding** with swipe navigation and persisted completion state
+- **Supabase auth** for email, Google OAuth and guest mode
+- **Home, menu and product detail** backed by Supabase services
+- **Persistent cart and checkout** with order registration and WhatsApp handoff
+- **Reservation request flow** through WhatsApp
+- **PWA service worker** with runtime caching for Google Fonts
+- **Dark Luxury design system**, accessibility improvements and responsive mobile layout
+
+#### Roadmap / not production-ready
+
+- Admin dashboard and CRUD management
+- Order history and order tracking routes
+- Advanced recommendation and loyalty systems
+- 3D table selection, push notifications and install-prompt polish
+- ScrollTrigger experiences, Lenis smooth scrolling and tsParticles effects
+- Final PWA icons, production Supabase migrations and verified production deployment
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **UI** | React 19 + TypeScript | Component framework |
-| **Bundler** | Vite 6 | Dev server + production builds |
-| **Styling** | Tailwind CSS 4 | Utility-first CSS |
-| **Animation** | GSAP + Framer Motion | Scroll animations + transitions |
-| **Smooth Scroll** | Lenis | Buttery smooth scrolling |
-| **Particles** | tsParticles | Decorative golden particles |
-| **State** | Zustand | Global state management |
-| **Routing** | React Router v7 | SPA navigation |
-| **Backend** | Supabase | Auth + DB + Storage + Realtime |
-| **PWA** | vite-plugin-pwa | Service worker + manifest |
-| **Deploy** | Vercel | Hosting + CDN |
+| Layer | Technology | Current use |
+|-------|-----------|-------------|
+| **UI** | React 19 + TypeScript | Active |
+| **Bundler** | Vite 6 | Active |
+| **Styling** | Tailwind CSS 4 | Active through CSS-first `@theme` tokens |
+| **Animation** | GSAP + Framer Motion | GSAP splash + Framer Motion UI/transitions |
+| **Smooth Scroll** | Lenis | Installed, roadmap |
+| **Particles** | CSS + tsParticles | CSS particles active; tsParticles installed, roadmap |
+| **State** | Zustand | Auth and persistent cart |
+| **Routing** | React Router v7 | Active SPA routing |
+| **Backend** | Supabase | Auth and data services; migrations not yet versioned |
+| **PWA** | vite-plugin-pwa | Generated manifest/service worker and runtime caching |
+| **Deploy** | Vercel | Intended target; production status is not documented in-repo |
 
 ---
 
@@ -68,11 +89,11 @@ Sorbo App is a **premium Progressive Web App** built for Sorbo Café • Bistró
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/sorbo-app.git
+git clone https://github.com/reynielpaz/sorbo-app.git
 cd sorbo-app
 
 # Install dependencies
-npm install
+npm ci
 
 # Copy environment variables
 cp .env.example .env.local
@@ -102,31 +123,23 @@ VITE_APP_URL=https://your-domain.com
 
 ```
 sorbo-app/
-├── public/                     # Static assets
-│   ├── manifest.json           # PWA manifest
-│   ├── icons/                  # App icons (192, 512)
-│   ├── images/                 # Hero, products, brand
-│   └── fonts/                  # Custom typefaces
+├── public/                     # Static image assets
+│   └── images/                 # Auth, hero, menu, payments and brand
 ├── src/
 │   ├── app/                    # App shell (App, Router, Providers)
 │   ├── components/
 │   │   ├── ui/                 # Reusable primitives
 │   │   ├── layout/             # App shell, navigation
 │   │   ├── product/            # Product-specific components
-│   │   ├── cart/               # Cart components
-│   │   └── animations/         # Splash, particles, reveals
+│   │   └── motion/             # Shared route transitions
 │   ├── features/               # Feature modules
-│   │   ├── auth/               # Authentication
 │   │   ├── home/               # Home screen
 │   │   ├── menu/               # Product catalog
 │   │   ├── cart/               # Shopping cart
-│   │   ├── checkout/           # Payment + WhatsApp flow
-│   │   ├── orders/             # Order history + tracking
-│   │   ├── profile/            # User profile
-│   │   ├── onboarding/         # Welcome slides
-│   │   └── admin/              # Admin panel (protected)
+│   │   ├── product/            # Product detail composition
+│   │   └── reservations/       # Reservation form and WhatsApp handoff
 │   ├── hooks/                  # Global custom hooks
-│   ├── lib/                    # Library configs (Supabase, GSAP)
+│   ├── lib/                    # Supabase client
 │   ├── services/               # API / data layer
 │   ├── store/                  # Zustand stores
 │   ├── styles/                 # Global CSS + animations
@@ -135,9 +148,13 @@ sorbo-app/
 │   ├── pages/                  # Route pages
 │   └── main.tsx                # Entry point
 ├── docs/                       # AI agent context + documentation
-├── supabase/                   # Database migrations + seeds
+├── supabase/migrations/        # Placeholder; migrations not committed yet
+├── .github/workflows/          # CI and Supabase keep-alive
 └── [config files]
 ```
+
+The web app manifest is generated by `vite-plugin-pwa` from `vite.config.ts`; there is
+no hand-maintained manifest file.
 
 ---
 
@@ -149,18 +166,23 @@ sorbo-app/
 | `npm run build` | Production build |
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | Run ESLint |
+| `npm test` | Run Vitest test suite |
 | `npm run format` | Format with Prettier |
 
 ---
 
 ## Git Workflow
 
+Current repository workflow:
+
+```text
+main                           → Stable integration branch and CI push target
+codex/menu-premium-experience  → Current working branch (June 2026)
+feature/* or codex/*           → Scoped development branches
 ```
-main          → Production (deploy trigger)
-develop       → Active development
-feature/*     → Individual features
-hotfix/*      → Urgent fixes
-```
+
+Open a pull request before merging a working branch into `main`. The existing `develop`
+branch is not the mandatory integration branch for the current work.
 
 ### Commit Convention
 
@@ -177,9 +199,9 @@ chore(scope): maintenance
 
 ## Deployment
 
-The app is deployed on **Vercel** with automatic deployments:
-- Push to `main` → Production deploy
-- Push to `develop` → Preview deploy
+Vercel is the intended hosting target, but this repository does not contain enough
+configuration to claim a verified production deployment. GitHub Actions currently runs
+lint, typecheck, tests and build for pull requests and pushes to `main`.
 
 ---
 
@@ -187,12 +209,12 @@ The app is deployed on **Vercel** with automatic deployments:
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--sorbo-black` | `#0A0908` | Primary background |
-| `--sorbo-dark` | `#1A1612` | Card surfaces |
-| `--sorbo-gold` | `#D4A853` | CTAs, prices, highlights |
-| `--sorbo-cream` | `#F5E6C8` | Body text |
-| `--sorbo-amber` | `#E8943A` | Badges, urgency |
-| `--sorbo-neon` | `#00B4FF` | Hover states |
+| `--color-sorbo-black` | `#0B0F1A` | Primary background |
+| `--color-sorbo-dark` | `#0E1225` | Card surfaces |
+| `--color-sorbo-warm` | `#131830` | Elevated surfaces |
+| `--color-sorbo-gold` | `#D4A853` | CTAs, prices, highlights |
+| `--color-sorbo-cream` | `#FFFFFF` | Primary text |
+| `--color-sorbo-amber` | `#E8943A` | Badges and urgency |
 
 **Typography:** Playfair Display (display) + DM Sans (body)
 
@@ -200,15 +222,15 @@ The app is deployed on **Vercel** with automatic deployments:
 
 ## Roadmap
 
-- [x] Phase 0 — Project setup + design system
-- [ ] Phase 1 — Splash + Onboarding
-- [ ] Phase 2 — Auth + Home
-- [ ] Phase 3 — Menu + Product Detail
-- [ ] Phase 4 — Cart + Checkout + WhatsApp
-- [ ] Phase 5 — Orders + Profile + Polish
-- [ ] Phase 6 — Admin Panel
-- [ ] Phase 7 — Recommendations + Loyalty
-- [ ] Phase 8 — 3D Reservations (Spline)
+- ✅ Phase 0 — Project setup + design system
+- ✅ Phase 1 — Splash + onboarding
+- 🟡 Phase 2 — Auth + home implemented; production integration pending
+- 🟡 Phase 3 — Menu + product detail implemented; production data pending
+- 🟡 Phase 4 — Cart + checkout + WhatsApp implemented; end-to-end validation pending
+- 🟡 Phase 5 — Profile and PWA polish partial; order history pending
+- ⏳ Phase 6 — Admin Panel
+- ⏳ Phase 7 — Advanced recommendations + loyalty
+- 🟡 Phase 8 — Reservation form implemented; 3D table experience pending
 
 ---
 

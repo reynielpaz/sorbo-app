@@ -1,6 +1,11 @@
-# PROMPT PARA CLAUDE CODE — Fase 0: Setup Completo
+# ARCHIVO HISTÓRICO — Prompt de Fase 0
 
-> COPIA Y PEGA ESTE PROMPT COMPLETO EN CLAUDE CODE
+> **No ejecutar este documento como instrucciones actuales.** La Fase 0 ya fue completada
+> y la estructura, paleta, carga de fuentes y configuración PWA evolucionaron desde este
+> prompt original. Para trabajo vigente usa `SYSTEM_INSTRUCTIONS.md`, `TECH_SPEC.md`,
+> `DESIGN_SYSTEM.md` y el código del repositorio como fuente de verdad.
+
+> El texto siguiente se conserva únicamente como registro histórico del setup inicial.
 
 ---
 

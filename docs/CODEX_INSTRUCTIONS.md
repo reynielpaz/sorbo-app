@@ -13,6 +13,10 @@ Se instala como app nativa desde el navegador. Diseño Dark Luxury (negro + dora
 
 **Stack:** React 19 + TypeScript + Vite 6 + Tailwind CSS 4 + Supabase + Zustand
 
+**Estado actual:** Base Fase 0/1 estabilizada. Auth, Home, Menú, Producto, Carrito,
+Checkout, Reservaciones y Perfil tienen implementación local. Admin, historial de
+órdenes, tracking y 3D siguen en roadmap.
+
 ---
 
 ## REGLAS CRÍTICAS
@@ -30,11 +34,10 @@ Se instala como app nativa desde el navegador. Diseño Dark Luxury (negro + dora
 ## PALETA DE COLORES
 
 ```
-Negro:   #0A0908 (fondo)     Dorado:  #D4A853 (CTA, precios)
-Dark:    #1A1612 (cards)      Crema:   #F5E6C8 (texto)
-Warm:    #2A2420 (bordes)     Amber:   #E8943A (badges)
-Neon:    #00B4FF (hover)      Verde:   #4CAF50 (éxito)
-                               Rojo:    #E53935 (error)
+Negro:   #0B0F1A (fondo)     Dorado:  #D4A853 (CTA, precios)
+Dark:    #0E1225 (cards)      Crema:   #FFFFFF (texto)
+Warm:    #131830 (superficie) Amber:   #E8943A (badges)
+Verde:   #00DC82 (éxito)      Rojo:    #EF4444 (error)
 ```
 
 ---
@@ -45,17 +48,16 @@ Neon:    #00B4FF (hover)      Verde:   #4CAF50 (éxito)
 src/
 ├── components/ui/        → Botones, cards, inputs (reutilizables)
 ├── components/layout/    → BottomNav, Header, AppShell
-├── components/product/   → ProductCard, ProductGrid
-├── components/cart/      → CartItem, CartSummary
-├── components/animations/→ SplashScreen, Particles
-├── features/             → auth/, home/, menu/, cart/, checkout/, orders/, profile/, admin/
+├── components/product/   → ProductCard
+├── components/motion/    → Transiciones compartidas
+├── features/             → home/, menu/, cart/, product/, reservations/
 │   └── [feature]/
 │       ├── components/
 │       ├── hooks/
 │       ├── services/
 │       └── types.ts
 ├── hooks/                → Hooks globales
-├── lib/                  → Config (supabase.ts, gsap.ts)
+├── lib/                  → Cliente Supabase
 ├── services/             → API calls
 ├── store/                → Zustand stores
 ├── styles/               → globals.css, animations.css, fonts.css

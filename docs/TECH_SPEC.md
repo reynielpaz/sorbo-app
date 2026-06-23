@@ -1,5 +1,9 @@
 # TECH SPEC — Sorbo Café • Bistró Web App
 
+> Estado: especificación de arquitectura objetivo. Las secciones de base de datos y RLS
+> son propuestas para futuras migraciones; `supabase/migrations/` todavía no contiene el
+> esquema productivo.
+
 ---
 
 ## 1. Dependencias y Versiones
@@ -95,8 +99,8 @@ export default defineConfig({
         name: 'Sorbo Café • Bistró',
         short_name: 'Sorbo',
         description: 'Pide tu comida favorita desde tu celular',
-        theme_color: '#0A0908',
-        background_color: '#0A0908',
+        theme_color: '#000000',
+        background_color: '#000000',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',
@@ -107,7 +111,27 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}']
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'google-fonts-stylesheets',
+              cacheableResponse: { statuses: [0, 200] },
+              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 }
+            }
+          },
+          {
+            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-webfonts',
+              cacheableResponse: { statuses: [0, 200] },
+              expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 }
+            }
+          }
+        ]
       }
     })
   ],
@@ -261,7 +285,30 @@ insert into app_config (key, value) values
 
 ### Row Level Security (RLS)
 
+Las políticas administrativas no deben consultar directamente `profiles` desde cada
+policy. Como `profiles` también tiene RLS, ese patrón puede provocar recursión o resultados
+inesperados. La opción recomendada es encapsular la comprobación en una función
+`SECURITY DEFINER` con `search_path` vacío y referencias totalmente calificadas:
+
 ```sql
+create or replace function public.is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists (
+    select 1
+    from public.profiles
+    where id = (select auth.uid())
+      and role = 'admin'
+  );
+$$;
+
+revoke all on function public.is_admin() from public;
+grant execute on function public.is_admin() to authenticated;
+
 -- Profiles: usuarios solo ven su propio perfil
 alter table profiles enable row level security;
 create policy "Users can view own profile" on profiles for select using (auth.uid() = id);
@@ -270,65 +317,80 @@ create policy "Users can update own profile" on profiles for update using (auth.
 -- Products: todos pueden ver, solo admin puede modificar
 alter table products enable row level security;
 create policy "Anyone can view products" on products for select using (true);
-create policy "Admin can manage products" on products for all using (
-  exists (select 1 from profiles where id = auth.uid() and role = 'admin')
-);
+create policy "Admin can manage products" on products for all to authenticated
+  using (public.is_admin())
+  with check (public.is_admin());
 
 -- Orders: usuarios ven sus propias órdenes, admin ve todas
 alter table orders enable row level security;
 create policy "Users see own orders" on orders for select using (auth.uid() = user_id);
 create policy "Users can create orders" on orders for insert with check (auth.uid() = user_id);
-create policy "Admin sees all orders" on orders for select using (
-  exists (select 1 from profiles where id = auth.uid() and role = 'admin')
-);
+create policy "Admin sees all orders" on orders for select to authenticated
+  using (public.is_admin());
 
 -- Categories: todos pueden ver, solo admin modifica
 alter table categories enable row level security;
 create policy "Anyone can view categories" on categories for select using (true);
-create policy "Admin manages categories" on categories for all using (
-  exists (select 1 from profiles where id = auth.uid() and role = 'admin')
-);
+create policy "Admin manages categories" on categories for all to authenticated
+  using (public.is_admin())
+  with check (public.is_admin());
 
 -- Promotions: todos pueden ver activas, admin gestiona
 alter table promotions enable row level security;
 create policy "Anyone sees active promos" on promotions for select using (is_active = true);
-create policy "Admin manages promos" on promotions for all using (
-  exists (select 1 from profiles where id = auth.uid() and role = 'admin')
-);
+create policy "Admin manages promos" on promotions for all to authenticated
+  using (public.is_admin())
+  with check (public.is_admin());
 
 -- App Config: todos leen, admin escribe
 alter table app_config enable row level security;
 create policy "Anyone reads config" on app_config for select using (true);
-create policy "Admin writes config" on app_config for all using (
-  exists (select 1 from profiles where id = auth.uid() and role = 'admin')
-);
+create policy "Admin writes config" on app_config for all to authenticated
+  using (public.is_admin())
+  with check (public.is_admin());
 ```
+
+La función debe crearse desde una migración controlada por el propietario del esquema,
+no desde una sesión de usuario final.
+
+Alternativa válida: guardar el rol en un claim personalizado de `app_metadata` y comprobar
+`(auth.jwt() -> 'app_metadata' ->> 'role') = 'admin'`. Ese claim debe ser escrito solo
+desde un entorno servidor confiable; nunca debe depender de `user_metadata`, que el usuario
+puede modificar. Los cambios de claims requieren renovar el JWT antes de reflejarse.
 
 ---
 
 ## 4. Supabase Keep-Alive (Anti-Pausa)
 
-Para evitar que Supabase pause el proyecto free por inactividad,
-configurar un GitHub Actions cron que hace ping cada 6 días:
+El repositorio ya incluye `.github/workflows/keep-alive.yml`. Ejecuta un ping semanal
+al endpoint REST y falla de forma explícita si faltan los secrets requeridos:
 
 ```yaml
 # .github/workflows/keep-alive.yml
-name: Supabase Keep Alive
+name: Keep Supabase Alive
 on:
   schedule:
-    - cron: '0 8 */6 * *'    # Cada 6 días a las 8am UTC
-  workflow_dispatch:           # Manual trigger
+    - cron: '0 6 * * 1'      # Lunes a las 06:00 UTC
+  workflow_dispatch: {}
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase
+      - name: Keep database active
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
-          curl -s -o /dev/null -w "%{http_code}" \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/app_config?select=key&limit=1" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::Faltan los secrets SUPABASE_URL y/o SUPABASE_ANON_KEY."
+            exit 1
+          fi
+          curl --fail --silent --show-error \
+            "${SUPABASE_URL%/}/rest/v1/" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            -o /dev/null
 ```
 
 ---
@@ -420,7 +482,11 @@ async function getTimeBasedPromos(): Promise<Promotion[]>
 
 ## 7. PWA Configuration
 
-### manifest.json
+### Manifest generado por `vite-plugin-pwa`
+
+El manifest no se mantiene como archivo dentro de `public/`; se declara en
+`vite.config.ts` y se genera durante `npm run build`.
+
 ```json
 {
   "name": "Sorbo Café • Bistró",
@@ -429,20 +495,20 @@ async function getTimeBasedPromos(): Promise<Promotion[]>
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "theme_color": "#0A0908",
-  "background_color": "#0A0908",
-  "categories": ["food", "shopping"],
+  "theme_color": "#000000",
+  "background_color": "#000000",
   "icons": [
     { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
     { "src": "/icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
-  ],
-  "screenshots": [
-    { "src": "/screenshots/home.png", "sizes": "375x812", "type": "image/png", "form_factor": "narrow" }
   ]
 }
 ```
 
+Las rutas de iconos ya están declaradas, pero los PNG finales todavía no están presentes
+en `public/icons/`; añadirlos es requisito antes de declarar la PWA lista para instalación
+en producción.
+
 ---
 
-*Última actualización: Marzo 2026*
+*Última actualización: Junio 2026*
