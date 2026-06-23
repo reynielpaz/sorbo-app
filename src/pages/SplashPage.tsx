@@ -133,7 +133,7 @@ export function SplashPage() {
     <div
       ref={containerRef}
       onClick={runExit}
-      className="fixed inset-0 z-[90] overflow-hidden bg-black cursor-pointer"
+      className="fixed inset-0 z-90 overflow-hidden bg-black cursor-pointer"
     >
       <div className="pointer-events-none absolute inset-0 z-[1]">
         {PARTICLES.map((particle) => {

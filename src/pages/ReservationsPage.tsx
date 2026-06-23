@@ -310,7 +310,7 @@ export function ReservationsPage() {
                         {isPhonePrefixOpen ? (
                           <div
                             role="listbox"
-                            className="absolute left-12 top-[calc(100%+8px)] z-[80] w-[104px] overflow-hidden rounded-[14px] border border-white/[0.06] bg-[#05070B] p-1 shadow-[0_20px_38px_rgba(0,0,0,0.52)]"
+                            className="absolute left-12 top-[calc(100%+8px)] z-80 w-[104px] overflow-hidden rounded-[14px] border border-white/[0.06] bg-[#05070B] p-1 shadow-[0_20px_38px_rgba(0,0,0,0.52)]"
                           >
                             {VENEZUELAN_MOBILE_PREFIXES.map((prefix) => {
                               const isSelected = phonePrefix === prefix.value;

@@ -79,7 +79,7 @@ export function OnboardingPage() {
   const isLastSlide = currentSlide === SLIDES.length - 1;
 
   return (
-    <div className="fixed inset-0 bg-black overflow-hidden z-[90]">
+    <div className="fixed inset-0 bg-black overflow-hidden z-90">
 
       {/* Botón Omitir — siempre visible arriba a la derecha */}
       <button

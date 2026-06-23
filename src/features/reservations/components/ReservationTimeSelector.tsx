@@ -107,7 +107,7 @@ export function ReservationTimeSelector({
 
       {isOpen ? (
         <div
-          className="fixed inset-0 z-[90] bg-black/70"
+          className="fixed inset-0 z-90 bg-black/70"
           role="presentation"
           onClick={() => setIsOpen(false)}
         >

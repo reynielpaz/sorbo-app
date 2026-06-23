@@ -161,7 +161,7 @@ interface ClearCartDialogProps {
 function ClearCartDialog({ onCancel, onConfirm }: ClearCartDialogProps) {
   return (
     <motion.div
-      className="fixed inset-0 z-[80] flex items-end justify-center bg-black/70 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+18px)] pt-6 sm:items-center sm:pb-6"
+      className="fixed inset-0 z-80 flex items-end justify-center bg-black/70 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+18px)] pt-6 sm:items-center sm:pb-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.18, ease: 'easeOut' }}
