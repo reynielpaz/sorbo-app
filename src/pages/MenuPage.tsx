@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
+import { PageTransition } from '@/components/motion/PageTransition';
 import { MenuCategoryRail } from '@/features/menu/components/MenuCategoryRail';
 import { MenuEmptyState } from '@/features/menu/components/MenuEmptyState';
 import { MenuProductCard } from '@/features/menu/components/MenuProductCard';
@@ -111,7 +112,7 @@ export function MenuPage() {
 
   return (
     <AppShell showHeader={false}>
-      <div className="relative min-h-full overflow-x-hidden">
+      <PageTransition className="relative min-h-full overflow-x-hidden">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-[linear-gradient(180deg,rgba(0,0,0,0.34)_0%,rgba(0,0,0,0)_100%)]" />
 
         <div className="sticky top-0 z-20 border-b border-white/[0.025] bg-[rgba(5,7,11,0.88)] backdrop-blur-[8px]">
@@ -198,7 +199,7 @@ export function MenuPage() {
             </div>
           ) : null}
         </motion.section>
-      </div>
+      </PageTransition>
     </AppShell>
   );
 }

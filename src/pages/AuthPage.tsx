@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input } from '@/components/ui';
+import { PageTransition } from '@/components/motion/PageTransition';
 import { useAuth } from '@/hooks/useAuth';
 import { authStore } from '@/store/authStore';
 import { ROUTES } from '@/utils/constants';
@@ -147,7 +148,7 @@ export function AuthPage() {
   };
 
   return (
-    <div className="relative min-h-[100dvh] overflow-hidden bg-sorbo-black">
+    <PageTransition className="relative min-h-[100dvh] overflow-hidden bg-sorbo-black">
       <img
         src="/images/auth/auth-hero.jpeg"
         alt=""
@@ -325,6 +326,6 @@ export function AuthPage() {
           </form>
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }

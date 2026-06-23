@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { BottomNav } from '@/components/layout/BottomNav';
+import { PageTransition } from '@/components/motion/PageTransition';
 import { FeaturedProducts } from '@/features/home/components/FeaturedProducts';
 import { HomeCollections } from '@/features/home/components/HomeCollections';
 import { HomeCredits } from '@/features/home/components/HomeCredits';
@@ -31,7 +32,7 @@ export function HomePage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#03060A]">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[240px] bg-[linear-gradient(180deg,rgba(3,6,10,0.72)_0%,rgba(3,6,10,0)_100%)]" />
-      <div className="relative z-[1] pb-[calc(env(safe-area-inset-bottom)+124px)]">
+      <PageTransition className="relative z-[1] pb-[calc(env(safe-area-inset-bottom)+124px)]">
         <motion.section {...getSectionAnimation(0)}>
           <TopGlassPanel />
         </motion.section>
@@ -55,7 +56,7 @@ export function HomePage() {
         <motion.section {...getSectionAnimation(0.4)}>
           <HomeCredits />
         </motion.section>
-      </div>
+      </PageTransition>
 
       <BottomNav />
     </div>

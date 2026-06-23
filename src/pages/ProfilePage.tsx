@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
+import { PageTransition } from '@/components/motion/PageTransition';
 import { useCartStore } from '@/features/cart/store/cartStore';
 import { useAuth } from '@/hooks/useAuth';
 import { GUEST_MODE_STORAGE_KEY, authStore } from '@/store/authStore';
@@ -100,7 +101,7 @@ export function ProfilePage() {
 
   return (
     <AppShell showHeader={false} showBottomNav={true}>
-      <div className="relative isolate mx-auto flex min-h-full max-w-[720px] flex-col px-4 pb-[calc(env(safe-area-inset-bottom,0px)+124px)] pt-[calc(env(safe-area-inset-top,0px)+24px)]">
+      <PageTransition className="relative isolate mx-auto flex min-h-full max-w-[720px] flex-col px-4 pb-[calc(env(safe-area-inset-bottom,0px)+124px)] pt-[calc(env(safe-area-inset-top,0px)+24px)]">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
@@ -232,7 +233,7 @@ export function ProfilePage() {
             )}
           </section>
         </motion.div>
-      </div>
+      </PageTransition>
     </AppShell>
   );
 }

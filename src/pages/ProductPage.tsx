@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
+import { pageVariants } from '@/components/motion/transitions';
 import { ProductAddOns } from '@/features/product/components/ProductAddOns';
 import { ProductActionBar } from '@/features/product/components/ProductActionBar';
 import { ProductCustomizations } from '@/features/product/components/ProductCustomizations';
@@ -169,9 +170,10 @@ export function ProductPage() {
             {!loading && !error && currentProduct ? (
               <>
                 <motion.div
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35, ease: 'easeOut' }}
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
                   className="relative -mt-3 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+188px)]"
                 >
                   <div className="mx-auto max-w-[720px] space-y-5">

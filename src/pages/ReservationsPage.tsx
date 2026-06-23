@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { CalendarDays, ChevronDown, MessageSquareText, Phone, UserRound } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
+import { pageExit } from '@/components/motion/transitions';
 import { ReservationActionBar } from '@/features/reservations/components/ReservationActionBar';
 import { ReservationGuestStepper } from '@/features/reservations/components/ReservationGuestStepper';
 import { ReservationHero } from '@/features/reservations/components/ReservationHero';
@@ -150,6 +151,7 @@ export function ReservationsPage() {
               <motion.div
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
+                exit={pageExit}
                 transition={{ duration: 0.4, delay: 0.06 }}
                 className="relative z-10"
               >
@@ -226,6 +228,7 @@ export function ReservationsPage() {
               <motion.div
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
+                exit={pageExit}
                 transition={{ duration: 0.4, delay: 0.12 }}
                 className={cn('relative z-20', isPhonePrefixOpen && 'z-50')}
               >
@@ -351,6 +354,7 @@ export function ReservationsPage() {
               <motion.div
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
+                exit={pageExit}
                 transition={{ duration: 0.4, delay: 0.18 }}
                 className="relative z-0"
               >

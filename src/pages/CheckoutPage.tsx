@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
+import { PageTransition } from '@/components/motion/PageTransition';
 import { useCartStore } from '@/features/cart/store/cartStore';
 import { useAuth } from '@/hooks/useAuth';
 import { createOrder } from '@/services/orders';
@@ -408,7 +409,7 @@ export function CheckoutPage() {
 
   return (
     <AppShell showHeader={false} showBottomNav={true} className="bg-[#030406]">
-      <div className="mx-auto flex min-h-full max-w-[720px] flex-col px-4 pb-[calc(env(safe-area-inset-bottom,0px)+124px)] pt-[calc(env(safe-area-inset-top,0px)+24px)]">
+      <PageTransition className="mx-auto flex min-h-full max-w-[720px] flex-col px-4 pb-[calc(env(safe-area-inset-bottom,0px)+124px)] pt-[calc(env(safe-area-inset-top,0px)+24px)]">
         <motion.header
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -717,7 +718,7 @@ export function CheckoutPage() {
             ) : null}
           </motion.div>
         )}
-      </div>
+      </PageTransition>
     </AppShell>
   );
 }

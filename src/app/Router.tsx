@@ -25,7 +25,7 @@ export function Router() {
 
   return (
     <AnimatePresence mode="wait">
-      <Routes>
+      <Routes location={location} key={location.pathname}>
         <Route path={ROUTES.SPLASH} element={<SplashPage />} />
         <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
         <Route path={ROUTES.AUTH} element={<AuthPage />} />
