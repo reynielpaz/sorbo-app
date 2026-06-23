@@ -16,10 +16,10 @@ interface ButtonProps
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    'bg-gradient-to-r from-sorbo-gold to-sorbo-amber text-sorbo-black font-bold shadow-[var(--sorbo-shadow-gold)]',
+    'bg-gradient-to-r from-sorbo-gold to-sorbo-amber text-sorbo-black font-bold shadow-sorbo-gold',
   secondary:
     'bg-sorbo-dark border border-sorbo-gold/20 text-sorbo-cream hover:border-sorbo-gold/40',
-  ghost: 'bg-transparent text-sorbo-cream hover:bg-[var(--sorbo-glass-light)]',
+  ghost: 'bg-transparent text-sorbo-cream hover:bg-sorbo-glass-light',
   danger: 'bg-sorbo-red/20 text-sorbo-red border border-sorbo-red/20 hover:bg-sorbo-red/30',
 };
 

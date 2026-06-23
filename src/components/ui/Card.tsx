@@ -14,7 +14,7 @@ interface CardProps
 const variantStyles: Record<CardVariant, string> = {
   default: 'bg-sorbo-dark border border-sorbo-gold/10 hover:border-sorbo-gold/25',
   glass:
-    'bg-[var(--sorbo-glass)] backdrop-blur-md border border-[var(--sorbo-glass-border)] hover:border-sorbo-gold/25',
+    'bg-sorbo-glass backdrop-blur-md border border-sorbo-glass-border hover:border-sorbo-gold/25',
 };
 
 export function Card({

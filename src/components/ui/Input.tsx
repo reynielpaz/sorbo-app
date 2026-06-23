@@ -56,14 +56,14 @@ export function Input({
           onBlur?.(event);
         }}
         className={cn(
-          'h-12 w-full rounded-xl border bg-[#2A2420] px-4 pb-1 pt-4 text-base text-[#F5E6C8]',
-          'placeholder:text-[rgba(245,230,200,0.3)] outline-none transition-all duration-200',
+          'h-12 w-full rounded-xl border bg-sorbo-warm px-4 pb-1 pt-4 text-base text-sorbo-cream',
+          'placeholder:text-sorbo-cream/30 outline-none transition-all duration-200',
           rightAdornment && 'pr-14',
           error
-            ? 'border-[#E53935]'
+            ? 'border-sorbo-red'
             : focused
-              ? 'border-[rgba(212,168,83,0.4)] ring-1 ring-[rgba(212,168,83,0.2)]'
-              : 'border-[rgba(212,168,83,0.1)] hover:border-[rgba(212,168,83,0.2)]',
+              ? 'border-sorbo-gold/40 ring-1 ring-sorbo-gold/20'
+              : 'border-sorbo-gold/10 hover:border-sorbo-gold/20',
           disabled && 'cursor-not-allowed opacity-50',
           inputClassName
         )}
@@ -74,8 +74,8 @@ export function Input({
         className={cn(
           'pointer-events-none absolute left-4 transition-all duration-200',
           isFloating
-            ? 'top-1.5 text-xs text-[rgba(245,230,200,0.6)]'
-            : 'top-1/2 -translate-y-1/2 text-sm text-[rgba(245,230,200,0.6)]',
+            ? 'top-1.5 text-xs text-sorbo-cream/60'
+            : 'top-1/2 -translate-y-1/2 text-sm text-sorbo-cream/60',
           labelClassName
         )}
       >
@@ -87,7 +87,7 @@ export function Input({
       ) : null}
 
       {error ? (
-        <p id={errorId} role="alert" className="mt-1 text-xs text-[#E53935]">
+        <p id={errorId} role="alert" className="mt-1 text-xs text-sorbo-red">
           {error}
         </p>
       ) : null}

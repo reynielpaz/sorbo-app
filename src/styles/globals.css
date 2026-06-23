@@ -1,21 +1,35 @@
 @import "tailwindcss";
 
-/* Colores y fuentes del design system de Sorbo en Tailwind v4 */
+/* Tokens del design system de Sorbo en Tailwind v4 */
 @theme {
-  /* Colores */
+  /* Paleta Dark Luxury */
   --color-sorbo-black: #0b0f1a;
   --color-sorbo-dark: #0e1225;
   --color-sorbo-warm: #131830;
   --color-sorbo-gold: #d4a853;
-  --color-sorbo-cream: #ffffff;
+  --color-sorbo-gold-light: #e8c068;
+  --color-sorbo-gold-dark: #b8923a;
   --color-sorbo-amber: #e8943a;
+  --color-sorbo-cream: #ffffff;
   --color-sorbo-green: #00dc82;
   --color-sorbo-red: #ef4444;
+
+  /* Efectos expuestos como utilidades nativas */
+  --color-sorbo-glass: var(--sorbo-glass);
+  --color-sorbo-glass-light: var(--sorbo-glass-light);
+  --color-sorbo-glass-border: var(--sorbo-glass-border);
+  --color-sorbo-glass-border-light: var(--sorbo-glass-border-light);
+  --shadow-sorbo-gold: var(--sorbo-shadow-gold);
 
   /* Familias tipográficas */
   --font-playfair: 'Playfair Display', Georgia, serif;
   --font-sans: 'DM Sans', system-ui, sans-serif;
   --font-mono: 'DM Mono', 'Courier New', monospace;
+
+  /* Timing de animaciones */
+  --ease-out-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Escala de z-index del design system */
   --z-60: 60;
@@ -25,29 +39,8 @@
   --z-100: 100;
 }
 
-/* CSS custom properties para el design system */
+/* Efectos complejos que no representan colores base de la paleta */
 :root {
-  /* Colores primarios */
-  --sorbo-black: #0b0f1a;
-  --sorbo-dark: #0e1225;
-  --sorbo-dark-warm: #131830;
-
-  /* Acentos — Dorado cálido, CERO violeta */
-  --sorbo-gold: #d4a853;
-  --sorbo-gold-light: #e8c068;
-  --sorbo-gold-dark: #b8923a;
-  --sorbo-cream: #ffffff;
-  --sorbo-amber: #e8943a;
-
-  /* Funcionales */
-  --sorbo-green: #00dc82;
-  --sorbo-red: #ef4444;
-
-  /* Texto */
-  --sorbo-text-primary: #ffffff;
-  --sorbo-text-secondary: rgba(255, 255, 255, 0.5);
-  --sorbo-text-muted: rgba(255, 255, 255, 0.25);
-
   /* Glassmorphism */
   --sorbo-glass: rgba(255, 255, 255, 0.06);
   --sorbo-glass-light: rgba(255, 255, 255, 0.04);
@@ -64,11 +57,6 @@
   --sorbo-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
   --sorbo-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
   --sorbo-shadow-gold: 0 4px 16px rgba(212, 168, 83, 0.25);
-
-  /* Timing de animaciones */
-  --ease-out-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
-  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Reset y estilos base */
@@ -86,8 +74,8 @@ html {
 
 body {
   margin: 0;
-  background-color: var(--sorbo-black);
-  color: var(--sorbo-text-primary);
+  background-color: var(--color-sorbo-black);
+  color: var(--color-sorbo-cream);
   font-family: 'DM Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
