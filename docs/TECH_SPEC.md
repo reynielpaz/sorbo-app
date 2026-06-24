@@ -95,19 +95,21 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      includeManifestIcons: false,
       manifest: {
         name: 'Sorbo Café • Bistró',
         short_name: 'Sorbo',
         description: 'Pide tu comida favorita desde tu celular',
+        lang: 'es',
         theme_color: '#000000',
         background_color: '#000000',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',
         icons: [
-          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: '/icons/icon-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+          { src: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+          { src: '/icons/icon-512x512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
         ]
       },
       workbox: {
@@ -492,22 +494,22 @@ El manifest no se mantiene como archivo dentro de `public/`; se declara en
   "name": "Sorbo Café • Bistró",
   "short_name": "Sorbo",
   "description": "Pide tu comida favorita desde tu celular",
+  "lang": "es",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#000000",
   "background_color": "#000000",
   "icons": [
-    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "/icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/icon-512x512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
 ```
 
-Las rutas de iconos ya están declaradas, pero los PNG finales todavía no están presentes
-en `public/icons/`; añadirlos es requisito antes de declarar la PWA lista para instalación
-en producción.
+Los assets de producción viven en `public/icons/`, junto con el Apple Touch icon. El
+favicon ICO se mantiene en `public/favicon.ico`.
 
 ---
 

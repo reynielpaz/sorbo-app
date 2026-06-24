@@ -166,7 +166,6 @@ export function SplashPage() {
             className="object-contain"
             style={{
               width: 'clamp(80px, 22vw, 128px)',
-              filter: 'brightness(0) invert(1) sepia(0.2)',
             }}
           />
 

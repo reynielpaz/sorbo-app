@@ -8,7 +8,7 @@
 
 ## Fase 0 — Setup & Fundamentos ✅
 
-**Estado:** Completada; falta versionar el esquema real de Supabase y añadir iconos PWA finales.
+**Estado:** Completada; falta versionar el esquema real de Supabase.
 **Dependencias:** Ninguna
 **Resultado:** Proyecto funcional con dev server, estructura de carpetas, y design system
 
@@ -150,7 +150,7 @@
 - [ ] PWA Polish (parcial)
   - Manifest y service worker generados
   - Caché runtime para Google Fonts
-  - Iconos optimizados (192x192, 512x512) — pendientes
+  - Iconos de producción (192x192, 512x512, maskable, Apple Touch y favicon)
   - Install prompt personalizado
   - Offline page básica
 - [ ] Performance

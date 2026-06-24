@@ -54,7 +54,7 @@ they can be considered production-ready.
 - Advanced recommendation and loyalty systems
 - 3D table selection, push notifications and install-prompt polish
 - ScrollTrigger experiences, Lenis smooth scrolling and tsParticles effects
-- Final PWA icons, production Supabase migrations and verified production deployment
+- Production Supabase migrations and verified production deployment
 
 ---
 

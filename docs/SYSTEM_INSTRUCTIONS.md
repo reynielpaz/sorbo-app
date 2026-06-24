@@ -311,6 +311,8 @@ Ruta prevista: `/admin` — todavía no registrada en el router actual.
 ```
 sorbo-app/
 ├── public/
+│   ├── favicon.ico
+│   ├── icons/
 │   ├── images/
 │   │   ├── auth/
 │   │   ├── brand/

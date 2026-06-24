@@ -141,7 +141,7 @@ export function HomeHeader() {
         <img
           src="/images/brand/logo-sorbo.png"
           alt="Sorbo Café • Bistró"
-          className="h-[72px] w-auto object-contain brightness-0 invert"
+          className="h-[72px] w-auto object-contain"
         />
 
         <div>

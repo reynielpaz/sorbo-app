@@ -163,7 +163,6 @@ export function AuthPage() {
             src="/images/brand/logo-sorbo.png"
             alt="Sorbo Café • Bistró"
             className="w-24 object-contain"
-            style={{ filter: 'brightness(0) invert(1) sepia(0.2)' }}
           />
           <p className="mt-4 font-sans text-sm uppercase tracking-[0.2em] text-[rgba(245,230,200,0.66)]">
             Tu rincón para saborear
