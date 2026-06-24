@@ -37,6 +37,13 @@
 }
 ```
 
+> **Decisión de dependencias:** `gsap`, `lenis` y `@tsparticles/react` se mantienen
+> instaladas de forma intencional. GSAP ya impulsa la secuencia cinematográfica del splash
+> y seguirá cubriendo micro-interacciones avanzadas; Lenis queda reservado para el scroll
+> fluido; y tsParticles (`@tsparticles/react` + `@tsparticles/slim`) para efectos visuales
+> premium. Su adopción completa pertenece a las etapas de pulido del roadmap, por lo que
+> no deben eliminarse como dependencias aparentemente sin uso.
+
 ### State & Routing
 ```json
 {
